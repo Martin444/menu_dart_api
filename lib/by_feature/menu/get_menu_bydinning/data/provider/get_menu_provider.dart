@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+// ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 import 'package:menu_dart_api/by_feature/menu/get_menu_bydinning/data/repository/get_menu_repository.dart';
 import 'package:menu_dart_api/by_feature/menu/get_menu_bydinning/model/menu_response.dart';
