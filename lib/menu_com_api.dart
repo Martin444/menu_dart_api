@@ -1,3 +1,4 @@
 library menu_com_api;
 
 export 'package:menu_dart_api/core/api.dart';
+export 'package:menu_dart_api/by_feature/upload_images/data/usescases/upload_file_usescases.dart';
