@@ -30,6 +30,7 @@ class LoginProvider extends LoginRepository {
           respJson['message'],
         );
       }
+      API.setAccessToken(respJson['access_token']);
       return UserSuccess(
         accessToken: respJson['access_token'],
         needToChangePassword: respJson['needToChangePassword'],
