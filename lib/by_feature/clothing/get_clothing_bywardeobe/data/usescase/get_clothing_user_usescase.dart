@@ -1,5 +1,5 @@
-import 'package:menu_dart_api/by_feature/wardrobe/get_clothing_bywardeobe/data/provider/get_wardrobe_provider.dart';
-import 'package:menu_dart_api/by_feature/wardrobe/get_clothing_bywardeobe/model/wardrobe_response_params.dart';
+import 'package:menu_dart_api/by_feature/clothing/get_clothing_bywardeobe/data/provider/get_wardrobe_provider.dart';
+import 'package:menu_dart_api/by_feature/clothing/get_clothing_bywardeobe/model/wardrobe_response_params.dart';
 
 class GetClothingUserUsescase {
   GetClothingUserUsescase();

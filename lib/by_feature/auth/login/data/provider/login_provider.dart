@@ -23,13 +23,14 @@ class LoginProvider extends LoginRepository {
           "password": password,
         },
       );
-      var respJson = jsonDecode(login.body);
-      if (respJson['access_token'] == null) {
+      if (login.statusCode != 201) {
+        var respJson = jsonDecode(login.body);
         throw ApiException(
-          respJson['statusCode'],
+          login.statusCode,
           respJson['message'],
         );
       }
+      var respJson = jsonDecode(login.body);
       API.setAccessToken(respJson['access_token']);
       return UserSuccess(
         accessToken: respJson['access_token'],

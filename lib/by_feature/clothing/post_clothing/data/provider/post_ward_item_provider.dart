@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:menu_dart_api/by_feature/wardrobe/get_me_wardrobe/model/clothing_item_model.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:menu_dart_api/by_feature/wardrobe/post_clothing/data/repository/post_ward_item_repository.dart';
+import 'package:menu_dart_api/by_feature/clothing/post_clothing/data/repository/post_ward_item_repository.dart';
 import 'package:menu_dart_api/core/api.dart';
 import 'package:menu_dart_api/core/exeptions/api_exception.dart';
 
