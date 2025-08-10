@@ -26,3 +26,7 @@ export 'package:menu_dart_api/by_feature/menu/put_menu_item/data/usescase/put_me
 export 'package:menu_dart_api/by_feature/menu/put_menu/data/usecase/put_menu_usecase.dart';
 export 'package:menu_dart_api/by_feature/menu/post_menu/data/usescase/post_menu_usecase.dart';
 export 'package:menu_dart_api/by_feature/menu/post_menu_item/data/usescase/post_menu_item_usescases.dart';
+export 'package:menu_dart_api/by_feature/orders/models/new_order_param.dart';
+export 'package:menu_dart_api/by_feature/orders/models/order_item_model.dart';
+export 'package:menu_dart_api/by_feature/orders/models/order_model.dart';
+export 'package:menu_dart_api/by_feature/orders/usescase/order_usescase.dart';
