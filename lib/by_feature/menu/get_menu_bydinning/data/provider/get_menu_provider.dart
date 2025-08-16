@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-// ignore: depend_on_referenced_packages
-import 'package:http/http.dart' as http;
 import 'package:menu_dart_api/by_feature/menu/get_menu_bydinning/data/repository/get_menu_repository.dart';
 import 'package:menu_dart_api/by_feature/menu/get_menu_bydinning/model/menu_response.dart';
 import 'package:menu_dart_api/core/api.dart';
@@ -12,9 +10,8 @@ class GetMenuProvider extends GetMenuRespository {
   Future<MenuResponse> getmenuByDining(String idDining) async {
     Uri userURl = Uri.parse('${API.defaulBaseUrl}/menu/bydining/$idDining');
     try {
-      var response = await http.get(
-        userURl,
-      );
+      // Usar el cliente HTTP con soporte para Anonymous ID
+      var response = await API.httpClient.get(userURl);
       if (response.statusCode != 200) {
         throw ApiException(
           response.statusCode,

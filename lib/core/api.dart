@@ -1,3 +1,6 @@
+import 'package:menu_dart_api/core/services/anonymous_http_client.dart';
+import 'package:menu_dart_api/core/services/anonymous_dio_client.dart';
+
 class API {
   static late API _instance;
 
@@ -25,4 +28,20 @@ class API {
   static String get loginAccessToken => _accessToken;
 
   bool get initialized => _inicialized;
+
+  /// Cliente HTTP con soporte para Anonymous ID automático
+  static AnonymousHttpClient get httpClient => AnonymousHttpClient.instance;
+
+  /// Cliente Dio con soporte para Anonymous ID automático
+  static AnonymousDioClient get dioClient => AnonymousDioClient.instance;
+
+  /// Obtiene el Anonymous ID actual
+  static Future<String> getCurrentAnonymousId() async {
+    return await httpClient.getCurrentAnonymousId();
+  }
+
+  /// Regenera el Anonymous ID (útil para testing)
+  static Future<String> regenerateAnonymousId() async {
+    return await httpClient.regenerateAnonymousId();
+  }
 }

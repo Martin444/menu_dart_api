@@ -1,6 +1,10 @@
 library menu_com_api;
 
 export 'package:menu_dart_api/core/api.dart';
+export 'package:menu_dart_api/core/services/anonymous_id_service.dart';
+export 'package:menu_dart_api/core/services/universal_anonymous_id_service.dart';
+export 'package:menu_dart_api/core/services/anonymous_http_client.dart';
+export 'package:menu_dart_api/core/services/anonymous_dio_client.dart';
 export 'package:menu_dart_api/core/exeptions/api_exception.dart';
 export 'package:menu_dart_api/by_feature/upload_images/data/usescases/upload_file_usescases.dart';
 export 'package:menu_dart_api/by_feature/clothing/put_clothing_item/data/usescase/put_clothing_item_usescases.dart';

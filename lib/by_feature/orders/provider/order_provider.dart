@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:menu_dart_api/by_feature/orders/repository/order_repository.dart';
-import 'package:http/http.dart' as http;
 import 'package:menu_dart_api/menu_com_api.dart';
 
 class OrderProvider extends OrderRepository {
@@ -15,7 +14,7 @@ class OrderProvider extends OrderRepository {
   Future<Order> createOrder(Order order) async {
     try {
       Uri wardrobeCreateURl = Uri.parse('${API.defaulBaseUrl}/orders');
-      var response = await http.post(
+      var response = await API.httpClient.post(
         wardrobeCreateURl,
         headers: {
           'Content-type': 'application/json; charset=UTF-8',

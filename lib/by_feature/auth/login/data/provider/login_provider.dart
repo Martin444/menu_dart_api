@@ -5,9 +5,6 @@ import 'package:menu_dart_api/by_feature/auth/login/model/user_succes_model.dart
 import 'package:menu_dart_api/core/api.dart';
 import 'package:menu_dart_api/core/exeptions/api_exception.dart';
 
-// ignore: depend_on_referenced_packages
-import 'package:http/http.dart' as http;
-
 class LoginProvider extends LoginRepository {
   @override
   Future<UserSuccess> loginCommerce({
@@ -16,7 +13,8 @@ class LoginProvider extends LoginRepository {
   }) async {
     try {
       Uri loginURl = Uri.parse('${API.defaulBaseUrl}/auth/login');
-      var login = await http.post(
+      // Usar el cliente HTTP con soporte para Anonymous ID
+      var login = await API.httpClient.post(
         loginURl,
         body: {
           "email": email,
