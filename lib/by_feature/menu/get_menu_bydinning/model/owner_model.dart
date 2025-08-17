@@ -28,12 +28,8 @@ class OwnerModel {
       email: json['email'] as String?,
       phone: json['phone'] as String?,
       role: json['role'] as String?,
-      createAt: json['createAt'] != null 
-          ? DateTime.parse(json['createAt'] as String)
-          : null,
-      updateAt: json['updateAt'] != null 
-          ? DateTime.parse(json['updateAt'] as String)
-          : null,
+      createAt: json['createAt'] != null ? DateTime.parse(json['createAt'] as String) : null,
+      updateAt: json['updateAt'] != null ? DateTime.parse(json['updateAt'] as String) : null,
     );
   }
 
