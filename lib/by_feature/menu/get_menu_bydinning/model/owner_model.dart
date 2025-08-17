@@ -28,9 +28,31 @@ class OwnerModel {
       email: json['email'] as String?,
       phone: json['phone'] as String?,
       role: json['role'] as String?,
-      createAt: json['createAt'] != null ? DateTime.parse(json['createAt'] as String) : null,
-      updateAt: json['updateAt'] != null ? DateTime.parse(json['updateAt'] as String) : null,
+      createAt: _parseDateTime(json['createAt']),
+      updateAt: _parseDateTime(json['updateAt']),
     );
+  }
+
+  // Método helper para parsear DateTime desde diferentes formatos
+  static DateTime? _parseDateTime(dynamic dateValue) {
+    if (dateValue == null) return null;
+
+    try {
+      if (dateValue is String) {
+        return DateTime.parse(dateValue);
+      } else if (dateValue is Map<String, dynamic>) {
+        // Si viene como objeto JSON, buscar la fecha en diferentes propiedades
+        final dateString = dateValue['date'] ?? dateValue['value'] ?? dateValue['datetime'] ?? dateValue['timestamp'];
+        if (dateString is String) {
+          return DateTime.parse(dateString);
+        }
+      }
+    } catch (e) {
+      // Si hay error en el parsing, retornar null
+      return null;
+    }
+
+    return null;
   }
 
   // toJson
