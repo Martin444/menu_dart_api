@@ -3,6 +3,8 @@ import 'package:menu_dart_api/menu_com_api.dart';
 abstract class OrderRepository {
   Future<List<Order>> getOrdersByUserId(String userId);
 
+  Future<List<Order>> getOrdersByBusinessOwner(String businessOwnerId);
+
   Future<Order> getOrderById(String orderId);
 
   Future<void> createOrder(Order order);

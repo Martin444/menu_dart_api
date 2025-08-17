@@ -8,3 +8,11 @@ class CreateOrderUseCase {
     return await OrderProvider().createOrder(order);
   }
 }
+
+class GetOrdersByBusinessOwnerUseCase {
+  GetOrdersByBusinessOwnerUseCase();
+
+  Future<List<Order>> call(String businessOwnerId) async {
+    return await OrderProvider().getOrdersByBusinessOwner(businessOwnerId);
+  }
+}

@@ -55,6 +55,28 @@ class OrderProvider extends OrderRepository {
   }
 
   @override
+  Future<List<Order>> getOrdersByBusinessOwner(String businessOwnerId) async {
+    try {
+      Uri ordersUrl = Uri.parse('${API.defaulBaseUrl}/orders/byBusinessOwner/$businessOwnerId');
+      var response = await API.httpClient.get(
+        ordersUrl,
+        headers: {
+          'Authorization': 'Bearer ${API.loginAccessToken}',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> ordersJson = jsonDecode(response.body);
+        return ordersJson.map((orderJson) => Order.fromJson(orderJson)).toList();
+      } else {
+        throw Exception('Failed to load orders by business owner: ${response.statusCode}');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
   Future<void> removeOrderItem(String orderItemId) {
     // TODO: implement removeOrderItem
     throw UnimplementedError();
