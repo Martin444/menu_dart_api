@@ -23,6 +23,8 @@ export 'package:menu_dart_api/by_feature/user/get_me_profile/model/dinning_model
 export 'package:menu_dart_api/by_feature/menu/delete_menu_item/data/usescase/delete_menu_item_usescases.dart';
 export 'package:menu_dart_api/by_feature/menu/get_menu_bydinning/model/menu_model.dart';
 export 'package:menu_dart_api/by_feature/menu/get_menu_bydinning/model/menu_item_model.dart';
+export 'package:menu_dart_api/by_feature/menu/get_menu_bydinning/model/menu_response.dart';
+export 'package:menu_dart_api/by_feature/menu/get_menu_bydinning/model/owner_model.dart';
 export 'package:menu_dart_api/by_feature/menu/get_menu_bydinning/data/usescase/get_menu_usecases.dart';
 export 'package:menu_dart_api/by_feature/menu/post_menu/model/menu_params.dart';
 export 'package:menu_dart_api/by_feature/menu/delete_menu/data/usescase/delete_menu_usecase.dart';
