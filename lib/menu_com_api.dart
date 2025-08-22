@@ -36,3 +36,6 @@ export 'package:menu_dart_api/by_feature/orders/models/new_order_param.dart';
 export 'package:menu_dart_api/by_feature/orders/models/order_item_model.dart';
 export 'package:menu_dart_api/by_feature/orders/models/order_model.dart';
 export 'package:menu_dart_api/by_feature/orders/usescase/order_usescase.dart';
+
+// OAuth de Mercado Pago - Funcionalidad completa
+export 'package:menu_dart_api/by_feature/payments/oauth/mp_oauth.dart';
