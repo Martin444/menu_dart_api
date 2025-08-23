@@ -35,11 +35,8 @@ class InitiateMPOAuthUseCase {
     required String redirectUri,
     String? customState,
   }) {
-    final state = customState ?? 'oauth_${DateTime.now().millisecondsSinceEpoch}';
-
     return MPOAuthInitiateRequest(
       redirectUri: redirectUri,
-      state: state,
     );
   }
 }
