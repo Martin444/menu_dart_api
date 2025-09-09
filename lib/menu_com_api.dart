@@ -20,6 +20,10 @@ export 'package:menu_dart_api/by_feature/wardrobe/delete_wardrobe/data/usescase/
 export 'package:menu_dart_api/by_feature/user/get_me_profile/data/usescase/get_dinning_usescases.dart';
 export 'package:menu_dart_api/by_feature/user/get_me_profile/model/roles_users.dart';
 export 'package:menu_dart_api/by_feature/user/get_me_profile/model/dinning_model.dart';
+export 'package:menu_dart_api/by_feature/user/get_users_by_roles/model/users_by_roles_params.dart';
+export 'package:menu_dart_api/by_feature/user/get_users_by_roles/model/user_by_role_model.dart';
+export 'package:menu_dart_api/by_feature/user/get_users_by_roles/model/users_by_roles_response.dart';
+export 'package:menu_dart_api/by_feature/user/get_users_by_roles/data/usescase/get_users_by_roles_usecase.dart';
 export 'package:menu_dart_api/by_feature/menu/delete_menu_item/data/usescase/delete_menu_item_usescases.dart';
 export 'package:menu_dart_api/by_feature/menu/get_menu_bydinning/model/menu_model.dart';
 export 'package:menu_dart_api/by_feature/menu/get_menu_bydinning/model/menu_item_model.dart';
