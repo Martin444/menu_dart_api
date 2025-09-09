@@ -1,6 +1,8 @@
 enum RolesUsers {
   clothes,
   dinning,
+  customer,
+  admin,
 }
 
 class RolesFuncionts {
