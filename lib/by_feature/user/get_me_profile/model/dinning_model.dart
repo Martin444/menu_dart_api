@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 class DinningModel {
   String? id;
   String? photoURL;
@@ -55,7 +57,7 @@ class DinningModel {
       try {
         return DateTime.parse(value);
       } catch (e) {
-        print('Error parsing date: $value - $e');
+        debugPrint('Error parsing date: $value - $e');
         return null;
       }
     }
@@ -67,10 +69,10 @@ class DinningModel {
 
   // Método para debugging - te ayudará a ver la estructura real del JSON
   static void debugJson(Map<String, dynamic> json) {
-    print('=== DEBUG JSON STRUCTURE ===');
+    debugPrint('=== DEBUG JSON STRUCTURE ===');
     json.forEach((key, value) {
-      print('$key: ${value.runtimeType} = $value');
+      debugPrint('$key: ${value.runtimeType} = $value');
     });
-    print('=== END DEBUG ===');
+    debugPrint('=== END DEBUG ===');
   }
 }

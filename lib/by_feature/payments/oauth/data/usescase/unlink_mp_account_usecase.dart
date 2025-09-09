@@ -11,7 +11,7 @@ import 'package:menu_dart_api/by_feature/payments/oauth/models/mp_oauth_base_res
 /// final useCase = UnlinkMPAccountUseCase();
 /// final response = await useCase.execute();
 /// if (response.success) {
-///   print('Cuenta desvinculada exitosamente');
+///   debugPrint('Cuenta desvinculada exitosamente');
 /// }
 /// ```
 class UnlinkMPAccountUseCase {

@@ -50,19 +50,19 @@ void main() async {
     final List<Order> orders = await getOrdersByBusinessOwnerUseCase.call(businessOwnerId);
     
     // 5. Use the results
-    print('Found ${orders.length} orders for business owner $businessOwnerId');
+    debugPrint('Found ${orders.length} orders for business owner $businessOwnerId');
     
     for (final order in orders) {
-      print('Order ID: ${order.id}');
-      print('Customer Email: ${order.customerEmail}');
-      print('Total: ${order.total}');
-      print('Status: ${order.status}');
-      print('Created At: ${order.createdAt}');
-      print('---');
+      debugPrint('Order ID: ${order.id}');
+      debugPrint('Customer Email: ${order.customerEmail}');
+      debugPrint('Total: ${order.total}');
+      debugPrint('Status: ${order.status}');
+      debugPrint('Created At: ${order.createdAt}');
+      debugPrint('---');
     }
     
   } catch (e) {
-    print('Error getting orders by business owner: $e');
+    debugPrint('Error getting orders by business owner: $e');
   }
 }
 ```

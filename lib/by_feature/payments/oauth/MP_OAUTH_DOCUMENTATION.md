@@ -33,13 +33,13 @@ class PaymentIntegrationService {
     final result = await _mpOAuthService.initiateLinkingFlow(redirectUri);
     
     if (result.isAlreadyLinked) {
-      print('Ya hay una cuenta vinculada: ${result.linkedEmail}');
+      debugPrint('Ya hay una cuenta vinculada: ${result.linkedEmail}');
       return null;
     } else if (result.hasAuthUrl) {
-      print('Redirigir a: ${result.authUrl}');
+      debugPrint('Redirigir a: ${result.authUrl}');
       return result.authUrl;
     } else {
-      print('Error: ${result.error}');
+      debugPrint('Error: ${result.error}');
       return null;
     }
   }
@@ -51,11 +51,11 @@ class PaymentIntegrationService {
     try {
       final success = await _mpOAuthService.completeLinking(authCode, redirectUri);
       if (success) {
-        print('¡Cuenta vinculada exitosamente!');
+        debugPrint('¡Cuenta vinculada exitosamente!');
       }
       return success;
     } catch (e) {
-      print('Error al completar vinculación: $e');
+      debugPrint('Error al completar vinculación: $e');
       return false;
     }
   }
@@ -65,7 +65,7 @@ class PaymentIntegrationService {
     try {
       return await _mpOAuthService.unlinkAccount();
     } catch (e) {
-      print('Error al desvincular: $e');
+      debugPrint('Error al desvincular: $e');
       return false;
     }
   }
@@ -109,15 +109,15 @@ class DetailedPaymentIntegration {
       final status = await _statusUseCase.execute();
       
       if (status.isLinked) {
-        print('✅ Cuenta vinculada');
-        print('Email: ${status.account?.email}');
-        print('Collector ID: ${status.account?.collectorId}');
-        print('Nickname: ${status.account?.nickname}');
+        debugPrint('✅ Cuenta vinculada');
+        debugPrint('Email: ${status.account?.email}');
+        debugPrint('Collector ID: ${status.account?.collectorId}');
+        debugPrint('Nickname: ${status.account?.nickname}');
       } else {
-        print('❌ No hay cuenta vinculada');
+        debugPrint('❌ No hay cuenta vinculada');
       }
     } catch (e) {
-      print('Error al verificar estado: $e');
+      debugPrint('Error al verificar estado: $e');
     }
   }
 
@@ -130,12 +130,12 @@ class DetailedPaymentIntegration {
       );
 
       final response = await _initiateUseCase.execute(request);
-      print('URL de autorización: ${response.authorizationUrl}');
-      print('Estado: ${response.state}');
+      debugPrint('URL de autorización: ${response.authorizationUrl}');
+      debugPrint('Estado: ${response.state}');
       
       return response.authorizationUrl;
     } catch (e) {
-      print('Error al iniciar OAuth: $e');
+      debugPrint('Error al iniciar OAuth: $e');
       return null;
     }
   }
@@ -156,16 +156,16 @@ class DetailedPaymentIntegration {
       final response = await _completeUseCase.execute(request);
       
       if (response.success) {
-        print('✅ Vinculación completada');
+        debugPrint('✅ Vinculación completada');
         // Verificar el estado final
         await checkDetailedStatus();
         return true;
       } else {
-        print('❌ Error en vinculación: ${response.message}');
+        debugPrint('❌ Error en vinculación: ${response.message}');
         return false;
       }
     } catch (e) {
-      print('Error al completar vinculación: $e');
+      debugPrint('Error al completar vinculación: $e');
       return false;
     }
   }
@@ -175,10 +175,10 @@ class DetailedPaymentIntegration {
     try {
       final refreshed = await _refreshUseCase.executeSilently();
       if (refreshed) {
-        print('🔄 Token refrescado automáticamente');
+        debugPrint('🔄 Token refrescado automáticamente');
       }
     } catch (e) {
-      print('⚠️ No se pudo refrescar el token: $e');
+      debugPrint('⚠️ No se pudo refrescar el token: $e');
     }
   }
 }
@@ -456,21 +456,21 @@ class ErrorHandler {
     if (error is ApiException) {
       switch (error.statusCode) {
         case 400:
-          print('❌ Configuración OAuth incorrecta');
+          debugPrint('❌ Configuración OAuth incorrecta');
           break;
         case 401:
-          print('❌ Token JWT inválido');
+          debugPrint('❌ Token JWT inválido');
           break;
         case 404:
-          print('❌ Usuario no tiene cuenta vinculada');
+          debugPrint('❌ Usuario no tiene cuenta vinculada');
           break;
         default:
-          print('❌ Error de API: ${error.message}');
+          debugPrint('❌ Error de API: ${error.message}');
       }
     } else if (error is ArgumentError) {
-      print('❌ Error de parámetros: ${error.message}');
+      debugPrint('❌ Error de parámetros: ${error.message}');
     } else {
-      print('❌ Error inesperado: $error');
+      debugPrint('❌ Error inesperado: $error');
     }
   }
 }

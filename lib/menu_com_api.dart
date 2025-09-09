@@ -39,3 +39,5 @@ export 'package:menu_dart_api/by_feature/orders/usescase/order_usescase.dart';
 
 // OAuth de Mercado Pago - Funcionalidad completa
 export 'package:menu_dart_api/by_feature/payments/oauth/mp_oauth.dart';
+
+export 'package:menu_dart_api/by_feature/auth/social_login/social_login.dart';
