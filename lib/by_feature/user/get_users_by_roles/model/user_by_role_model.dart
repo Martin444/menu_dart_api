@@ -1,9 +1,10 @@
 import 'package:flutter/foundation.dart';
+import 'package:menu_dart_api/by_feature/menu/get_menu_bydinning/model/menu_model.dart';
 
 /// Modelo que representa un usuario en la respuesta de usuarios por roles
 ///
 /// Esta clase mapea la estructura completa del usuario retornada por la API
-/// incluyendo información de autenticación, membresía y configuraciones.
+/// incluyendo información de autenticación, membresía, configuraciones y menús.
 class UserByRoleModel {
   final String? id;
   final String? photoURL;
@@ -19,6 +20,7 @@ class UserByRoleModel {
   final DateTime? createAt;
   final DateTime? updateAt;
   final Map<String, dynamic>? membership;
+  final List<MenuModel>? menus;
 
   const UserByRoleModel({
     this.id,
@@ -35,6 +37,7 @@ class UserByRoleModel {
     this.createAt,
     this.updateAt,
     this.membership,
+    this.menus,
   });
 
   /// Crea una instancia desde un Map JSON
@@ -57,6 +60,7 @@ class UserByRoleModel {
       createAt: _parseDateTime(json['createAt']),
       updateAt: _parseDateTime(json['updateAt']),
       membership: json['membership'] as Map<String, dynamic>?,
+      menus: _parseMenus(json['menus']),
     );
   }
 
@@ -77,7 +81,38 @@ class UserByRoleModel {
       'createAt': createAt?.toIso8601String(),
       'updateAt': updateAt?.toIso8601String(),
       'membership': membership,
+      'menus': menus
+          ?.map((menu) => {
+                'id': menu.id,
+                'idOwner': menu.idOwner,
+                'description': menu.description,
+                'capacity': menu.capacity,
+                'items': menu.items
+                    ?.map((item) => {
+                          'id': item.id,
+                          'name': item.name,
+                          'photoURL': item.photoUrl,
+                          'price': item.price,
+                          'ingredients': item.ingredients,
+                          'deliveryTime': item.deliveryTime,
+                        })
+                    .toList(),
+              })
+          .toList(),
     };
+  }
+
+  /// Método auxiliar para parsear la lista de menús de forma segura
+  static List<MenuModel>? _parseMenus(dynamic value) {
+    if (value == null) return null;
+    if (value is! List) return null;
+
+    try {
+      return value.map((menuJson) => MenuModel.fromJson(menuJson as Map<String, dynamic>)).toList();
+    } catch (e) {
+      debugPrint('Error parsing menus: $value - $e');
+      return null;
+    }
   }
 
   /// Método auxiliar para extraer strings de forma segura
@@ -119,7 +154,7 @@ class UserByRoleModel {
 
   @override
   String toString() {
-    return 'UserByRoleModel(id: $id, name: $name, email: $email, role: $role, isEmailVerified: $isEmailVerified)';
+    return 'UserByRoleModel(id: $id, name: $name, email: $email, role: $role, isEmailVerified: $isEmailVerified, menusCount: ${menus?.length ?? 0})';
   }
 
   @override
@@ -129,11 +164,12 @@ class UserByRoleModel {
         other.id == id &&
         other.name == name &&
         other.email == email &&
-        other.role == role;
+        other.role == role &&
+        listEquals(other.menus, menus);
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ name.hashCode ^ email.hashCode ^ role.hashCode;
+    return id.hashCode ^ name.hashCode ^ email.hashCode ^ role.hashCode ^ (menus?.length.hashCode ?? 0);
   }
 }

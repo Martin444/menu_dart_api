@@ -11,9 +11,13 @@ class UsersByRolesParams {
   /// Indica si se deben incluir cuentas vinculadas en la respuesta
   final bool withVinculedAccount;
 
+  /// Indica si se deben incluir menús en la respuesta
+  final bool includeMenus;
+
   const UsersByRolesParams({
     required this.roles,
     this.withVinculedAccount = false,
+    this.includeMenus = false,
   });
 
   /// Convierte los parámetros a un Map para el envío HTTP
@@ -21,6 +25,7 @@ class UsersByRolesParams {
     return {
       'roles': roles.map((role) => role.toString().split('.').last).toList(),
       'withVinculedAccount': withVinculedAccount,
+      'includeMenus': includeMenus,
     };
   }
 
@@ -33,12 +38,13 @@ class UsersByRolesParams {
           .cast<RolesUsers>()
           .toList(),
       withVinculedAccount: json['withVinculedAccount'] ?? false,
+      includeMenus: json['includeMenus'] ?? false,
     );
   }
 
   @override
   String toString() {
-    return 'UsersByRolesParams(roles: $roles, withVinculedAccount: $withVinculedAccount)';
+    return 'UsersByRolesParams(roles: $roles, withVinculedAccount: $withVinculedAccount, includeMenus: $includeMenus)';
   }
 
   @override
@@ -47,11 +53,12 @@ class UsersByRolesParams {
     return other is UsersByRolesParams &&
         other.roles.length == roles.length &&
         other.roles.every((role) => roles.contains(role)) &&
-        other.withVinculedAccount == withVinculedAccount;
+        other.withVinculedAccount == withVinculedAccount &&
+        other.includeMenus == includeMenus;
   }
 
   @override
   int get hashCode {
-    return roles.hashCode ^ withVinculedAccount.hashCode;
+    return roles.hashCode ^ withVinculedAccount.hashCode ^ includeMenus.hashCode;
   }
 }

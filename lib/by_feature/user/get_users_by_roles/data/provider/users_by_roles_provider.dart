@@ -35,7 +35,7 @@ class UsersByRolesProvider extends UsersByRolesRepository {
       );
 
       // Verifica el status code de la respuesta
-      if (response.statusCode != 200) {
+      if (response.statusCode != 201) {
         throw ApiException(
           response.statusCode,
           response.body,
