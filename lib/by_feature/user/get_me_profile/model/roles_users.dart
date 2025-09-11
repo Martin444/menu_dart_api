@@ -3,6 +3,10 @@ enum RolesUsers {
   dinning,
   customer,
   admin,
+  // Nuevos roles de negocio
+  commerce,
+  distributor,
+  service,
 }
 
 class RolesFuncionts {
