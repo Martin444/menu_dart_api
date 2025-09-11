@@ -26,11 +26,16 @@ class PutWardrobesProvider extends PutWardrobesRepository {
         ),
       );
 
-      if (wardrobe.statusCode != 201 || wardrobe.statusCode != 200) {
+      if (wardrobe.statusCode != 201 && wardrobe.statusCode != 200) {
         throw ApiException(
           wardrobe.statusCode,
           wardrobe.body,
         );
+      }
+
+      // Si el body está vacío, no intentar parsearlo como JSON
+      if (wardrobe.body.isEmpty) {
+        return; // Retornar void como indica el método
       }
 
       var respJson = jsonDecode(wardrobe.body);
