@@ -20,6 +20,7 @@ class UserByRoleModel {
   final DateTime? createAt;
   final DateTime? updateAt;
   final Map<String, dynamic>? membership;
+  final String? storeURL; // Nueva URL de la tienda
   final List<MenuModel>? menus;
 
   const UserByRoleModel({
@@ -37,6 +38,7 @@ class UserByRoleModel {
     this.createAt,
     this.updateAt,
     this.membership,
+    this.storeURL,
     this.menus,
   });
 
@@ -60,6 +62,7 @@ class UserByRoleModel {
       createAt: _parseDateTime(json['createAt']),
       updateAt: _parseDateTime(json['updateAt']),
       membership: json['membership'] as Map<String, dynamic>?,
+      storeURL: _extractString(json['storeURL']),
       menus: _parseMenus(json['menus']),
     );
   }
@@ -81,6 +84,7 @@ class UserByRoleModel {
       'createAt': createAt?.toIso8601String(),
       'updateAt': updateAt?.toIso8601String(),
       'membership': membership,
+      'storeURL': storeURL,
       'menus': menus
           ?.map((menu) => {
                 'id': menu.id,
