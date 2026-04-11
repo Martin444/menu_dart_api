@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:menu_dart_api/by_feature/menu/get_menu_bydinning/model/menu_model.dart';
+import 'package:menu_dart_api/by_feature/catalog/models/catalog_model.dart';
 
 /// Modelo que representa un usuario en la respuesta de usuarios por roles
 ///
@@ -21,7 +21,7 @@ class UserByRoleModel {
   final DateTime? updateAt;
   final Map<String, dynamic>? membership;
   final String? storeURL; // Nueva URL de la tienda
-  final List<MenuModel>? menus;
+  final List<CatalogModel>? catalogs;
 
   const UserByRoleModel({
     this.id,
@@ -39,7 +39,7 @@ class UserByRoleModel {
     this.updateAt,
     this.membership,
     this.storeURL,
-    this.menus,
+    this.catalogs,
   });
 
   /// Crea una instancia desde un Map JSON
@@ -63,7 +63,7 @@ class UserByRoleModel {
       updateAt: _parseDateTime(json['updateAt']),
       membership: json['membership'] as Map<String, dynamic>?,
       storeURL: _extractString(json['storeURL']),
-      menus: _parseMenus(json['menus']),
+      catalogs: _parseCatalogs(json['catalogs']),
     );
   }
 
@@ -85,36 +85,19 @@ class UserByRoleModel {
       'updateAt': updateAt?.toIso8601String(),
       'membership': membership,
       'storeURL': storeURL,
-      'menus': menus
-          ?.map((menu) => {
-                'id': menu.id,
-                'idOwner': menu.idOwner,
-                'description': menu.description,
-                'capacity': menu.capacity,
-                'items': menu.items
-                    ?.map((item) => {
-                          'id': item.id,
-                          'name': item.name,
-                          'photoURL': item.photoUrl,
-                          'price': item.price,
-                          'ingredients': item.ingredients,
-                          'deliveryTime': item.deliveryTime,
-                        })
-                    .toList(),
-              })
-          .toList(),
+      'catalogs': catalogs?.map((catalog) => catalog.toJson()).toList(),
     };
   }
 
-  /// Método auxiliar para parsear la lista de menús de forma segura
-  static List<MenuModel>? _parseMenus(dynamic value) {
+  /// Método auxiliar para parsear la lista de catálogos de forma segura
+  static List<CatalogModel>? _parseCatalogs(dynamic value) {
     if (value == null) return null;
     if (value is! List) return null;
 
     try {
-      return value.map((menuJson) => MenuModel.fromJson(menuJson as Map<String, dynamic>)).toList();
+      return value.map((catalogJson) => CatalogModel.fromJson(catalogJson as Map<String, dynamic>)).toList();
     } catch (e) {
-      debugPrint('Error parsing menus: $value - $e');
+      debugPrint('Error parsing catalogs: $value - $e');
       return null;
     }
   }
@@ -158,7 +141,7 @@ class UserByRoleModel {
 
   @override
   String toString() {
-    return 'UserByRoleModel(id: $id, name: $name, email: $email, role: $role, isEmailVerified: $isEmailVerified, menusCount: ${menus?.length ?? 0})';
+    return 'UserByRoleModel(id: $id, name: $name, email: $email, role: $role, isEmailVerified: $isEmailVerified, catalogsCount: ${catalogs?.length ?? 0})';
   }
 
   @override
@@ -169,11 +152,11 @@ class UserByRoleModel {
         other.name == name &&
         other.email == email &&
         other.role == role &&
-        listEquals(other.menus, menus);
+        listEquals(other.catalogs, catalogs);
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ name.hashCode ^ email.hashCode ^ role.hashCode ^ (menus?.length.hashCode ?? 0);
+    return id.hashCode ^ name.hashCode ^ email.hashCode ^ role.hashCode ^ (catalogs?.length.hashCode ?? 0);
   }
 }
