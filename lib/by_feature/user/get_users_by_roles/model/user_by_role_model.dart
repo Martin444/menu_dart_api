@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:menu_dart_api/by_feature/catalog/models/catalog_model.dart';
+import 'package:menu_dart_api/by_feature/menu/get_menu_bydinning/model/menu_model.dart';
 
 /// Modelo que representa un usuario en la respuesta de usuarios por roles
 ///
@@ -22,6 +23,7 @@ class UserByRoleModel {
   final Map<String, dynamic>? membership;
   final String? storeURL; // Nueva URL de la tienda
   final List<CatalogModel>? catalogs;
+  final List<MenuModel>? menus; // Menús del comercio
 
   const UserByRoleModel({
     this.id,
@@ -40,6 +42,7 @@ class UserByRoleModel {
     this.membership,
     this.storeURL,
     this.catalogs,
+    this.menus,
   });
 
   /// Crea una instancia desde un Map JSON
@@ -64,6 +67,7 @@ class UserByRoleModel {
       membership: json['membership'] as Map<String, dynamic>?,
       storeURL: _extractString(json['storeURL']),
       catalogs: _parseCatalogs(json['catalogs']),
+      menus: _parseMenus(json['menus']),
     );
   }
 
@@ -86,6 +90,7 @@ class UserByRoleModel {
       'membership': membership,
       'storeURL': storeURL,
       'catalogs': catalogs?.map((catalog) => catalog.toJson()).toList(),
+      'menus': menus?.map((menu) => menu.toJson()).toList(),
     };
   }
 
@@ -95,9 +100,28 @@ class UserByRoleModel {
     if (value is! List) return null;
 
     try {
-      return value.map((catalogJson) => CatalogModel.fromJson(catalogJson as Map<String, dynamic>)).toList();
+      return value
+          .map((catalogJson) =>
+              CatalogModel.fromJson(catalogJson as Map<String, dynamic>))
+          .toList();
     } catch (e) {
       debugPrint('Error parsing catalogs: $value - $e');
+      return null;
+    }
+  }
+
+  /// Método auxiliar para parsear la lista de menús de forma segura
+  static List<MenuModel>? _parseMenus(dynamic value) {
+    if (value == null) return null;
+    if (value is! List) return null;
+
+    try {
+      return value
+          .map((menuJson) =>
+              MenuModel.fromJson(menuJson as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      debugPrint('Error parsing menus: $value - $e');
       return null;
     }
   }
@@ -157,6 +181,10 @@ class UserByRoleModel {
 
   @override
   int get hashCode {
-    return id.hashCode ^ name.hashCode ^ email.hashCode ^ role.hashCode ^ (catalogs?.length.hashCode ?? 0);
+    return id.hashCode ^
+        name.hashCode ^
+        email.hashCode ^
+        role.hashCode ^
+        (catalogs?.length.hashCode ?? 0);
   }
 }
