@@ -42,13 +42,13 @@ class CatalogModel {
 
   factory CatalogModel.fromJson(Map<String, dynamic> json) {
     return CatalogModel(
-      id: json['id'] as String,
-      catalogType: json['catalogType'] as String,
+      id: json['id'] as String? ?? '',
+      catalogType: json['catalogType'] as String? ?? 'wardrobe',
       name: json['name'] as String?,
       description: json['description'] as String?,
-      ownerId: json['ownerId'] as String,
-      status: json['status'] as String,
-      slug: json['slug'] as String,
+      ownerId: json['ownerId'] as String? ?? '',
+      status: json['status'] as String? ?? 'active',
+      slug: json['slug'] as String? ?? '',
       isPublic: json['isPublic'] as bool? ?? true,
       coverImageUrl: json['coverImageUrl'] as String?,
       itemCount: json['itemCount'] as int? ?? 0,
@@ -57,11 +57,19 @@ class CatalogModel {
       settings: json['settings'] as Map<String, dynamic>?,
       tags: (json['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
       items: json['items'] != null
-          ? (json['items'] as List<dynamic>).map((e) => CatalogItemModel.fromJson(e as Map<String, dynamic>)).toList()
+          ? (json['items'] as List<dynamic>)
+              .map((e) => CatalogItemModel.fromJson(e as Map<String, dynamic>))
+              .toList()
           : null,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
-      archivedAt: json['archivedAt'] != null ? DateTime.parse(json['archivedAt'] as String) : null,
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'] as String)
+          : DateTime.now(),
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.parse(json['updatedAt'] as String)
+          : DateTime.now(),
+      archivedAt: json['archivedAt'] != null
+          ? DateTime.parse(json['archivedAt'] as String)
+          : null,
     );
   }
 
@@ -141,14 +149,18 @@ class CatalogItemModel {
       description: json['description'] as String?,
       photoURL: json['photoURL'] as String?,
       price: (json['price'] as num).toDouble(),
-      discountPrice: json['discountPrice'] != null ? (json['discountPrice'] as num).toDouble() : null,
+      discountPrice: json['discountPrice'] != null
+          ? (json['discountPrice'] as num).toDouble()
+          : null,
       quantity: json['quantity'] as int? ?? 0,
       sku: json['sku'] as String?,
       status: json['status'] as String? ?? 'available',
       isAvailable: json['isAvailable'] as bool? ?? true,
       isFeatured: json['isFeatured'] as bool? ?? false,
       attributes: json['attributes'] as Map<String, dynamic>?,
-      additionalImages: (json['additionalImages'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
+      additionalImages: (json['additionalImages'] as List<dynamic>?)
+          ?.map((e) => e.toString())
+          .toList(),
       category: json['category'] as String?,
       tags: (json['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
       displayOrder: json['displayOrder'] as int? ?? 0,

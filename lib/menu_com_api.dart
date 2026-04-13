@@ -42,3 +42,20 @@ export 'package:menu_dart_api/by_feature/wardrobe/get_clothing_user/data/usescas
 export 'package:menu_dart_api/by_feature/payments/oauth/mp_oauth.dart';
 
 export 'package:menu_dart_api/by_feature/auth/social_login/social_login.dart';
+
+export 'package:menu_dart_api/by_feature/wardrobe/get_me_wardrobe/data/usescase/get_wardrobe_usecase.dart';
+
+// Catalog APIs
+export 'package:menu_dart_api/by_feature/catalog/models/catalog_model.dart';
+export 'package:menu_dart_api/by_feature/catalog/models/create_catalog_params.dart';
+export 'package:menu_dart_api/by_feature/catalog/models/update_catalog_params.dart';
+export 'package:menu_dart_api/by_feature/catalog/models/create_catalog_item_params.dart';
+export 'package:menu_dart_api/by_feature/catalog/models/update_catalog_item_params.dart';
+export 'package:menu_dart_api/by_feature/catalog/data/usecase/get_my_catalogs_usecase.dart';
+export 'package:menu_dart_api/by_feature/catalog/data/usecase/create_catalog_usecase.dart';
+export 'package:menu_dart_api/by_feature/catalog/data/usecase/update_catalog_usecase.dart';
+export 'package:menu_dart_api/by_feature/catalog/data/usecase/delete_catalog_usecase.dart';
+export 'package:menu_dart_api/by_feature/catalog/data/usecase/get_catalog_by_id_usecase.dart';
+export 'package:menu_dart_api/by_feature/catalog/data/usecase/create_catalog_item_usecase.dart';
+export 'package:menu_dart_api/by_feature/catalog/data/usecase/update_catalog_item_usecase.dart';
+export 'package:menu_dart_api/by_feature/catalog/data/usecase/delete_catalog_item_usecase.dart';

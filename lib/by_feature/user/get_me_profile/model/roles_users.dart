@@ -3,9 +3,19 @@ enum RolesUsers {
   dinning,
   customer,
   admin,
-  // Nuevos roles de negocio
-  commerce,
-  distributor,
+  // Tipos de comercio del registro
+  retail,
+  water_distributor,
+  grocery,
+  food,
+  accessories,
+  electronics,
+  pharmacy,
+  beauty,
+  construction,
+  automotive,
+  pets,
+  // Servicios profesionales
   service,
 }
 

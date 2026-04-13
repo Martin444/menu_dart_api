@@ -21,4 +21,14 @@ abstract class CatalogRepository {
 
   /// Archiva un catálogo
   Future<CatalogModel> archiveCatalog(String catalogId);
+
+  /// Obtiene un catálogo público por su slug
+  Future<CatalogModel> getPublicCatalogBySlug(String slug);
+
+  /// Busca catálogos públicos con filtros
+  Future<List<CatalogModel>> searchPublicCatalogs({
+    String? query,
+    String? type,
+    List<String>? tags,
+  });
 }
