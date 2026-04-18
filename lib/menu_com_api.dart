@@ -59,3 +59,16 @@ export 'package:menu_dart_api/by_feature/catalog/data/usecase/get_catalog_by_id_
 export 'package:menu_dart_api/by_feature/catalog/data/usecase/create_catalog_item_usecase.dart';
 export 'package:menu_dart_api/by_feature/catalog/data/usecase/update_catalog_item_usecase.dart';
 export 'package:menu_dart_api/by_feature/catalog/data/usecase/delete_catalog_item_usecase.dart';
+
+// Membership APIs
+export 'package:menu_dart_api/by_feature/membership/models/membership_status_model.dart';
+export 'package:menu_dart_api/by_feature/membership/models/membership_plan_model.dart';
+export 'package:menu_dart_api/by_feature/membership/models/discount_result_model.dart';
+export 'package:menu_dart_api/by_feature/membership/models/payment_result_model.dart';
+export 'package:menu_dart_api/by_feature/membership/data/usecase/get_membership_status_usecase.dart';
+export 'package:menu_dart_api/by_feature/membership/data/usecase/get_membership_plans_usecase.dart';
+export 'package:menu_dart_api/by_feature/membership/data/usecase/create_membership_payment_usecase.dart';
+export 'package:menu_dart_api/by_feature/membership/data/usecase/subscribe_membership_usecase.dart';
+export 'package:menu_dart_api/by_feature/membership/data/usecase/apply_membership_discount_usecase.dart';
+export 'package:menu_dart_api/by_feature/membership/data/usecase/manage_membership_subscription_usecase.dart';
+export 'package:menu_dart_api/by_feature/membership/data/usecase/upgrade_membership_plan_usecase.dart';
