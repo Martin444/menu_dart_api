@@ -12,7 +12,7 @@ class CreateOrderUseCase {
 class GetOrdersByBusinessOwnerUseCase {
   GetOrdersByBusinessOwnerUseCase();
 
-  Future<List<Order>> call(String businessOwnerId) async {
-    return await OrderProvider().getOrdersByBusinessOwner(businessOwnerId);
+  Future<List<Order>> call(String businessOwnerId, {int? page, int? limit}) async {
+    return await OrderProvider().getOrdersByBusinessOwner(businessOwnerId, page: page, limit: limit);
   }
 }

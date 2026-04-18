@@ -55,9 +55,19 @@ class OrderProvider extends OrderRepository {
   }
 
   @override
-  Future<List<Order>> getOrdersByBusinessOwner(String businessOwnerId) async {
+  Future<List<Order>> getOrdersByBusinessOwner(String businessOwnerId, {int? page, int? limit}) async {
     try {
-      Uri ordersUrl = Uri.parse('${API.defaulBaseUrl}/orders/byBusinessOwner/$businessOwnerId');
+      String urlString = '${API.defaulBaseUrl}/orders/byBusinessOwner/$businessOwnerId';
+      
+      final queryParams = <String>[];
+      if (page != null) queryParams.add('page=$page');
+      if (limit != null) queryParams.add('limit=$limit');
+      
+      if (queryParams.isNotEmpty) {
+        urlString += '?${queryParams.join('&')}';
+      }
+      
+      Uri ordersUrl = Uri.parse(urlString);
       var response = await API.httpClient.get(
         ordersUrl,
         headers: {
