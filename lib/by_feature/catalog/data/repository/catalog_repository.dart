@@ -31,4 +31,10 @@ abstract class CatalogRepository {
     String? type,
     List<String>? tags,
   });
+
+  /// Obtiene un catálogo público por su ID (sin autenticación)
+  Future<CatalogModel> getPublicCatalogById(String catalogId);
+
+  /// Obtiene catálogos públicos por ownerId (sin autenticación)
+  Future<List<CatalogModel>> getPublicCatalogsByOwnerId(String ownerId);
 }
