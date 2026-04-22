@@ -1,25 +1,34 @@
 class NewOrderParam {
-  final int id;
-  final String customerId;
-  final String customerEmail;
+  final String? customerId;
+  final String? customerEmail;
+  final String? customerPhone;
+  final String? customerName;
+  final String? customerLastName;
+  final String? ownerId;
   final double total;
-  final String status;
+  final String? status;
   final List<OrderItem> items;
 
   NewOrderParam({
-    required this.id,
-    required this.customerId,
-    required this.customerEmail,
+    this.customerId,
+    this.customerEmail,
+    this.customerPhone,
+    this.customerName,
+    this.customerLastName,
+    this.ownerId,
     required this.total,
-    required this.status,
+    this.status,
     required this.items,
   });
 
   factory NewOrderParam.fromJson(Map<String, dynamic> json) {
     return NewOrderParam(
-      id: json['id'],
       customerId: json['customerId'],
       customerEmail: json['customerEmail'],
+      customerPhone: json['customerPhone'],
+      customerName: json['customerName'],
+      customerLastName: json['customerLastName'],
+      ownerId: json['ownerId'],
       total: (json['total'] as num).toDouble(),
       status: json['status'],
       items: (json['items'] as List).map((item) => OrderItem.fromJson(item)).toList(),
@@ -27,14 +36,19 @@ class NewOrderParam {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
+    final data = {
       'customerId': customerId,
       'customerEmail': customerEmail,
+      'customerPhone': customerPhone,
+      'customerName': customerName,
+      'customerLastName': customerLastName,
+      'ownerId': ownerId,
       'total': total,
       'status': status,
       'items': items.map((item) => item.toJson()).toList(),
     };
+    data.removeWhere((key, value) => value == null);
+    return data;
   }
 }
 
@@ -42,18 +56,24 @@ class OrderItem {
   final String productName;
   final int quantity;
   final double price;
+  final String sourceId;
+  final String sourceType;
 
   OrderItem({
     required this.productName,
     required this.quantity,
     required this.price,
+    required this.sourceId,
+    required this.sourceType,
   });
 
   factory OrderItem.fromJson(Map<String, dynamic> json) {
     return OrderItem(
       productName: json['productName'],
       quantity: json['quantity'],
-      price: double.tryParse(json['price']) ?? 0.0,
+      price: (json['price'] as num).toDouble(),
+      sourceId: json['sourceId'] ?? '',
+      sourceType: json['sourceType'] ?? 'menu',
     );
   }
 
@@ -62,6 +82,9 @@ class OrderItem {
       'productName': productName,
       'quantity': quantity,
       'price': price,
+      'sourceId': sourceId,
+      'sourceType': sourceType,
     };
   }
 }
+
