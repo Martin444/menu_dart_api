@@ -21,7 +21,7 @@ Future<void> ejemploBasico() async {
   print('=== Ejemplo Básico ===');
 
   final useCase = GetUsersByRolesUseCase();
-  final params = UsersByRolesParams(
+  const params = UsersByRolesParams(
     roles: [RolesUsers.dinning],
     withVinculedAccount: false,
   );
@@ -43,7 +43,7 @@ Future<void> ejemploConCuentasVinculadas() async {
   print('\n=== Ejemplo con Información de Autenticación ===');
 
   final useCase = GetUsersByRolesUseCase();
-  final params = UsersByRolesParams(
+  const params = UsersByRolesParams(
     roles: [RolesUsers.dinning, RolesUsers.clothes],
     withVinculedAccount: true,
   );
@@ -77,7 +77,7 @@ Future<void> ejemploConMultiplesRoles() async {
   print('\n=== Ejemplo con Múltiples Roles ===');
 
   final useCase = GetUsersByRolesUseCase();
-  final params = UsersByRolesParams(
+  const params = UsersByRolesParams(
     roles: [
       RolesUsers.dinning,
       RolesUsers.clothes,
@@ -116,7 +116,7 @@ Future<void> ejemploManejoDeErrores() async {
 
   // Caso 1: Lista vacía de roles (debería lanzar ArgumentError)
   try {
-    final params = UsersByRolesParams(roles: []);
+    const params = UsersByRolesParams(roles: []);
     await useCase.execute(params);
   } catch (e) {
     print('Error esperado con lista vacía: ${e.runtimeType} - $e');
@@ -127,7 +127,7 @@ Future<void> ejemploManejoDeErrores() async {
     final originalToken = API.loginAccessToken;
     API.setAccessToken('token_invalido');
 
-    final params = UsersByRolesParams(
+    const params = UsersByRolesParams(
       roles: [RolesUsers.dinning],
     );
 
@@ -145,7 +145,7 @@ class UsersByRolesHelper {
   /// Obtiene todos los usuarios administradores
   static Future<UsersByRolesResponse> getAdmins() async {
     final useCase = GetUsersByRolesUseCase();
-    final params = UsersByRolesParams(
+    const params = UsersByRolesParams(
       roles: [RolesUsers.admin],
       withVinculedAccount: false,
     );
@@ -155,7 +155,7 @@ class UsersByRolesHelper {
   /// Obtiene usuarios de comida (dinning) con información de autenticación
   static Future<UsersByRolesResponse> getDinningUsersWithAuthInfo() async {
     final useCase = GetUsersByRolesUseCase();
-    final params = UsersByRolesParams(
+    const params = UsersByRolesParams(
       roles: [RolesUsers.dinning],
       withVinculedAccount: true,
     );
@@ -165,7 +165,7 @@ class UsersByRolesHelper {
   /// Obtiene usuarios de ropa (clothes)
   static Future<UsersByRolesResponse> getClothesUsers() async {
     final useCase = GetUsersByRolesUseCase();
-    final params = UsersByRolesParams(
+    const params = UsersByRolesParams(
       roles: [RolesUsers.clothes],
       withVinculedAccount: false,
     );
@@ -186,7 +186,7 @@ class UsersByRolesHelper {
   /// Obtiene usuarios que necesitan cambiar contraseña
   static Future<List<UserByRoleModel>> getUsersNeedingPasswordChange() async {
     final useCase = GetUsersByRolesUseCase();
-    final params = UsersByRolesParams(
+    const params = UsersByRolesParams(
       roles: RolesUsers.values, // Todos los roles
       withVinculedAccount: true,
     );

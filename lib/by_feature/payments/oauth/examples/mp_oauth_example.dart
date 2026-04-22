@@ -14,54 +14,54 @@ class MPOAuthIntegrationExample {
 
   /// 1. Verificar estado inicial de vinculación
   Future<void> checkInitialState() async {
-    debugPrint('🔍 Verificando estado de vinculación...');
+    print('🔍 Verificando estado de vinculación...');
 
     try {
       final status = await _mpOAuthService.getAccountStatus();
 
       if (status.isLinked) {
-        debugPrint('✅ Cuenta ya vinculada:');
-        debugPrint('   📧 Email: ${status.account?.email}');
-        debugPrint('   🏷️  Nickname: ${status.account?.nickname}');
-        debugPrint('   🌍 País: ${status.account?.country}');
-        debugPrint('   📊 Estado: ${status.account?.status}');
+        print('✅ Cuenta ya vinculada:');
+        print('   📧 Email: ${status.account?.email}');
+        print('   🏷️  Nickname: ${status.account?.nickname}');
+        print('   🌍 País: ${status.account?.country}');
+        print('   📊 Estado: ${status.account?.status}');
       } else {
-        debugPrint('❌ No hay cuenta vinculada');
+        print('❌ No hay cuenta vinculada');
       }
     } catch (e) {
-      debugPrint('⚠️ Error al verificar estado: $e');
+      print('⚠️ Error al verificar estado: $e');
     }
   }
 
   /// 2. Flujo completo de vinculación
   Future<String?> startLinkingProcess() async {
-    debugPrint('🚀 Iniciando proceso de vinculación...');
+    print('🚀 Iniciando proceso de vinculación...');
 
     try {
       // Usar el flujo helper que maneja todo automáticamente
       final result = await _mpOAuthService.initiateLinkingFlow(redirectUri);
 
       if (result.isAlreadyLinked) {
-        debugPrint('ℹ️ Ya hay una cuenta vinculada: ${result.linkedEmail}');
+        print('ℹ️ Ya hay una cuenta vinculada: ${result.linkedEmail}');
         return null;
       } else if (result.hasAuthUrl) {
-        debugPrint('🔗 URL de autorización generada: ${result.authUrl}');
-        debugPrint('👆 Redirige al usuario a esta URL');
+        print('🔗 URL de autorización generada: ${result.authUrl}');
+        print('👆 Redirige al usuario a esta URL');
         return result.authUrl;
       } else {
-        debugPrint('❌ Error en el flujo: ${result.error}');
+        print('❌ Error en el flujo: ${result.error}');
         return null;
       }
     } catch (e) {
-      debugPrint('⚠️ Error al iniciar vinculación: $e');
+      print('⚠️ Error al iniciar vinculación: $e');
       return null;
     }
   }
 
   /// 3. Completar vinculación (llamar desde callback page)
   Future<bool> completeLinkinFromCallback(String authorizationCode) async {
-    debugPrint('🔄 Completando vinculación...');
-    debugPrint('📝 Código recibido: ${authorizationCode.substring(0, 10)}...');
+    print('🔄 Completando vinculación...');
+    print('📝 Código recibido: ${authorizationCode.substring(0, 10)}...');
 
     try {
       final success = await _mpOAuthService.completeLinking(
@@ -70,60 +70,60 @@ class MPOAuthIntegrationExample {
       );
 
       if (success) {
-        debugPrint('🎉 ¡Vinculación completada exitosamente!');
+        print('🎉 ¡Vinculación completada exitosamente!');
         // Verificar el estado final
         await checkInitialState();
         return true;
       } else {
-        debugPrint('❌ Error al completar vinculación');
+        print('❌ Error al completar vinculación');
         return false;
       }
     } catch (e) {
-      debugPrint('⚠️ Error en callback: $e');
+      print('⚠️ Error en callback: $e');
       return false;
     }
   }
 
   /// 4. Desvincular cuenta
   Future<bool> unlinkAccount() async {
-    debugPrint('🔓 Desvinculando cuenta...');
+    print('🔓 Desvinculando cuenta...');
 
     try {
       final success = await _mpOAuthService.unlinkAccount();
 
       if (success) {
-        debugPrint('✅ Cuenta desvinculada exitosamente');
+        print('✅ Cuenta desvinculada exitosamente');
         return true;
       } else {
-        debugPrint('❌ Error al desvincular cuenta');
+        print('❌ Error al desvincular cuenta');
         return false;
       }
     } catch (e) {
-      debugPrint('⚠️ Error al desvincular: $e');
+      print('⚠️ Error al desvincular: $e');
       return false;
     }
   }
 
   /// 5. Mantener token válido
   Future<void> ensureValidToken() async {
-    debugPrint('🔄 Verificando validez del token...');
+    print('🔄 Verificando validez del token...');
 
     try {
       final isValid = await _mpOAuthService.ensureValidToken();
 
       if (isValid) {
-        debugPrint('✅ Token válido');
+        print('✅ Token válido');
       } else {
-        debugPrint('⚠️ Token inválido o no hay cuenta vinculada');
+        print('⚠️ Token inválido o no hay cuenta vinculada');
       }
     } catch (e) {
-      debugPrint('⚠️ Error al verificar token: $e');
+      print('⚠️ Error al verificar token: $e');
     }
   }
 
   /// 6. Ejemplo de uso con casos de uso individuales
   Future<void> advancedUsageExample() async {
-    debugPrint('🔧 Ejemplo de uso avanzado...');
+    print('🔧 Ejemplo de uso avanzado...');
 
     // Instanciar casos de uso individuales
     final initiateUseCase = InitiateMPOAuthUseCase();
@@ -133,12 +133,12 @@ class MPOAuthIntegrationExample {
     try {
       // 1. Verificar estado
       final status = await statusUseCase.execute();
-      debugPrint('Estado: ${status.isLinked ? "Vinculado" : "No vinculado"}');
+      print('Estado: ${status.isLinked ? "Vinculado" : "No vinculado"}');
 
       // 2. Si está vinculado, refrescar token silenciosamente
       if (status.isLinked) {
         final refreshed = await refreshUseCase.executeSilently();
-        debugPrint('Token refrescado: ${refreshed ? "Sí" : "No"}');
+        print('Token refrescado: ${refreshed ? "Sí" : "No"}');
       } else {
         // 3. Si no está vinculado, generar URL personalizada
         final request = initiateUseCase.createRequest(
@@ -147,53 +147,53 @@ class MPOAuthIntegrationExample {
         );
 
         final response = await initiateUseCase.execute(request);
-        debugPrint('URL personalizada: ${response.authorizationUrl}');
-        debugPrint('Estado de seguridad: ${response.state}');
+        print('URL personalizada: ${response.authorizationUrl}');
+        print('Estado de seguridad: ${response.state}');
       }
     } catch (e) {
-      debugPrint('Error en uso avanzado: $e');
+      print('Error en uso avanzado: $e');
     }
   }
 
   /// 7. Simulación de flujo completo
   Future<void> runCompleteFlow() async {
-    debugPrint('🎯 Ejecutando flujo completo de ejemplo...\n');
+    print('🎯 Ejecutando flujo completo de ejemplo...\n');
 
     // Paso 1: Verificar estado inicial
     await checkInitialState();
-    debugPrint('');
+    print('');
 
     // Paso 2: Iniciar vinculación si no está vinculada
     final authUrl = await startLinkingProcess();
-    debugPrint('');
+    print('');
 
     if (authUrl != null) {
-      debugPrint('📱 En tu aplicación, redirigirías al usuario a: $authUrl');
-      debugPrint('⏳ Esperando que el usuario autorice...');
-      debugPrint('');
+      print('📱 En tu aplicación, redirigirías al usuario a: $authUrl');
+      print('⏳ Esperando que el usuario autorice...');
+      print('');
 
       // Simular que el usuario autorizó y recibimos el código
       // (En la realidad, esto vendría del callback)
       const simulatedAuthCode = 'SIMULATED_AUTH_CODE_123456';
 
-      debugPrint('📞 Simulando callback con código de autorización...');
+      print('📞 Simulando callback con código de autorización...');
       final completed = await completeLinkinFromCallback(simulatedAuthCode);
-      debugPrint('');
+      print('');
 
       if (completed) {
-        debugPrint('🎊 ¡Flujo completado exitosamente!');
+        print('🎊 ¡Flujo completado exitosamente!');
       }
     }
 
     // Paso 3: Mostrar uso avanzado
     await advancedUsageExample();
-    debugPrint('');
+    print('');
 
     // Paso 4: Verificar token
     await ensureValidToken();
-    debugPrint('');
+    print('');
 
-    debugPrint('✨ Ejemplo completado');
+    print('✨ Ejemplo completado');
   }
 }
 

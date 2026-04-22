@@ -24,8 +24,9 @@ class CatalogProvider extends CatalogRepository {
       // Agregar campos de texto
       formDataMap['catalogType'] = params.catalogType;
       if (params.name != null) formDataMap['name'] = params.name;
-      if (params.description != null)
+      if (params.description != null) {
         formDataMap['description'] = params.description;
+      }
       if (params.isPublic != null) {
         formDataMap['isPublic'] = MultipartHelper.encodeBool(params.isPublic!);
       }
@@ -188,8 +189,9 @@ class CatalogProvider extends CatalogRepository {
 
       // Agregar solo los campos que no son null
       if (params.name != null) formDataMap['name'] = params.name;
-      if (params.description != null)
+      if (params.description != null) {
         formDataMap['description'] = params.description;
+      }
       if (params.status != null) formDataMap['status'] = params.status;
       if (params.slug != null) formDataMap['slug'] = params.slug;
       if (params.isPublic != null) {

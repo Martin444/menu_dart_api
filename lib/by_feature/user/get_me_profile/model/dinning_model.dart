@@ -57,7 +57,7 @@ class DinningModel {
       try {
         return DateTime.parse(value);
       } catch (e) {
-        debugPrint('Error parsing date: $value - $e');
+        print('Error parsing date: $value - $e');
         return null;
       }
     }
@@ -69,10 +69,10 @@ class DinningModel {
 
   // Método para debugging - te ayudará a ver la estructura real del JSON
   static void debugJson(Map<String, dynamic> json) {
-    debugPrint('=== DEBUG JSON STRUCTURE ===');
+    print('=== DEBUG JSON STRUCTURE ===');
     json.forEach((key, value) {
-      debugPrint('$key: ${value.runtimeType} = $value');
+      print('$key: ${value.runtimeType} = $value');
     });
-    debugPrint('=== END DEBUG ===');
+    print('=== END DEBUG ===');
   }
 }

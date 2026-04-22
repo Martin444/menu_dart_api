@@ -11,7 +11,7 @@ import 'package:menu_dart_api/by_feature/payments/oauth/models/mp_oauth_base_res
 /// final useCase = RefreshMPTokenUseCase();
 /// final response = await useCase.execute();
 /// if (response.success) {
-///   debugPrint('Token refrescado exitosamente');
+///   print('Token refrescado exitosamente');
 /// }
 /// ```
 class RefreshMPTokenUseCase {

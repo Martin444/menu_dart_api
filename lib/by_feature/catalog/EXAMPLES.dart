@@ -125,7 +125,7 @@ Future<void> example4UpdateCatalog() async {
   const catalogId = '550e8400-e29b-41d4-a716-446655440000';
 
   // Actualización simple
-  final params = UpdateCatalogParams(
+  const params = UpdateCatalogParams(
     catalogId: catalogId,
     name: 'Menú Actualizado 2024',
     description: 'Renovamos nuestro menú con nuevas opciones',
@@ -289,20 +289,20 @@ Future<void> exampleDifferentTypes() async {
   print('\n--- Ejemplo: Diferentes Tipos de Catálogos ---');
 
   // Catálogo de menú
-  final menuParams = CreateCatalogParams(
+  const menuParams = CreateCatalogParams(
     catalogType: 'menu',
     name: 'Menú del Día',
   );
 
   // Catálogo de guardarropa
-  final wardrobeParams = CreateCatalogParams(
+  const wardrobeParams = CreateCatalogParams(
     catalogType: 'wardrobe',
     name: 'Colección Primavera 2024',
     tags: ['primavera', 'casual', 'formal'],
   );
 
   // Catálogo de productos
-  final productParams = CreateCatalogParams(
+  const productParams = CreateCatalogParams(
     catalogType: 'product_list',
     name: 'Productos Destacados',
     settings: {'showStock': true, 'allowBackorder': false},

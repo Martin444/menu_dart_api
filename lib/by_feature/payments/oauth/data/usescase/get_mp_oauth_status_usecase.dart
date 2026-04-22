@@ -11,9 +11,9 @@ import 'package:menu_dart_api/by_feature/payments/oauth/models/mp_oauth_status_r
 /// final useCase = GetMPOAuthStatusUseCase();
 /// final status = await useCase.execute();
 /// if (status.isLinked) {
-///   debugPrint('Cuenta vinculada: ${status.account?.email}');
+///   print('Cuenta vinculada: ${status.account?.email}');
 /// } else {
-///   debugPrint('No hay cuenta vinculada');
+///   print('No hay cuenta vinculada');
 /// }
 /// ```
 class GetMPOAuthStatusUseCase {
