@@ -4,6 +4,8 @@ class Order {
   final String? id;
   final String? customerEmail;
   final String? customerPhone;
+  final String? customerName;
+  final String? customerLastName;
   final String? createdBy;
   final String? ownerId;
   final String? operationID;
@@ -18,6 +20,8 @@ class Order {
     this.id,
     this.customerEmail,
     this.customerPhone,
+    this.customerName,
+    this.customerLastName,
     this.createdBy,
     this.ownerId,
     this.operationID,
@@ -34,6 +38,8 @@ class Order {
       id: json['id'],
       customerEmail: json['customerEmail'],
       customerPhone: json['customerPhone'],
+      customerName: json['customerName'],
+      customerLastName: json['customerLastName'],
       createdBy: json['createdBy'],
       ownerId: json['ownerId'],
       operationID: json['operationID'],
@@ -51,6 +57,8 @@ class Order {
       'id': id,
       'customerEmail': customerEmail,
       'customerPhone': customerPhone,
+      'customerName': customerName,
+      'customerLastName': customerLastName,
       'createdBy': createdBy,
       'ownerId': ownerId,
       'operationID': operationID,
@@ -71,6 +79,8 @@ extension OrderCopyWith on Order {
     String? id,
     String? customerEmail,
     String? customerPhone,
+    String? customerName,
+    String? customerLastName,
     String? createdBy,
     String? ownerId,
     String? operationID,
@@ -85,6 +95,8 @@ extension OrderCopyWith on Order {
       id: id ?? this.id,
       customerEmail: customerEmail ?? this.customerEmail,
       customerPhone: customerPhone ?? this.customerPhone,
+      customerName: customerName ?? this.customerName,
+      customerLastName: customerLastName ?? this.customerLastName,
       createdBy: createdBy ?? this.createdBy,
       ownerId: ownerId ?? this.ownerId,
       operationID: operationID ?? this.operationID,
@@ -97,3 +109,4 @@ extension OrderCopyWith on Order {
     );
   }
 }
+

@@ -41,12 +41,21 @@ class CatalogModel {
   });
 
   factory CatalogModel.fromJson(Map<String, dynamic> json) {
+    // Extraer ownerId de forma segura (sea string o objeto anidado)
+    String extractedOwnerId = '';
+    if (json['ownerId'] != null) {
+      extractedOwnerId = json['ownerId'] as String;
+    } else if (json['owner'] != null && json['owner']['id'] != null) {
+      extractedOwnerId = json['owner']['id'] as String;
+    }
+
     return CatalogModel(
       id: json['id'] as String? ?? '',
-      catalogType: json['catalogType'] as String? ?? 'wardrobe',
+      // Soporta tanto 'catalogType' como 'type' del JSON
+      catalogType: json['catalogType'] as String? ?? json['type'] as String? ?? 'wardrobe',
       name: json['name'] as String?,
       description: json['description'] as String?,
-      ownerId: json['ownerId'] as String? ?? '',
+      ownerId: extractedOwnerId,
       status: json['status'] as String? ?? 'active',
       slug: json['slug'] as String? ?? '',
       isPublic: json['isPublic'] as bool? ?? true,

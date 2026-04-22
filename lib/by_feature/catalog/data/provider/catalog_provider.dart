@@ -430,4 +430,88 @@ class CatalogProvider extends CatalogRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<CatalogModel> getPublicCatalogById(String catalogId) async {
+    try {
+      final Uri url =
+          Uri.parse('${API.defaulBaseUrl}/catalogs/public/id/$catalogId');
+
+      final response = await _dio.get(
+        url.toString(),
+        options: dio.Options(
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      if (response.statusCode != 200) {
+        throw ApiException(
+          response.statusCode ?? 500,
+          response.data.toString(),
+        );
+      }
+
+      final responseData =
+          response.data is String ? jsonDecode(response.data) : response.data;
+
+      return CatalogModel.fromJson(responseData as Map<String, dynamic>);
+    } catch (e) {
+      if (e is dio.DioException) {
+        throw ApiException(
+          e.response?.statusCode ?? 500,
+          e.response?.data?.toString() ??
+              e.message ??
+              'Error al obtener catálogo público por ID',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<CatalogModel>> getPublicCatalogsByOwnerId(String ownerId) async {
+    try {
+      final Uri url =
+          Uri.parse('${API.defaulBaseUrl}/catalogs/public/owner/$ownerId');
+
+      final response = await _dio.get(
+        url.toString(),
+        options: dio.Options(
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      if (response.statusCode != 200) {
+        throw ApiException(
+          response.statusCode ?? 500,
+          response.data.toString(),
+        );
+      }
+
+      final responseData =
+          response.data is String ? jsonDecode(response.data) : response.data;
+
+      if (responseData is! List) {
+        throw ApiException(500, 'Respuesta inválida del servidor');
+      }
+
+      return responseData
+          .map((item) => CatalogModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      if (e is dio.DioException) {
+        throw ApiException(
+          e.response?.statusCode ?? 500,
+          e.response?.data?.toString() ??
+              e.message ??
+              'Error al obtener catálogos públicos por ownerId',
+        );
+      }
+      rethrow;
+    }
+  }
 }
