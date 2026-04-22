@@ -29,7 +29,7 @@ class NewOrderParam {
       customerName: json['customerName'],
       customerLastName: json['customerLastName'],
       ownerId: json['ownerId'],
-      total: (json['total'] as num).toDouble(),
+      total: double.tryParse(json['total'].toString()) ?? 0.0,
       status: json['status'],
       items: (json['items'] as List).map((item) => OrderItem.fromJson(item)).toList(),
     );
@@ -71,7 +71,7 @@ class OrderItem {
     return OrderItem(
       productName: json['productName'],
       quantity: json['quantity'],
-      price: (json['price'] as num).toDouble(),
+      price: double.tryParse(json['price'].toString()) ?? 0.0,
       sourceId: json['sourceId'] ?? '',
       sourceType: json['sourceType'] ?? 'menu',
     );

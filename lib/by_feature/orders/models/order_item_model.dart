@@ -16,7 +16,7 @@ class OrderItemModel {
       id: json['id'],
       productName: json['productName'],
       quantity: json['quantity'],
-      price: (json['price'] as num).toDouble(),
+      price: double.tryParse(json['price'].toString()) ?? 0.0,
     );
   }
 

@@ -20,13 +20,13 @@ class DiscountResultModel {
       valid: json['valid'] ?? false,
       message: json['message']?.toString(),
       percentageOff: calculation != null
-          ? (calculation['percentageOff'] as num?)?.toDouble()
+          ? double.tryParse(calculation['percentageOff'].toString())
           : null,
       amountOff: calculation != null
-          ? (calculation['amountOff'] as num?)?.toDouble()
+          ? double.tryParse(calculation['amountOff'].toString())
           : null,
       finalPrice: calculation != null
-          ? (calculation['finalPrice'] as num?)?.toDouble()
+          ? double.tryParse(calculation['finalPrice'].toString())
           : null,
     );
   }

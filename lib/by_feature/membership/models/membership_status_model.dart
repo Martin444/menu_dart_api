@@ -35,13 +35,13 @@ class MembershipStatusModel {
       isActive: json['isActive'] ?? false,
       plan: json['plan']?.toString(),
       status: json['status']?.toString(),
-      amount: (json['amount'] ?? 0).toDouble(),
+      amount: double.tryParse(json['amount'].toString()) ?? 0.0,
       currency: json['currency']?.toString() ?? 'ARS',
       originalPrice: json['originalPrice'] != null
-          ? (json['originalPrice'] as num).toDouble()
+          ? double.tryParse(json['originalPrice'].toString())
           : null,
       discountPercentage: json['discountPercentage'] != null
-          ? (json['discountPercentage'] as num).toDouble()
+          ? double.tryParse(json['discountPercentage'].toString())
           : null,
       nextBillingDate: json['nextBillingDate']?.toString(),
       lastPaymentAt: json['lastPaymentAt']?.toString(),

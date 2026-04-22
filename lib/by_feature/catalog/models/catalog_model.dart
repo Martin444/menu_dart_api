@@ -157,9 +157,9 @@ class CatalogItemModel {
       name: json['name'] as String,
       description: json['description'] as String?,
       photoURL: json['photoURL'] as String?,
-      price: (json['price'] as num).toDouble(),
+      price: double.tryParse(json['price'].toString()) ?? 0.0,
       discountPrice: json['discountPrice'] != null
-          ? (json['discountPrice'] as num).toDouble()
+          ? double.tryParse(json['discountPrice'].toString())
           : null,
       quantity: json['quantity'] as int? ?? 0,
       sku: json['sku'] as String?,
