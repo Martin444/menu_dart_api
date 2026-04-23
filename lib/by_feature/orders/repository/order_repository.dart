@@ -5,6 +5,8 @@ abstract class OrderRepository {
 
   Future<List<Order>> getOrdersByBusinessOwner(String businessOwnerId, {int? page, int? limit});
 
+  Future<List<Order>> getOrdersByOwner({int? page, int? limit});
+
   Future<Order> getOrderById(String orderId);
 
   Future<void> createOrder(Order order);

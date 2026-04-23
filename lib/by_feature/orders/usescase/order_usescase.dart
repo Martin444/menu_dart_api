@@ -16,3 +16,11 @@ class GetOrdersByBusinessOwnerUseCase {
     return await OrderProvider().getOrdersByBusinessOwner(businessOwnerId, page: page, limit: limit);
   }
 }
+
+class GetOrdersByOwnerUseCase {
+  GetOrdersByOwnerUseCase();
+
+  Future<List<Order>> call({int? page, int? limit}) async {
+    return await OrderProvider().getOrdersByOwner(page: page, limit: limit);
+  }
+}
