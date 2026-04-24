@@ -14,7 +14,21 @@ export 'package:menu_dart_api/by_feature/user/get_users_by_roles/model/users_by_
 export 'package:menu_dart_api/by_feature/user/get_users_by_roles/model/user_by_role_model.dart';
 export 'package:menu_dart_api/by_feature/user/get_users_by_roles/model/users_by_roles_response.dart';
 export 'package:menu_dart_api/by_feature/user/get_users_by_roles/data/usescase/get_users_by_roles_usecase.dart';
+
+// Admin Users APIs
+export 'package:menu_dart_api/by_feature/user/get_all_users_admin/model/get_all_users_admin_params.dart';
+export 'package:menu_dart_api/by_feature/user/get_all_users_admin/model/get_all_users_admin_filters.dart';
+export 'package:menu_dart_api/by_feature/user/get_all_users_admin/model/get_all_users_admin_response.dart';
+export 'package:menu_dart_api/by_feature/user/get_all_users_admin/model/membership_enums.dart';
+export 'package:menu_dart_api/by_feature/user/get_all_users_admin/data/usecase/get_all_users_admin_usecase.dart';
+
+export 'package:menu_dart_api/by_feature/user/count_users_admin/model/count_users_admin_params.dart';
+export 'package:menu_dart_api/by_feature/user/count_users_admin/model/count_users_admin_filters.dart';
+export 'package:menu_dart_api/by_feature/user/count_users_admin/model/count_users_admin_response.dart';
+export 'package:menu_dart_api/by_feature/user/count_users_admin/data/usecase/count_users_admin_usecase.dart';
+
 export 'package:menu_dart_api/by_feature/user/update_user/update_user.dart';
+export 'package:menu_dart_api/by_feature/user/delete_user/data/usecase/delete_user_usecase.dart';
 export 'package:menu_dart_api/by_feature/orders/models/new_order_param.dart';
 export 'package:menu_dart_api/by_feature/orders/models/order_item_model.dart';
 export 'package:menu_dart_api/by_feature/orders/models/order_model.dart';
