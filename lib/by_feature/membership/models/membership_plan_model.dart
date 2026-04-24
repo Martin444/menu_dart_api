@@ -8,6 +8,7 @@ class MembershipPlanModel {
   final List<String> features;
   final int? maxItems;
   final int? maxCatalogs;
+  final bool isActive;
 
   MembershipPlanModel({
     this.id,
@@ -18,6 +19,7 @@ class MembershipPlanModel {
     this.features = const [],
     this.maxItems,
     this.maxCatalogs,
+    this.isActive = true,
   });
 
   factory MembershipPlanModel.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class MembershipPlanModel {
           : [],
       maxItems: json['maxItems'] as int?,
       maxCatalogs: json['maxCatalogs'] as int?,
+      isActive: json['isActive'] ?? json['active'] ?? ! (json['isArchived'] ?? false),
     );
   }
 
@@ -45,6 +48,8 @@ class MembershipPlanModel {
       'features': features,
       'maxItems': maxItems,
       'maxCatalogs': maxCatalogs,
+      'isActive': isActive,
     };
   }
 }
+

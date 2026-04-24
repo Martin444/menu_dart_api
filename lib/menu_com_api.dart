@@ -58,6 +58,8 @@ export 'package:menu_dart_api/by_feature/catalog/data/usecase/update_catalog_ite
 export 'package:menu_dart_api/by_feature/catalog/data/usecase/delete_catalog_item_usecase.dart';
 
 // Membership APIs
+export 'package:menu_dart_api/by_feature/membership/data/repository/membership_repository.dart';
+export 'package:menu_dart_api/by_feature/membership/data/provider/membership_provider.dart';
 export 'package:menu_dart_api/by_feature/membership/models/membership_status_model.dart';
 export 'package:menu_dart_api/by_feature/membership/models/membership_plan_model.dart';
 export 'package:menu_dart_api/by_feature/membership/models/discount_result_model.dart';
@@ -69,3 +71,10 @@ export 'package:menu_dart_api/by_feature/membership/data/usecase/subscribe_membe
 export 'package:menu_dart_api/by_feature/membership/data/usecase/apply_membership_discount_usecase.dart';
 export 'package:menu_dart_api/by_feature/membership/data/usecase/manage_membership_subscription_usecase.dart';
 export 'package:menu_dart_api/by_feature/membership/data/usecase/upgrade_membership_plan_usecase.dart';
+export 'package:menu_dart_api/by_feature/membership/data/usecase/get_all_admin_plans_usecase.dart';
+export 'package:menu_dart_api/by_feature/membership/data/usecase/get_admin_plan_by_id_usecase.dart';
+export 'package:menu_dart_api/by_feature/membership/data/usecase/create_admin_plan_usecase.dart';
+export 'package:menu_dart_api/by_feature/membership/data/usecase/update_admin_plan_usecase.dart';
+export 'package:menu_dart_api/by_feature/membership/data/usecase/archive_admin_plan_usecase.dart';
+export 'package:menu_dart_api/by_feature/membership/data/usecase/get_admin_plan_stats_usecase.dart';
+export 'package:menu_dart_api/by_feature/membership/data/usecase/seed_admin_plans_usecase.dart';

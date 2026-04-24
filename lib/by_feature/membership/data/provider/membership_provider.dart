@@ -385,4 +385,204 @@ class MembershipProvider extends MembershipRepository {
       rethrow;
     }
   }
+
+  // --- Admin Methods ---
+
+  @override
+  Future<List<MembershipPlanModel>> getAllPlansAdmin() async {
+    try {
+      final response = await _dio.get(
+        '${API.defaulBaseUrl}/admin/subscription-plans',
+        options: dio.Options(headers: _headers),
+      );
+
+      if (response.statusCode != 200) {
+        throw ApiException(
+          response.statusCode ?? 500,
+          response.data.toString(),
+        );
+      }
+
+      final data = _parseResponse(response);
+      if (data is List) {
+        return data
+            .map((item) => MembershipPlanModel.fromJson(item as Map<String, dynamic>))
+            .toList();
+      }
+      return [];
+    } catch (e) {
+      if (e is dio.DioException) {
+        throw ApiException(
+          e.response?.statusCode ?? 500,
+          e.response?.data?.toString() ?? e.message ?? 'Error al obtener todos los planes (admin)',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<MembershipPlanModel> getPlanByIdAdmin(String id) async {
+    try {
+      final response = await _dio.get(
+        '${API.defaulBaseUrl}/admin/subscription-plans/$id',
+        options: dio.Options(headers: _headers),
+      );
+
+      if (response.statusCode != 200) {
+        throw ApiException(
+          response.statusCode ?? 500,
+          response.data.toString(),
+        );
+      }
+
+      final data = _parseResponse(response) as Map<String, dynamic>;
+      return MembershipPlanModel.fromJson(data);
+    } catch (e) {
+      if (e is dio.DioException) {
+        throw ApiException(
+          e.response?.statusCode ?? 500,
+          e.response?.data?.toString() ?? e.message ?? 'Error al obtener plan por ID (admin)',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<MembershipPlanModel> createPlan(Map<String, dynamic> planData) async {
+    try {
+      final response = await _dio.post(
+        '${API.defaulBaseUrl}/admin/subscription-plans',
+        data: jsonEncode(planData),
+        options: dio.Options(headers: _headers),
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ApiException(
+          response.statusCode ?? 500,
+          response.data.toString(),
+        );
+      }
+
+      final data = _parseResponse(response) as Map<String, dynamic>;
+      return MembershipPlanModel.fromJson(data);
+    } catch (e) {
+      if (e is dio.DioException) {
+        throw ApiException(
+          e.response?.statusCode ?? 500,
+          e.response?.data?.toString() ?? e.message ?? 'Error al crear plan',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<MembershipPlanModel> updatePlan(String id, Map<String, dynamic> planData) async {
+    try {
+      final response = await _dio.put(
+        '${API.defaulBaseUrl}/admin/subscription-plans/$id',
+        data: jsonEncode(planData),
+        options: dio.Options(headers: _headers),
+      );
+
+      if (response.statusCode != 200) {
+        throw ApiException(
+          response.statusCode ?? 500,
+          response.data.toString(),
+        );
+      }
+
+      final data = _parseResponse(response) as Map<String, dynamic>;
+      return MembershipPlanModel.fromJson(data);
+    } catch (e) {
+      if (e is dio.DioException) {
+        throw ApiException(
+          e.response?.statusCode ?? 500,
+          e.response?.data?.toString() ?? e.message ?? 'Error al actualizar plan',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<bool> archivePlan(String id) async {
+    try {
+      final response = await _dio.delete(
+        '${API.defaulBaseUrl}/admin/subscription-plans/$id',
+        options: dio.Options(headers: _headers),
+      );
+
+      if (response.statusCode != 200) {
+        throw ApiException(
+          response.statusCode ?? 500,
+          response.data.toString(),
+        );
+      }
+      return true;
+    } catch (e) {
+      if (e is dio.DioException) {
+        throw ApiException(
+          e.response?.statusCode ?? 500,
+          e.response?.data?.toString() ?? e.message ?? 'Error al archivar plan',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> getPlanStats() async {
+    try {
+      final response = await _dio.get(
+        '${API.defaulBaseUrl}/admin/subscription-plans/stats',
+        options: dio.Options(headers: _headers),
+      );
+
+      if (response.statusCode != 200) {
+        throw ApiException(
+          response.statusCode ?? 500,
+          response.data.toString(),
+        );
+      }
+
+      return _parseResponse(response) as Map<String, dynamic>;
+    } catch (e) {
+      if (e is dio.DioException) {
+        throw ApiException(
+          e.response?.statusCode ?? 500,
+          e.response?.data?.toString() ?? e.message ?? 'Error al obtener estadísticas de planes',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<bool> seedStandardPlans() async {
+    try {
+      final response = await _dio.post(
+        '${API.defaulBaseUrl}/admin/subscription-plans/seed-standard-plans',
+        options: dio.Options(headers: _headers),
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ApiException(
+          response.statusCode ?? 500,
+          response.data.toString(),
+        );
+      }
+      return true;
+    } catch (e) {
+      if (e is dio.DioException) {
+        throw ApiException(
+          e.response?.statusCode ?? 500,
+          e.response?.data?.toString() ?? e.message ?? 'Error al sembrar planes estándar',
+        );
+      }
+      rethrow;
+    }
+  }
 }

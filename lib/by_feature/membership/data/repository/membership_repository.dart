@@ -44,4 +44,27 @@ abstract class MembershipRepository {
 
   /// Obtener historial de auditoría
   Future<List<Map<String, dynamic>>> getAuditHistory();
+
+  // --- Admin Methods ---
+
+  /// Obtiene todos los planes (incluyendo inactivos) - Solo Admin
+  Future<List<MembershipPlanModel>> getAllPlansAdmin();
+
+  /// Obtiene un plan por ID - Solo Admin
+  Future<MembershipPlanModel> getPlanByIdAdmin(String id);
+
+  /// Crea un nuevo plan - Solo Admin
+  Future<MembershipPlanModel> createPlan(Map<String, dynamic> planData);
+
+  /// Actualiza un plan existente - Solo Admin
+  Future<MembershipPlanModel> updatePlan(String id, Map<String, dynamic> planData);
+
+  /// Archiva un plan (soft delete) - Solo Admin
+  Future<bool> archivePlan(String id);
+
+  /// Obtiene estadísticas de planes y suscripciones - Solo Admin
+  Future<Map<String, dynamic>> getPlanStats();
+
+  /// Semilla de planes estándar - Solo Admin
+  Future<bool> seedStandardPlans();
 }
