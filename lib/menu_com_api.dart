@@ -28,6 +28,7 @@ export 'package:menu_dart_api/by_feature/user/count_users_admin/model/count_user
 export 'package:menu_dart_api/by_feature/user/count_users_admin/data/usecase/count_users_admin_usecase.dart';
 
 export 'package:menu_dart_api/by_feature/user/update_user/update_user.dart';
+export 'package:menu_dart_api/by_feature/user/update_user_admin/update_user_admin.dart';
 export 'package:menu_dart_api/by_feature/user/delete_user/data/usecase/delete_user_usecase.dart';
 export 'package:menu_dart_api/by_feature/orders/models/new_order_param.dart';
 export 'package:menu_dart_api/by_feature/orders/models/order_item_model.dart';
