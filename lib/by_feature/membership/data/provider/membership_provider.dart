@@ -71,13 +71,20 @@ class MembershipProvider extends MembershipRepository {
         );
       }
 
-      final data = _parseResponse(response) as Map<String, dynamic>;
-      if (data['plans'] != null) {
-        return (data['plans'] as List)
-            .map((item) => MembershipPlanModel.fromJson(item as Map<String, dynamic>))
-            .toList();
+      final data = _parseResponse(response);
+      
+      List<dynamic> plansList = [];
+      if (data is List) {
+        plansList = data;
+      } else if (data is Map && data['plans'] != null) {
+        plansList = data['plans'] as List;
+      } else if (data is Map && data['data'] != null && data['data'] is List) {
+        plansList = data['data'] as List;
       }
-      return [];
+
+      return plansList
+          .map((item) => MembershipPlanModel.fromJson(item as Map<String, dynamic>))
+          .toList();
     } catch (e) {
       if (e is dio.DioException) {
         throw ApiException(
@@ -404,12 +411,20 @@ class MembershipProvider extends MembershipRepository {
       }
 
       final data = _parseResponse(response);
+      
+      List<dynamic> plansList = [];
       if (data is List) {
-        return data
-            .map((item) => MembershipPlanModel.fromJson(item as Map<String, dynamic>))
-            .toList();
+        plansList = data;
+      } else if (data is Map && data['plans'] != null) {
+        plansList = data['plans'] as List;
+      } else if (data is Map && data['data'] != null && data['data'] is List) {
+        // Soporte adicional por si viene envuelto en 'data'
+        plansList = data['data'] as List;
       }
-      return [];
+
+      return plansList
+          .map((item) => MembershipPlanModel.fromJson(item as Map<String, dynamic>))
+          .toList();
     } catch (e) {
       if (e is dio.DioException) {
         throw ApiException(
@@ -548,7 +563,11 @@ class MembershipProvider extends MembershipRepository {
         );
       }
 
-      return _parseResponse(response) as Map<String, dynamic>;
+      final data = _parseResponse(response);
+      if (data is Map && data['data'] != null && data['data'] is Map) {
+        return data['data'] as Map<String, dynamic>;
+      }
+      return data as Map<String, dynamic>;
     } catch (e) {
       if (e is dio.DioException) {
         throw ApiException(
