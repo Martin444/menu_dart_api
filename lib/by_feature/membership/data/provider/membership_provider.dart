@@ -604,4 +604,32 @@ class MembershipProvider extends MembershipRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<MembershipStatusModel> assignPlanToUser(String userId, String plan) async {
+    try {
+      final response = await _dio.post(
+        '${API.defaulBaseUrl}/admin/memberships/user/$userId/assign/$plan',
+        options: dio.Options(headers: _headers),
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ApiException(
+          response.statusCode ?? 500,
+          response.data.toString(),
+        );
+      }
+
+      final data = _parseResponse(response) as Map<String, dynamic>;
+      return MembershipStatusModel.fromJson(data);
+    } catch (e) {
+      if (e is dio.DioException) {
+        throw ApiException(
+          e.response?.statusCode ?? 500,
+          e.response?.data?.toString() ?? e.message ?? 'Error al asignar plan al usuario',
+        );
+      }
+      rethrow;
+    }
+  }
 }

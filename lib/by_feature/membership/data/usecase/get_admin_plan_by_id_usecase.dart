@@ -1,3 +1,4 @@
+import 'package:menu_dart_api/by_feature/membership/data/provider/membership_provider.dart';
 import 'package:menu_dart_api/by_feature/membership/data/repository/membership_repository.dart';
 import 'package:menu_dart_api/by_feature/membership/models/membership_plan_model.dart';
 
@@ -5,7 +6,8 @@ import 'package:menu_dart_api/by_feature/membership/models/membership_plan_model
 class GetAdminPlanByIdUseCase {
   final MembershipRepository _repository;
 
-  GetAdminPlanByIdUseCase(this._repository);
+  GetAdminPlanByIdUseCase({MembershipRepository? repository})
+      : _repository = repository ?? MembershipProvider();
 
   Future<MembershipPlanModel> call(String id) async {
     return await _repository.getPlanByIdAdmin(id);

@@ -2,14 +2,13 @@ import 'package:menu_dart_api/by_feature/membership/data/provider/membership_pro
 import 'package:menu_dart_api/by_feature/membership/data/repository/membership_repository.dart';
 import 'package:menu_dart_api/by_feature/membership/models/membership_status_model.dart';
 
-/// Caso de uso para suscribirse a un plan gratuito
-class SubscribeMembershipUseCase {
+class AssignPlanToUserUseCase {
   final MembershipRepository _repository;
 
-  SubscribeMembershipUseCase({MembershipRepository? repository})
+  AssignPlanToUserUseCase({MembershipRepository? repository})
       : _repository = repository ?? MembershipProvider();
 
-  Future<MembershipStatusModel> call(String planId) async {
-    return await _repository.subscribe(planId);
+  Future<MembershipStatusModel> call(String userId, String plan) {
+    return _repository.assignPlanToUser(userId, plan);
   }
 }

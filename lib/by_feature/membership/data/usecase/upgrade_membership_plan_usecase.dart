@@ -1,22 +1,15 @@
 import 'package:menu_dart_api/by_feature/membership/data/provider/membership_provider.dart';
+import 'package:menu_dart_api/by_feature/membership/data/repository/membership_repository.dart';
 import 'package:menu_dart_api/by_feature/membership/models/membership_status_model.dart';
 
-/// Caso de uso para actualizar/hacer upgrade de plan
+/// Caso de uso para cambiar de plan (upgrade/downgrade)
 class UpgradeMembershipPlanUseCase {
-  final MembershipProvider _provider = MembershipProvider();
+  final MembershipRepository _repository;
 
-  /// Actualiza el plan de membresía del usuario
-  ///
-  /// [newPlan] - El nuevo plan (PREMIUM, ENTERPRISE)
-  ///
-  /// Retorna [MembershipStatusModel] con el estado actualizado
-  ///
-  /// Lanza [ApiException] si hay error en la petición
-  Future<MembershipStatusModel> execute(String newPlan) async {
-    try {
-      return await _provider.upgradePlan(newPlan);
-    } catch (e) {
-      rethrow;
-    }
+  UpgradeMembershipPlanUseCase({MembershipRepository? repository})
+      : _repository = repository ?? MembershipProvider();
+
+  Future<MembershipStatusModel> call(String newPlanId) async {
+    return await _repository.upgradePlan(newPlanId);
   }
 }

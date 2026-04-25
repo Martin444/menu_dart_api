@@ -78,3 +78,4 @@ export 'package:menu_dart_api/by_feature/membership/data/usecase/update_admin_pl
 export 'package:menu_dart_api/by_feature/membership/data/usecase/archive_admin_plan_usecase.dart';
 export 'package:menu_dart_api/by_feature/membership/data/usecase/get_admin_plan_stats_usecase.dart';
 export 'package:menu_dart_api/by_feature/membership/data/usecase/seed_admin_plans_usecase.dart';
+export 'package:menu_dart_api/by_feature/membership/data/usecase/assign_plan_to_user_usecase.dart';

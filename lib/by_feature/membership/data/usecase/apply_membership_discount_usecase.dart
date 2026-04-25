@@ -1,22 +1,15 @@
 import 'package:menu_dart_api/by_feature/membership/data/provider/membership_provider.dart';
+import 'package:menu_dart_api/by_feature/membership/data/repository/membership_repository.dart';
 import 'package:menu_dart_api/by_feature/membership/models/discount_result_model.dart';
 
-/// Caso de uso para aplicar un código de descuento
+/// Caso de uso para aplicar un cupón de descuento
 class ApplyMembershipDiscountUseCase {
-  final MembershipProvider _provider = MembershipProvider();
+  final MembershipRepository _repository;
 
-  /// Aplica un código de descuento a la membresía actual
-  ///
-  /// [code] - El código de descuento a validar y aplicar
-  ///
-  /// Retorna [DiscountResultModel] con el resultado de la validación
-  ///
-  /// Lanza [ApiException] si hay error en la petición
-  Future<DiscountResultModel> execute(String code) async {
-    try {
-      return await _provider.applyDiscount(code);
-    } catch (e) {
-      rethrow;
-    }
+  ApplyMembershipDiscountUseCase({MembershipRepository? repository})
+      : _repository = repository ?? MembershipProvider();
+
+  Future<DiscountResultModel> call(String coupon) async {
+    return await _repository.applyDiscount(coupon);
   }
 }

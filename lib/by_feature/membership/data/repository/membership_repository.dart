@@ -67,4 +67,7 @@ abstract class MembershipRepository {
 
   /// Semilla de planes estándar - Solo Admin
   Future<bool> seedStandardPlans();
+
+  /// Asigna un plan a un usuario - Solo Admin
+  Future<MembershipStatusModel> assignPlanToUser(String userId, String plan);
 }
