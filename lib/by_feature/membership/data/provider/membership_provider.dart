@@ -6,6 +6,8 @@ import 'package:menu_dart_api/by_feature/membership/models/membership_status_mod
 import 'package:menu_dart_api/by_feature/membership/models/membership_plan_model.dart';
 import 'package:menu_dart_api/by_feature/membership/models/discount_result_model.dart';
 import 'package:menu_dart_api/by_feature/membership/models/payment_result_model.dart';
+import 'package:menu_dart_api/by_feature/membership/models/payment_link_model.dart';
+import 'package:menu_dart_api/by_feature/membership/models/billing_details_model.dart';
 import 'package:menu_dart_api/core/api.dart';
 import 'package:menu_dart_api/core/exeptions/api_exception.dart';
 
@@ -627,6 +629,315 @@ class MembershipProvider extends MembershipRepository {
         throw ApiException(
           e.response?.statusCode ?? 500,
           e.response?.data?.toString() ?? e.message ?? 'Error al asignar plan al usuario',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  // --- Admin Billing Methods ---
+
+  @override
+  Future<PaymentLinkModel> generatePaymentLink({
+    required String userId,
+    required String plan,
+    required double amount,
+    int periodMonths = 1,
+    String? description,
+  }) async {
+    try {
+      final body = <String, dynamic>{
+        'userId': userId,
+        'plan': plan,
+        'amount': amount,
+        'periodMonths': periodMonths,
+      };
+      if (description != null) body['description'] = description;
+
+      final response = await _dio.post(
+        '${API.defaulBaseUrl}/admin/memberships/generate-payment-link',
+        data: jsonEncode(body),
+        options: dio.Options(headers: _headers),
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ApiException(
+          response.statusCode ?? 500,
+          response.data.toString(),
+        );
+      }
+
+      final data = _parseResponse(response) as Map<String, dynamic>;
+      return PaymentLinkModel.fromJson(data);
+    } catch (e) {
+      if (e is dio.DioException) {
+        throw ApiException(
+          e.response?.statusCode ?? 500,
+          e.response?.data?.toString() ?? e.message ?? 'Error al generar link de pago',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<AutoBillingResponseModel> enableAutoBilling({
+    required String userId,
+    required String plan,
+    required String cardTokenId,
+    double? amount,
+    String billingCycle = 'monthly',
+  }) async {
+    try {
+      final body = <String, dynamic>{
+        'userId': userId,
+        'plan': plan,
+        'cardTokenId': cardTokenId,
+        'billingCycle': billingCycle,
+      };
+      if (amount != null) body['amount'] = amount;
+
+      final response = await _dio.post(
+        '${API.defaulBaseUrl}/admin/memberships/enable-auto-billing',
+        data: jsonEncode(body),
+        options: dio.Options(headers: _headers),
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ApiException(
+          response.statusCode ?? 500,
+          response.data.toString(),
+        );
+      }
+
+      final data = _parseResponse(response) as Map<String, dynamic>;
+      return AutoBillingResponseModel.fromJson(data);
+    } catch (e) {
+      if (e is dio.DioException) {
+        throw ApiException(
+          e.response?.statusCode ?? 500,
+          e.response?.data?.toString() ?? e.message ?? 'Error al habilitar auto-billing',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<BillingDetailsModel> getBillingDetails(String membershipId) async {
+    try {
+      final response = await _dio.get(
+        '${API.defaulBaseUrl}/admin/memberships/$membershipId/billing-details',
+        options: dio.Options(headers: _headers),
+      );
+
+      if (response.statusCode != 200) {
+        throw ApiException(
+          response.statusCode ?? 500,
+          response.data.toString(),
+        );
+      }
+
+      final data = _parseResponse(response) as Map<String, dynamic>;
+      return BillingDetailsModel.fromJson(data);
+    } catch (e) {
+      if (e is dio.DioException) {
+        throw ApiException(
+          e.response?.statusCode ?? 500,
+          e.response?.data?.toString() ?? e.message ?? 'Error al obtener detalles de facturación',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ChangeAmountResponseModel> changeBillingAmount({
+    required String membershipId,
+    required double newAmount,
+    String? reason,
+  }) async {
+    try {
+      final body = <String, dynamic>{
+        'newAmount': newAmount,
+      };
+      if (reason != null) body['reason'] = reason;
+
+      final response = await _dio.patch(
+        '${API.defaulBaseUrl}/admin/memberships/$membershipId/billing-amount',
+        data: jsonEncode(body),
+        options: dio.Options(headers: _headers),
+      );
+
+      if (response.statusCode != 200) {
+        throw ApiException(
+          response.statusCode ?? 500,
+          response.data.toString(),
+        );
+      }
+
+      final data = _parseResponse(response) as Map<String, dynamic>;
+      return ChangeAmountResponseModel.fromJson(data);
+    } catch (e) {
+      if (e is dio.DioException) {
+        throw ApiException(
+          e.response?.statusCode ?? 500,
+          e.response?.data?.toString() ?? e.message ?? 'Error al cambiar monto de facturación',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<AutoBillingResponseModel> migrateToAutoBilling({
+    required String membershipId,
+    required String cardTokenId,
+    double? amount,
+  }) async {
+    try {
+      final body = <String, dynamic>{
+        'cardTokenId': cardTokenId,
+      };
+      if (amount != null) body['amount'] = amount;
+
+      final response = await _dio.post(
+        '${API.defaulBaseUrl}/admin/memberships/$membershipId/migrate-to-auto-billing',
+        data: jsonEncode(body),
+        options: dio.Options(headers: _headers),
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ApiException(
+          response.statusCode ?? 500,
+          response.data.toString(),
+        );
+      }
+
+      final data = _parseResponse(response) as Map<String, dynamic>;
+      return AutoBillingResponseModel.fromJson(data);
+    } catch (e) {
+      if (e is dio.DioException) {
+        throw ApiException(
+          e.response?.statusCode ?? 500,
+          e.response?.data?.toString() ?? e.message ?? 'Error al migrar a auto-billing',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> migrateToManualBilling(String membershipId) async {
+    try {
+      final response = await _dio.post(
+        '${API.defaulBaseUrl}/admin/memberships/$membershipId/migrate-to-manual',
+        options: dio.Options(headers: _headers),
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw ApiException(
+          response.statusCode ?? 500,
+          response.data.toString(),
+        );
+      }
+
+      return _parseResponse(response) as Map<String, dynamic>;
+    } catch (e) {
+      if (e is dio.DioException) {
+        throw ApiException(
+          e.response?.statusCode ?? 500,
+          e.response?.data?.toString() ?? e.message ?? 'Error al migrar a billing manual',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<bool> pauseUserSubscription(String membershipId) async {
+    try {
+      final response = await _dio.post(
+        '${API.defaulBaseUrl}/admin/memberships/$membershipId/pause',
+        options: dio.Options(headers: _headers),
+      );
+
+      if (response.statusCode != 200) {
+        throw ApiException(
+          response.statusCode ?? 500,
+          response.data.toString(),
+        );
+      }
+      return true;
+    } catch (e) {
+      if (e is dio.DioException) {
+        throw ApiException(
+          e.response?.statusCode ?? 500,
+          e.response?.data?.toString() ?? e.message ?? 'Error al pausar suscripción',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<bool> resumeUserSubscription(String membershipId) async {
+    try {
+      final response = await _dio.post(
+        '${API.defaulBaseUrl}/admin/memberships/$membershipId/resume',
+        options: dio.Options(headers: _headers),
+      );
+
+      if (response.statusCode != 200) {
+        throw ApiException(
+          response.statusCode ?? 500,
+          response.data.toString(),
+        );
+      }
+      return true;
+    } catch (e) {
+      if (e is dio.DioException) {
+        throw ApiException(
+          e.response?.statusCode ?? 500,
+          e.response?.data?.toString() ?? e.message ?? 'Error al reanudar suscripción',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<MembershipStatusModel> extendMembership({
+    required String membershipId,
+    required int periodMonths,
+    String? reason,
+  }) async {
+    try {
+      final body = <String, dynamic>{
+        'periodMonths': periodMonths,
+      };
+      if (reason != null) body['reason'] = reason;
+
+      final response = await _dio.post(
+        '${API.defaulBaseUrl}/admin/memberships/$membershipId/extend',
+        data: jsonEncode(body),
+        options: dio.Options(headers: _headers),
+      );
+
+      if (response.statusCode != 200) {
+        throw ApiException(
+          response.statusCode ?? 500,
+          response.data.toString(),
+        );
+      }
+
+      final data = _parseResponse(response) as Map<String, dynamic>;
+      return MembershipStatusModel.fromJson(data);
+    } catch (e) {
+      if (e is dio.DioException) {
+        throw ApiException(
+          e.response?.statusCode ?? 500,
+          e.response?.data?.toString() ?? e.message ?? 'Error al extender membresía',
         );
       }
       rethrow;
