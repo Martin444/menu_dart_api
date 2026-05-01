@@ -4,7 +4,7 @@ import 'package:menu_dart_api/core/services/anonymous_dio_client.dart';
 class API {
   static late API _instance;
 
-  static bool _inicialized = false;
+  static bool _initialized = false;
   static String _baseURL = '';
   static String _accessToken = '';
 
@@ -14,7 +14,7 @@ class API {
     if (urlMenuapi.isNotEmpty) {
       _instance = API._();
       _baseURL = urlMenuapi;
-      _inicialized = true;
+      _initialized = true;
     }
     return _instance;
   }
@@ -24,10 +24,11 @@ class API {
     return _accessToken;
   }
 
-  static String get defaulBaseUrl => _baseURL;
   static String get loginAccessToken => _accessToken;
 
-  bool get initialized => _inicialized;
+  static String get defaulBaseUrl => _baseURL;
+
+  bool get initialized => _initialized;
 
   /// Cliente HTTP con soporte para Anonymous ID automático
   static AnonymousHttpClient get httpClient => AnonymousHttpClient.instance;
