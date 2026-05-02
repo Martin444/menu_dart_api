@@ -551,6 +551,35 @@ class MembershipProvider extends MembershipRepository {
   }
 
   @override
+  Future<MembershipPlanModel> setDefaultPlan(String planId) async {
+    try {
+      final response = await _dio.put(
+        '${API.defaulBaseUrl}/admin/subscription-plans/$planId',
+        data: jsonEncode({'isDefault': true}),
+        options: dio.Options(headers: _headers),
+      );
+
+      if (response.statusCode != 200) {
+        throw ApiException(
+          response.statusCode ?? 500,
+          response.data.toString(),
+        );
+      }
+
+      final data = _parseResponse(response) as Map<String, dynamic>;
+      return MembershipPlanModel.fromJson(data);
+    } catch (e) {
+      if (e is dio.DioException) {
+        throw ApiException(
+          e.response?.statusCode ?? 500,
+          e.response?.data?.toString() ?? e.message ?? 'Error al establecer plan predeterminado',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  @override
   Future<Map<String, dynamic>> getPlanStats() async {
     try {
       final response = await _dio.get(

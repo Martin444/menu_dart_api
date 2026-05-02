@@ -36,15 +36,16 @@ class RegisterCommerceProvider extends RegisterCommerceRespository {
         }),
       );
       var respJson = jsonDecode(login.body);
-      if (respJson['access_token'] == null) {
+      final token = respJson['access_token'] ?? respJson['accessToken'];
+      if (token == null) {
         throw ApiException(
           respJson['statusCode'] ?? 32,
           respJson['message'],
         );
       }
       return UserSuccess(
-        accessToken: respJson['access_token'],
-        needToChangePassword: respJson['needToChangePassword'],
+        accessToken: token,
+        needToChangePassword: respJson['needToChangePassword'] ?? false,
       );
     } catch (e) {
       rethrow;

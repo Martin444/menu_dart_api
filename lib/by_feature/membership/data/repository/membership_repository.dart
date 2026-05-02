@@ -64,6 +64,10 @@ abstract class MembershipRepository {
   /// Archiva un plan (soft delete) - Solo Admin
   Future<bool> archivePlan(String id);
 
+  /// Establece un plan como predeterminado - Solo Admin
+  /// Solo puede haber un plan predeterminado a la vez
+  Future<MembershipPlanModel> setDefaultPlan(String planId);
+
   /// Obtiene estadísticas de planes y suscripciones - Solo Admin
   Future<Map<String, dynamic>> getPlanStats();
 

@@ -29,10 +29,11 @@ class LoginProvider extends LoginRepository {
         );
       }
       var respJson = jsonDecode(login.body);
-      API.setAccessToken(respJson['access_token']);
+      final token = respJson['access_token'] ?? respJson['accessToken'] ?? '';
+      API.setAccessToken(token);
       return UserSuccess(
-        accessToken: respJson['access_token'],
-        needToChangePassword: respJson['needToChangePassword'],
+        accessToken: token,
+        needToChangePassword: respJson['needToChangePassword'] ?? false,
       );
     } catch (e) {
       rethrow;

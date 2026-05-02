@@ -9,6 +9,7 @@ class MembershipPlanModel {
   final List<String> features;
   final MembershipPlanLimits limits;
   final bool isActive;
+  final bool isDefault;
 
   MembershipPlanModel({
     this.id,
@@ -20,6 +21,7 @@ class MembershipPlanModel {
     this.features = const [],
     MembershipPlanLimits? limits,
     this.isActive = true,
+    this.isDefault = false,
   }) : limits = limits ?? MembershipPlanLimits();
 
   factory MembershipPlanModel.fromJson(Map<String, dynamic> json) {
@@ -39,6 +41,7 @@ class MembershipPlanModel {
           ? MembershipPlanLimits.fromJson(json['limits'] as Map<String, dynamic>)
           : MembershipPlanLimits(),
       isActive: json['isActive'] ?? (json['status'] == 'active'),
+      isDefault: json['isDefault'] ?? false,
     );
   }
 
@@ -53,6 +56,7 @@ class MembershipPlanModel {
       'features': features,
       'limits': limits.toJson(),
       'isActive': isActive,
+      'isDefault': isDefault,
     };
   }
 }

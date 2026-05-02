@@ -29,7 +29,7 @@ class SocialLoginResponse {
   /// Crea una instancia desde JSON
   factory SocialLoginResponse.fromJson(Map<String, dynamic> json) {
     return SocialLoginResponse(
-      accessToken: json['access_token'] as String,
+      accessToken: (json['access_token'] ?? json['accessToken'] ?? '') as String,
       refreshToken: json['refresh_token'] as String?,
       user: json['user'] != null ? SocialLoginUser.fromJson(json['user'] as Map<String, dynamic>) : null,
       needToChangePassword: json['needToChangePassword'] as bool? ?? false,
