@@ -10,7 +10,7 @@ class UpdateFcmTokenProvider extends UpdateFcmTokenRepository {
     try {
       final String url = '${API.defaulBaseUrl}/user/fcm-token';
 
-      final response = await dio.Dio().post(
+      final response = await dio.Dio().patch(
         url,
         data: request.toJson(),
         options: dio.Options(
