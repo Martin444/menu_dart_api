@@ -24,3 +24,11 @@ class GetOrdersByOwnerUseCase {
     return await OrderProvider().getOrdersByOwner(page: page, limit: limit);
   }
 }
+
+class GetOrdersAdminUseCase {
+  GetOrdersAdminUseCase();
+
+  Future<List<Order>> call({int? page, int? limit}) async {
+    return await OrderProvider().getOrdersAdmin(page: page, limit: limit);
+  }
+}

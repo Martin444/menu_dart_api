@@ -129,4 +129,36 @@ class OrderProvider extends OrderRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<List<Order>> getOrdersAdmin({int? page, int? limit}) async {
+    try {
+      String urlString = '${API.defaulBaseUrl}/orders/admin/all';
+      
+      final queryParams = <String>[];
+      if (page != null) queryParams.add('page=$page');
+      if (limit != null) queryParams.add('limit=$limit');
+      
+      if (queryParams.isNotEmpty) {
+        urlString += '?${queryParams.join('&')}';
+      }
+      
+      Uri ordersUrl = Uri.parse(urlString);
+      var response = await API.httpClient.get(
+        ordersUrl,
+        headers: {
+          'Authorization': 'Bearer ${API.loginAccessToken}',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> ordersJson = jsonDecode(response.body);
+        return ordersJson.map((orderJson) => Order.fromJson(orderJson)).toList();
+      } else {
+        throw Exception('Failed to load all orders (admin): ${response.statusCode}');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
