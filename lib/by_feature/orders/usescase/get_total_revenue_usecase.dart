@@ -24,7 +24,11 @@ class GetTotalRevenueUseCase {
         );
       }
 
-      return (jsonDecode(response.body) as num).toDouble();
+      final decoded = jsonDecode(response.body);
+      if (decoded is Map<String, dynamic>) {
+        return (decoded['revenue'] as num? ?? decoded['total'] as num? ?? 0).toDouble();
+      }
+      return (decoded as num).toDouble();
     } catch (e) {
       rethrow;
     }

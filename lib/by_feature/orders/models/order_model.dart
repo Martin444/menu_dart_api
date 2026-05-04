@@ -34,21 +34,32 @@ class Order {
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
+    List<OrderItem> itemsList = [];
+    if (json['items'] != null && json['items'] is List) {
+      itemsList = (json['items'] as List)
+          .map((item) => OrderItem.fromJson(item as Map<String, dynamic>))
+          .toList();
+    }
+
     return Order(
-      id: json['id'],
-      customerEmail: json['customerEmail'],
-      customerPhone: json['customerPhone'],
-      customerName: json['customerName'],
-      customerLastName: json['customerLastName'],
-      createdBy: json['createdBy'],
-      ownerId: json['ownerId'],
-      operationID: json['operationID'],
-      paymentUrl: json['paymentUrl'],
-      items: (json['items'] as List<dynamic>?)?.map((item) => OrderItem.fromJson(item)).toList(),
-      total: double.tryParse(json['total'].toString()),
-      status: json['status'],
-      createdAt: json['createdAt'] != null ? DateTime.tryParse(json['createdAt']) : null,
-      updatedAt: json['updatedAt'] != null ? DateTime.tryParse(json['updatedAt']) : null,
+      id: json['id']?.toString(),
+      customerEmail: json['customerEmail']?.toString(),
+      customerPhone: json['customerPhone']?.toString(),
+      customerName: json['customerName']?.toString(),
+      customerLastName: json['customerLastName']?.toString(),
+      createdBy: json['createdBy']?.toString(),
+      ownerId: json['ownerId']?.toString(),
+      operationID: json['operationID']?.toString(),
+      paymentUrl: json['paymentUrl']?.toString(),
+      items: itemsList,
+      total: double.tryParse(json['total']?.toString() ?? '0') ?? 0.0,
+      status: json['status']?.toString(),
+      createdAt: json['createdAt'] != null
+          ? DateTime.tryParse(json['createdAt'].toString())
+          : null,
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.tryParse(json['updatedAt'].toString())
+          : null,
     );
   }
 

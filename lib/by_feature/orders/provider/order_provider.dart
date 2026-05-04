@@ -152,8 +152,17 @@ class OrderProvider extends OrderRepository {
       );
 
       if (response.statusCode == 200) {
-        final List<dynamic> ordersJson = jsonDecode(response.body);
-        return ordersJson.map((orderJson) => Order.fromJson(orderJson)).toList();
+        final decoded = jsonDecode(response.body);
+        List<dynamic> ordersList = [];
+        
+        if (decoded is List) {
+          ordersList = decoded;
+        } else if (decoded is Map<String, dynamic>) {
+          ordersList = decoded['orders'] as List<dynamic>? ?? 
+                       decoded['data'] as List<dynamic>? ?? [];
+        }
+        
+        return ordersList.map((orderJson) => Order.fromJson(orderJson)).toList();
       } else {
         throw Exception('Failed to load all orders (admin): ${response.statusCode}');
       }

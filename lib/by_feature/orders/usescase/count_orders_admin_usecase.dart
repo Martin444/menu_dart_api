@@ -24,7 +24,11 @@ class CountOrdersAdminUseCase {
         );
       }
 
-      return jsonDecode(response.body) as int;
+      final decoded = jsonDecode(response.body);
+      if (decoded is Map<String, dynamic>) {
+        return decoded['count'] as int? ?? decoded['total'] as int? ?? 0;
+      }
+      return decoded as int;
     } catch (e) {
       rethrow;
     }
