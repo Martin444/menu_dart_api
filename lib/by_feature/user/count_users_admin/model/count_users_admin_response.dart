@@ -18,6 +18,9 @@ class CountUsersAdminResponse {
     if (json['count'] != null) {
       if (json['count'] is int) {
         countValue = json['count'] as int;
+      } else if (json['count'] is Map) {
+        // Defensive check for nested count (common in some aggregation responses)
+        countValue = int.tryParse(json['count']['count']?.toString() ?? '0') ?? 0;
       } else {
         countValue = int.tryParse(json['count'].toString()) ?? 0;
       }
