@@ -44,42 +44,64 @@ class CatalogModel {
     // Extraer ownerId de forma segura (sea string o objeto anidado)
     String extractedOwnerId = '';
     if (json['ownerId'] != null) {
-      extractedOwnerId = json['ownerId'] as String;
-    } else if (json['owner'] != null && json['owner']['id'] != null) {
-      extractedOwnerId = json['owner']['id'] as String;
+      if (json['ownerId'] is String) {
+        extractedOwnerId = json['ownerId'] as String;
+      } else if (json['ownerId'] is Map && json['ownerId']['id'] != null) {
+        extractedOwnerId = json['ownerId']['id'].toString();
+      }
+    } else if (json['owner'] != null && json['owner'] is Map && json['owner']['id'] != null) {
+      extractedOwnerId = json['owner']['id'].toString();
     }
 
     return CatalogModel(
-      id: json['id'] as String? ?? '',
+      id: json['id']?.toString() ?? '',
       // Soporta tanto 'catalogType' como 'type' del JSON
-      catalogType: json['catalogType'] as String? ?? json['type'] as String? ?? 'wardrobe',
-      name: json['name'] as String?,
-      description: json['description'] as String?,
+      catalogType: json['catalogType']?.toString() ?? json['type']?.toString() ?? 'wardrobe',
+      name: json['name']?.toString(),
+      description: json['description']?.toString(),
       ownerId: extractedOwnerId,
-      status: json['status'] as String? ?? 'active',
-      slug: json['slug'] as String? ?? '',
-      isPublic: json['isPublic'] as bool? ?? true,
-      coverImageUrl: json['coverImageUrl'] as String?,
-      itemCount: json['itemCount'] as int? ?? 0,
-      capacity: json['capacity'] as int? ?? 10,
-      metadata: json['metadata'] as Map<String, dynamic>?,
-      settings: json['settings'] as Map<String, dynamic>?,
-      tags: (json['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
-      items: json['items'] != null
+      status: json['status']?.toString() ?? 'active',
+      slug: json['slug']?.toString() ?? '',
+      isPublic: _parseBool(json['isPublic']) ?? true,
+      coverImageUrl: json['coverImageUrl']?.toString(),
+      itemCount: _parseInt(json['itemCount']) ?? 0,
+      capacity: _parseInt(json['capacity']) ?? 10,
+      metadata: json['metadata'] is Map<String, dynamic> ? json['metadata'] as Map<String, dynamic> : null,
+      settings: json['settings'] is Map<String, dynamic> ? json['settings'] as Map<String, dynamic> : null,
+      tags: json['tags'] is List ? (json['tags'] as List).map((e) => e.toString()).toList() : null,
+      items: json['items'] != null && json['items'] is List
           ? (json['items'] as List<dynamic>)
               .map((e) => CatalogItemModel.fromJson(e as Map<String, dynamic>))
               .toList()
           : null,
-      createdAt: json['createdAt'] != null
-          ? DateTime.parse(json['createdAt'] as String)
-          : DateTime.now(),
-      updatedAt: json['updatedAt'] != null
-          ? DateTime.parse(json['updatedAt'] as String)
-          : DateTime.now(),
-      archivedAt: json['archivedAt'] != null
-          ? DateTime.parse(json['archivedAt'] as String)
-          : null,
+      createdAt: _parseDate(json['createdAt']),
+      updatedAt: _parseDate(json['updatedAt']),
+      archivedAt: json['archivedAt'] != null ? _parseDate(json['archivedAt']) : null,
     );
+  }
+
+  static int? _parseInt(dynamic value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    if (value is double) return value.toInt();
+    if (value is String) return int.tryParse(value);
+    if (value is Map && value.containsKey('value')) return _parseInt(value['value']);
+    return null; // Si es un mapa vacío u otro objeto, retorna null para usar el default
+  }
+
+  static bool? _parseBool(dynamic value) {
+    if (value == null) return null;
+    if (value is bool) return value;
+    if (value is String) return value.toLowerCase() == 'true';
+    if (value is Map && value.containsKey('value')) return _parseBool(value['value']);
+    return null;
+  }
+
+  static DateTime _parseDate(dynamic value) {
+    if (value == null) return DateTime.now();
+    if (value is String) return DateTime.tryParse(value) ?? DateTime.now();
+    if (value is Map && value.containsKey('value')) return _parseDate(value['value']);
+    return DateTime.now();
   }
 
   Map<String, dynamic> toJson() {
@@ -152,29 +174,29 @@ class CatalogItemModel {
 
   factory CatalogItemModel.fromJson(Map<String, dynamic> json) {
     return CatalogItemModel(
-      id: json['id'] as String,
-      catalogId: json['catalogId'] as String,
-      name: json['name'] as String,
-      description: json['description'] as String?,
-      photoURL: json['photoURL'] as String?,
-      price: double.tryParse(json['price'].toString()) ?? 0.0,
+      id: json['id']?.toString() ?? '',
+      catalogId: json['catalogId']?.toString() ?? '',
+      name: json['name']?.toString() ?? 'Sin nombre',
+      description: json['description']?.toString(),
+      photoURL: json['photoURL']?.toString(),
+      price: double.tryParse(json['price']?.toString() ?? '0') ?? 0.0,
       discountPrice: json['discountPrice'] != null
           ? double.tryParse(json['discountPrice'].toString())
           : null,
-      quantity: json['quantity'] as int? ?? 0,
-      sku: json['sku'] as String?,
-      status: json['status'] as String? ?? 'available',
-      isAvailable: json['isAvailable'] as bool? ?? true,
-      isFeatured: json['isFeatured'] as bool? ?? false,
-      attributes: json['attributes'] as Map<String, dynamic>?,
-      additionalImages: (json['additionalImages'] as List<dynamic>?)
-          ?.map((e) => e.toString())
-          .toList(),
-      category: json['category'] as String?,
-      tags: (json['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
-      displayOrder: json['displayOrder'] as int? ?? 0,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
+      quantity: CatalogModel._parseInt(json['quantity']) ?? 0,
+      sku: json['sku']?.toString(),
+      status: json['status']?.toString() ?? 'available',
+      isAvailable: CatalogModel._parseBool(json['isAvailable']) ?? true,
+      isFeatured: CatalogModel._parseBool(json['isFeatured']) ?? false,
+      attributes: json['attributes'] is Map<String, dynamic> ? json['attributes'] as Map<String, dynamic> : null,
+      additionalImages: json['additionalImages'] is List 
+          ? (json['additionalImages'] as List).map((e) => e.toString()).toList()
+          : null,
+      category: json['category']?.toString(),
+      tags: json['tags'] is List ? (json['tags'] as List).map((e) => e.toString()).toList() : null,
+      displayOrder: CatalogModel._parseInt(json['displayOrder']) ?? 0,
+      createdAt: CatalogModel._parseDate(json['createdAt']),
+      updatedAt: CatalogModel._parseDate(json['updatedAt']),
     );
   }
 

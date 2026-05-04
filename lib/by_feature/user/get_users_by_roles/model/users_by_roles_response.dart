@@ -28,11 +28,11 @@ class UsersByRolesResponse {
       if (json.containsKey('data') && json['data'] is List) {
         // Estructura: {"data": [...], "total": 10}
         usersData = json['data'] as List<dynamic>;
-        totalCount = json['total'] as int? ?? usersData.length;
+        totalCount = int.tryParse(json['total']?.toString() ?? '') ?? usersData.length;
       } else if (json.containsKey('users') && json['users'] is List) {
         // Estructura: {"users": [...], "total": 10}
         usersData = json['users'] as List<dynamic>;
-        totalCount = json['total'] as int? ?? usersData.length;
+        totalCount = int.tryParse(json['total']?.toString() ?? '') ?? usersData.length;
       } else {
         // Fallback: respuesta vacía
         usersData = [];

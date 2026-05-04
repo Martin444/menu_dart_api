@@ -45,19 +45,17 @@ class UserByRoleModel {
   /// Crea una instancia desde un Map JSON
   factory UserByRoleModel.fromJson(Map<String, dynamic> json) {
     // Debuggea la estructura del JSON para identificar problemas
-    debugJson(json);
-
     return UserByRoleModel(
       id: _extractString(json['id']),
       photoURL: _extractString(json['photoURL']),
       name: _extractString(json['name']) ?? 'Sin nombre',
       email: _extractString(json['email']),
       phone: _extractString(json['phone']),
-      needToChangepassword: json['needToChangepassword'] as bool?,
+      needToChangepassword: _parseBool(json['needToChangepassword']),
       role: _extractString(json['role']),
       socialToken: _extractString(json['socialToken']),
       firebaseProvider: _extractString(json['firebaseProvider']),
-      isEmailVerified: json['isEmailVerified'] as bool?,
+      isEmailVerified: _parseBool(json['isEmailVerified']),
       lastLoginAt: _parseDateTime(json['lastLoginAt']),
       createAt: _parseDateTime(json['createAt']),
       updateAt: _parseDateTime(json['updateAt']),
@@ -133,13 +131,15 @@ class UserByRoleModel {
     return null;
   }
 
-  /// Método para debugging - ayuda a ver la estructura real del JSON
-  static void debugJson(Map<String, dynamic> json) {
-    print('=== DEBUG JSON STRUCTURE ===');
-    json.forEach((key, value) {
-      print('$key: ${value.runtimeType} = $value');
-    });
-    print('=== END DEBUG ===');
+  /// Método auxiliar para parsear booleanos de forma segura
+  static bool? _parseBool(dynamic value) {
+    if (value == null) return null;
+    if (value is bool) return value;
+    if (value is String) return value.toLowerCase() == 'true';
+    if (value is Map && value.containsKey('value')) {
+      return _parseBool(value['value']);
+    }
+    return null;
   }
 
   @override

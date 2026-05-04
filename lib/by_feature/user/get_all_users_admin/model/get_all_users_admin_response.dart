@@ -26,9 +26,17 @@ class GetAllUsersAdminResponse {
         : null;
     
     final usersData = json['data'] is List ? json['data'] as List : [];
-    final totalCount = json['total'] as int? ?? pagination?['total'] as int? ?? 0;
-    final currentPage = json['page'] as int? ?? pagination?['page'] as int? ?? 1;
-    final limitSize = json['limit'] as int? ?? pagination?['limit'] as int? ?? 20;
+    
+    // Defensive parsing for total, page, limit
+    final totalValueStr = (json['total'] ?? pagination?['total'] ?? '0').toString();
+    final totalCount = int.tryParse(totalValueStr) ?? 0;
+    
+    final pageValueStr = (json['page'] ?? pagination?['page'] ?? '1').toString();
+    final currentPage = int.tryParse(pageValueStr) ?? 1;
+    
+    final limitValueStr = (json['limit'] ?? pagination?['limit'] ?? '20').toString();
+    final limitSize = int.tryParse(limitValueStr) ?? 20;
+    
     final pages = limitSize > 0 ? (totalCount / limitSize).ceil() : 0;
     
     final hasNextPage = pagination?['hasNext'] as bool? ?? (currentPage < pages);

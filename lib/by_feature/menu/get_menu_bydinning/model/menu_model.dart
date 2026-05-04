@@ -25,13 +25,13 @@ class MenuModel {
 
   factory MenuModel.fromJson(Map<String, dynamic> json) {
     return MenuModel(
-      id: json['id'] as String?,
-      name: json['name'] as String?,
-      description: json['description'] as String?,
-      imageUrl: json['imageUrl'] as String?,
-      userId: json['userId'] as String?,
-      status: json['status'] as String?,
-      itemCount: json['itemCount'] as int?,
+      id: json['id']?.toString(),
+      name: json['name']?.toString(),
+      description: json['description']?.toString(),
+      imageUrl: json['imageUrl']?.toString(),
+      userId: json['userId']?.toString(),
+      status: json['status']?.toString(),
+      itemCount: int.tryParse(json['itemCount']?.toString() ?? ''),
       items: (json['items'] as List<dynamic>?)
           ?.map((e) => MenuItemModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -93,15 +93,15 @@ class MenuItemModel {
 
   factory MenuItemModel.fromJson(Map<String, dynamic> json) {
     return MenuItemModel(
-      id: json['id'] as String?,
-      name: json['name'] as String?,
-      description: json['description'] as String?,
+      id: json['id']?.toString(),
+      name: json['name']?.toString(),
+      description: json['description']?.toString(),
       price: double.tryParse(json['price']?.toString() ?? '0'),
-      imageUrl: json['imageUrl'] as String?,
-      photoUrl: json['photoUrl'] as String?,
-      menuId: json['menuId'] as String?,
-      deliveryTime: json['deliveryTime'] as int?,
-      isAvailable: json['isAvailable'] as bool?,
+      imageUrl: json['imageUrl']?.toString(),
+      photoUrl: json['photoUrl']?.toString(),
+      menuId: json['menuId']?.toString(),
+      deliveryTime: int.tryParse(json['deliveryTime']?.toString() ?? ''),
+      isAvailable: json['isAvailable'] is bool ? json['isAvailable'] as bool : (json['isAvailable']?.toString().toLowerCase() == 'true' ? true : (json['isAvailable'] == null ? null : false)),
       tags: (json['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
       ingredients: (json['ingredients'] as List<dynamic>?)
           ?.map((e) => e.toString())

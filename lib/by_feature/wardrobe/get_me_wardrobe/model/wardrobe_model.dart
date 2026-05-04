@@ -17,10 +17,10 @@ class WardrobeModel {
 
   factory WardrobeModel.fromJson(Map<String, dynamic> json) {
     return WardrobeModel(
-      id: json['id'] as String?,
-      idOwner: json['idOwner'] as String?,
-      description: json['description'] as String?,
-      capacity: json['capacity'] as int?,
+      id: json['id']?.toString(),
+      idOwner: json['idOwner']?.toString(),
+      description: json['description']?.toString(),
+      capacity: int.tryParse(json['capacity']?.toString() ?? ''),
       items: (json['items'] as List<dynamic>?)?.map((itemJson) => ClothingItemModel.fromJson(itemJson)).toList(),
     );
   }

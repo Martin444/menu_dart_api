@@ -13,11 +13,23 @@ class CountUsersAdminResponse {
   });
 
   factory CountUsersAdminResponse.fromJson(Map<String, dynamic> json) {
+    // Defensive parsing for 'count'
+    int countValue = 0;
+    if (json['count'] != null) {
+      if (json['count'] is int) {
+        countValue = json['count'] as int;
+      } else {
+        countValue = int.tryParse(json['count'].toString()) ?? 0;
+      }
+    } else if (json['total'] != null) {
+      countValue = int.tryParse(json['total'].toString()) ?? 0;
+    }
+
     return CountUsersAdminResponse(
-      count: json['count'] as int? ?? json as int? ?? 0,
-      plan: json['plan'] as String?,
-      withActiveMembership: json['withActiveMembership'] as bool?,
-      withVinculedAccount: json['withVinculedAccount'] as bool?,
+      count: countValue,
+      plan: json['plan']?.toString(),
+      withActiveMembership: json['withActiveMembership'] is bool ? json['withActiveMembership'] as bool : (json['withActiveMembership']?.toString().toLowerCase() == 'true'),
+      withVinculedAccount: json['withVinculedAccount'] is bool ? json['withVinculedAccount'] as bool : (json['withVinculedAccount']?.toString().toLowerCase() == 'true'),
     );
   }
 

@@ -26,9 +26,13 @@ class CountOrdersAdminUseCase {
 
       final decoded = jsonDecode(response.body);
       if (decoded is Map<String, dynamic>) {
-        return decoded['count'] as int? ?? decoded['total'] as int? ?? 0;
+        final countStr = (decoded['count'] ?? decoded['total'] ?? '0').toString();
+        return int.tryParse(countStr) ?? 0;
       }
-      return decoded as int;
+      if (decoded is int) return decoded;
+      if (decoded is String) return int.tryParse(decoded) ?? 0;
+      
+      return 0;
     } catch (e) {
       rethrow;
     }

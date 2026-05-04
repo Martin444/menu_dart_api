@@ -23,15 +23,15 @@ class ClothingItemModel {
 
   factory ClothingItemModel.fromJson(Map<String, dynamic> json) {
     return ClothingItemModel(
-      id: json['id'] as String?,
-      name: json['name'] as String?,
-      brand: json['brand'] as String?,
-      sizes: (json['sizes'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      color: json['color'] as String?,
-      price: double.tryParse(json['price'].toString()),
-      quantity: json['quantity'] as int?,
-      wardrobeId: json['wardrobeId'] as int?,
-      photoURL: json['photoURL'] as String?,
+      id: json['id']?.toString(),
+      name: json['name']?.toString(),
+      brand: json['brand']?.toString(),
+      sizes: (json['sizes'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
+      color: json['color']?.toString(),
+      price: double.tryParse(json['price']?.toString() ?? ''),
+      quantity: int.tryParse(json['quantity']?.toString() ?? ''),
+      wardrobeId: int.tryParse(json['wardrobeId']?.toString() ?? ''),
+      photoURL: json['photoURL']?.toString(),
     );
   }
 
