@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class DinningModel {
   String? id;
   String? photoURL;

@@ -1,5 +1,4 @@
 import 'package:menu_dart_api/menu_com_api.dart';
-import 'package:flutter/foundation.dart';
 
 /// Ejemplo completo de integración OAuth de Mercado Pago
 ///
