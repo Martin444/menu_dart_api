@@ -11,6 +11,7 @@ enum BusinessContext {
   restaurant,
   wardrobe,
   marketplace,
+  events,
 }
 
 class TypeComerceModel {
@@ -113,6 +114,13 @@ class TypeComerceModel {
         description: 'Petshop',
         category: CommerceCategory.retail,
         backendContext: BusinessContext.marketplace,
+      ),
+      TypeComerceModel(
+        id: '13',
+        code: 'events',
+        description: 'Organizador de eventos',
+        category: CommerceCategory.services,
+        backendContext: BusinessContext.events,
       ),
     ];
   }

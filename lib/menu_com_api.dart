@@ -81,3 +81,6 @@ export 'package:menu_dart_api/by_feature/membership/data/usecase/archive_admin_p
 export 'package:menu_dart_api/by_feature/membership/data/usecase/get_admin_plan_stats_usecase.dart';
 export 'package:menu_dart_api/by_feature/membership/data/usecase/seed_admin_plans_usecase.dart';
 export 'package:menu_dart_api/by_feature/membership/data/usecase/assign_plan_to_user_usecase.dart';
+
+// Events & Tickets APIs
+export 'package:menu_dart_api/by_feature/events/events.dart';
