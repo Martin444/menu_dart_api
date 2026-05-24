@@ -116,7 +116,7 @@ class CatalogProvider extends CatalogRepository {
         );
       }
 
-      final responseData =
+      var responseData =
           response.data is String ? jsonDecode(response.data) : response.data;
 
       if (responseData is Map && responseData.containsKey('data')) {
@@ -363,7 +363,7 @@ class CatalogProvider extends CatalogRepository {
         );
       }
 
-      final responseData =
+      var responseData =
           response.data is String ? jsonDecode(response.data) : response.data;
 
       if (responseData is Map && responseData.containsKey('data')) {
@@ -416,7 +416,7 @@ class CatalogProvider extends CatalogRepository {
         );
       }
 
-      final responseData =
+      var responseData =
           response.data is String ? jsonDecode(response.data) : response.data;
 
       if (responseData is Map && responseData.containsKey('data')) {
@@ -465,7 +465,7 @@ class CatalogProvider extends CatalogRepository {
         );
       }
 
-      final responseData =
+      var responseData =
           response.data is String ? jsonDecode(response.data) : response.data;
 
       if (responseData is Map && responseData.containsKey('data')) {
