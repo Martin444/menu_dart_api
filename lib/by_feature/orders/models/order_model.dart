@@ -12,7 +12,13 @@ class Order {
   final String? paymentUrl;
   final List<OrderItem>? items;
   final double? total;
+  final double? subtotal;
+  final double? marketplaceFeePercentage;
+  final double? marketplaceFeeAmount;
+  final double? mpProcessingFee;
+  final double? netAmount;
   final String? status;
+  final String? paymentStatus;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -28,7 +34,13 @@ class Order {
     this.paymentUrl,
     this.items,
     this.total,
+    this.subtotal,
+    this.marketplaceFeePercentage,
+    this.marketplaceFeeAmount,
+    this.mpProcessingFee,
+    this.netAmount,
     this.status,
+    this.paymentStatus,
     this.createdAt,
     this.updatedAt,
   });
@@ -53,7 +65,13 @@ class Order {
       paymentUrl: json['paymentUrl']?.toString(),
       items: itemsList,
       total: double.tryParse(json['total']?.toString() ?? '0') ?? 0.0,
+      subtotal: double.tryParse(json['subtotal']?.toString() ?? ''),
+      marketplaceFeePercentage: double.tryParse(json['marketplaceFeePercentage']?.toString() ?? ''),
+      marketplaceFeeAmount: double.tryParse(json['marketplaceFeeAmount']?.toString() ?? ''),
+      mpProcessingFee: json['mpProcessingFee'] != null ? double.tryParse(json['mpProcessingFee'].toString()) : null,
+      netAmount: json['netAmount'] != null ? double.tryParse(json['netAmount'].toString()) : null,
       status: json['status']?.toString(),
+      paymentStatus: json['paymentStatus']?.toString(),
       createdAt: json['createdAt'] != null
           ? DateTime.tryParse(json['createdAt'].toString())
           : null,
@@ -76,7 +94,13 @@ class Order {
       'paymentUrl': paymentUrl,
       'items': items?.map((item) => item.toJson()).toList(),
       'total': total,
+      'subtotal': subtotal,
+      'marketplaceFeePercentage': marketplaceFeePercentage,
+      'marketplaceFeeAmount': marketplaceFeeAmount,
+      'mpProcessingFee': mpProcessingFee,
+      'netAmount': netAmount,
       'status': status,
+      'paymentStatus': paymentStatus,
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
     };
@@ -98,7 +122,13 @@ extension OrderCopyWith on Order {
     String? paymentUrl,
     List<OrderItem>? items,
     double? total,
+    double? subtotal,
+    double? marketplaceFeePercentage,
+    double? marketplaceFeeAmount,
+    double? mpProcessingFee,
+    double? netAmount,
     String? status,
+    String? paymentStatus,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -114,7 +144,13 @@ extension OrderCopyWith on Order {
       paymentUrl: paymentUrl ?? this.paymentUrl,
       items: items ?? this.items,
       total: total ?? this.total,
+      subtotal: subtotal ?? this.subtotal,
+      marketplaceFeePercentage: marketplaceFeePercentage ?? this.marketplaceFeePercentage,
+      marketplaceFeeAmount: marketplaceFeeAmount ?? this.marketplaceFeeAmount,
+      mpProcessingFee: mpProcessingFee ?? this.mpProcessingFee,
+      netAmount: netAmount ?? this.netAmount,
       status: status ?? this.status,
+      paymentStatus: paymentStatus ?? this.paymentStatus,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
