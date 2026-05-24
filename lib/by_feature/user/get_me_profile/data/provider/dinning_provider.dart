@@ -22,8 +22,9 @@ class DinningProvider extends DinningRepository {
         );
       }
       var respJson = jsonDecode(response.body);
+      var dataJson = respJson['data'] ?? respJson;
 
-      return DinningModel.fromJson(respJson);
+      return DinningModel.fromJson(dataJson);
     } catch (e) {
       rethrow;
     }
