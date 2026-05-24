@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:menu_dart_api/by_feature/orders/models/paginated_orders_response.dart';
 import 'package:menu_dart_api/by_feature/orders/repository/order_repository.dart';
 import 'package:menu_dart_api/menu_com_api.dart';
 
@@ -55,7 +56,7 @@ class OrderProvider extends OrderRepository {
   }
 
   @override
-  Future<List<Order>> getOrdersByBusinessOwner(String businessOwnerId, {int? page, int? limit}) async {
+  Future<PaginatedOrdersResponse> getOrdersByBusinessOwner(String businessOwnerId, {int? page, int? limit}) async {
     try {
       String urlString = '${API.defaulBaseUrl}/orders/byBusinessOwner/$businessOwnerId';
       
@@ -76,8 +77,15 @@ class OrderProvider extends OrderRepository {
       );
 
       if (response.statusCode == 200) {
-        final List<dynamic> ordersJson = jsonDecode(response.body);
-        return ordersJson.map((orderJson) => Order.fromJson(orderJson)).toList();
+        final decoded = jsonDecode(response.body);
+        if (decoded is Map<String, dynamic>) {
+          return PaginatedOrdersResponse.fromJson(decoded);
+        } else if (decoded is List) {
+          return PaginatedOrdersResponse(
+            orders: decoded.map((item) => Order.fromJson(item as Map<String, dynamic>)).toList(),
+          );
+        }
+        return PaginatedOrdersResponse(orders: []);
       } else {
         throw Exception('Failed to load orders by business owner: ${response.statusCode}');
       }
@@ -99,7 +107,7 @@ class OrderProvider extends OrderRepository {
   }
 
   @override
-  Future<List<Order>> getOrdersByOwner({int? page, int? limit}) async {
+  Future<PaginatedOrdersResponse> getOrdersByOwner({int? page, int? limit}) async {
     try {
       String urlString = '${API.defaulBaseUrl}/orders/byOwner';
       
@@ -120,8 +128,15 @@ class OrderProvider extends OrderRepository {
       );
 
       if (response.statusCode == 200) {
-        final List<dynamic> ordersJson = jsonDecode(response.body);
-        return ordersJson.map((orderJson) => Order.fromJson(orderJson)).toList();
+        final decoded = jsonDecode(response.body);
+        if (decoded is Map<String, dynamic>) {
+          return PaginatedOrdersResponse.fromJson(decoded);
+        } else if (decoded is List) {
+          return PaginatedOrdersResponse(
+            orders: decoded.map((item) => Order.fromJson(item as Map<String, dynamic>)).toList(),
+          );
+        }
+        return PaginatedOrdersResponse(orders: []);
       } else {
         throw Exception('Failed to load orders by owner: ${response.statusCode}');
       }
@@ -131,7 +146,7 @@ class OrderProvider extends OrderRepository {
   }
 
   @override
-  Future<List<Order>> getOrdersAdmin({int? page, int? limit}) async {
+  Future<PaginatedOrdersResponse> getOrdersAdmin({int? page, int? limit}) async {
     try {
       String urlString = '${API.defaulBaseUrl}/orders/admin/all';
       
@@ -153,16 +168,14 @@ class OrderProvider extends OrderRepository {
 
       if (response.statusCode == 200) {
         final decoded = jsonDecode(response.body);
-        List<dynamic> ordersList = [];
-        
-        if (decoded is List) {
-          ordersList = decoded;
-        } else if (decoded is Map<String, dynamic>) {
-          ordersList = decoded['orders'] as List<dynamic>? ?? 
-                       decoded['data'] as List<dynamic>? ?? [];
+        if (decoded is Map<String, dynamic>) {
+          return PaginatedOrdersResponse.fromJson(decoded);
+        } else if (decoded is List) {
+          return PaginatedOrdersResponse(
+            orders: decoded.map((item) => Order.fromJson(item as Map<String, dynamic>)).toList(),
+          );
         }
-        
-        return ordersList.map((orderJson) => Order.fromJson(orderJson)).toList();
+        return PaginatedOrdersResponse(orders: []);
       } else {
         throw Exception('Failed to load all orders (admin): ${response.statusCode}');
       }

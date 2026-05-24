@@ -33,6 +33,7 @@ export 'package:menu_dart_api/by_feature/user/delete_user/data/usecase/delete_us
 export 'package:menu_dart_api/by_feature/orders/models/new_order_param.dart';
 export 'package:menu_dart_api/by_feature/orders/models/order_item_model.dart';
 export 'package:menu_dart_api/by_feature/orders/models/order_model.dart';
+export 'package:menu_dart_api/by_feature/orders/models/paginated_orders_response.dart';
 export 'package:menu_dart_api/by_feature/orders/usescase/order_usescase.dart';
 export 'package:menu_dart_api/by_feature/orders/usescase/count_orders_admin_usecase.dart';
 export 'package:menu_dart_api/by_feature/orders/usescase/get_total_revenue_usecase.dart';
