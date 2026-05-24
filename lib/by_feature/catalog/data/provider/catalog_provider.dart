@@ -492,8 +492,12 @@ class CatalogProvider extends CatalogRepository {
         );
       }
 
-      final responseData =
+      var responseData =
           response.data is String ? jsonDecode(response.data) : response.data;
+
+      if (responseData is Map && responseData.containsKey('data')) {
+        responseData = responseData['data'];
+      }
 
       if (responseData is! List) {
         throw ApiException(500, 'Respuesta inválida del servidor');
