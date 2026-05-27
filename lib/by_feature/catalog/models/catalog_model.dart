@@ -200,6 +200,16 @@ class CatalogItemModel {
     );
   }
 
+  List<String> get ingredientsList {
+    if (attributes == null) return [];
+    final raw = attributes!['ingredients'];
+    if (raw is List) return raw.map((e) => e.toString()).toList();
+    if (raw is String && raw.isNotEmpty) return raw.split(',').map((e) => e.trim()).toList();
+    return [];
+  }
+
+  bool get hasDiscount => discountPrice != null && discountPrice! < price;
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
