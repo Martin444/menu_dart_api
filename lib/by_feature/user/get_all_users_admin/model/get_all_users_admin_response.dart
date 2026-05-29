@@ -21,11 +21,19 @@ class GetAllUsersAdminResponse {
   });
 
   factory GetAllUsersAdminResponse.fromJson(Map<String, dynamic> json) {
-    final pagination = json['pagination'] is Map<String, dynamic> 
-        ? json['pagination'] as Map<String, dynamic>
+    final innerData = json['data'] is Map<String, dynamic>
+        ? json['data'] as Map<String, dynamic>
         : null;
     
-    final usersData = json['data'] is List ? json['data'] as List : [];
+    final pagination = innerData?['pagination'] is Map<String, dynamic>
+        ? innerData!['pagination'] as Map<String, dynamic>
+        : (json['pagination'] is Map<String, dynamic>
+            ? json['pagination'] as Map<String, dynamic>
+            : null);
+    
+    final usersData = innerData?['data'] is List
+        ? innerData!['data'] as List
+        : (json['data'] is List ? json['data'] as List : []);
     
     // Defensive parsing for total, page, limit
     final totalValueStr = (json['total'] ?? pagination?['total'] ?? '0').toString();

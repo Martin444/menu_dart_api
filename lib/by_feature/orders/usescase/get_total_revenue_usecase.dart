@@ -26,6 +26,13 @@ class GetTotalRevenueUseCase {
 
       final decoded = jsonDecode(response.body);
       if (decoded is Map<String, dynamic>) {
+        final innerData = decoded['data'];
+        if (innerData is num) return innerData.toDouble();
+        if (innerData is String) return double.tryParse(innerData) ?? 0.0;
+        if (innerData is Map<String, dynamic>) {
+          final revenueStr = (innerData['revenue'] ?? innerData['total'] ?? '0').toString();
+          return double.tryParse(revenueStr) ?? 0.0;
+        }
         final revenueStr = (decoded['revenue'] ?? decoded['total'] ?? '0').toString();
         return double.tryParse(revenueStr) ?? 0.0;
       }

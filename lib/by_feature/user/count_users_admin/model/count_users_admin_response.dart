@@ -13,19 +13,23 @@ class CountUsersAdminResponse {
   });
 
   factory CountUsersAdminResponse.fromJson(Map<String, dynamic> json) {
+    // Handle wrapped response: { statusCode, message, data: { total } }
+    final innerData = json['data'] is Map<String, dynamic>
+        ? json['data'] as Map<String, dynamic>
+        : json;
+
     // Defensive parsing for 'count'
     int countValue = 0;
-    if (json['count'] != null) {
-      if (json['count'] is int) {
-        countValue = json['count'] as int;
-      } else if (json['count'] is Map) {
-        // Defensive check for nested count (common in some aggregation responses)
+    if (innerData['count'] != null) {
+      if (innerData['count'] is int) {
+        countValue = innerData['count'] as int;
+      } else if (innerData['count'] is Map) {
         countValue = int.tryParse(json['count']['count']?.toString() ?? '0') ?? 0;
       } else {
-        countValue = int.tryParse(json['count'].toString()) ?? 0;
+        countValue = int.tryParse(innerData['count'].toString()) ?? 0;
       }
-    } else if (json['total'] != null) {
-      countValue = int.tryParse(json['total'].toString()) ?? 0;
+    } else if (innerData['total'] != null) {
+      countValue = int.tryParse(innerData['total'].toString()) ?? 0;
     }
 
     return CountUsersAdminResponse(
