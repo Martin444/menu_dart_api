@@ -34,7 +34,8 @@ class MPOAuthProvider extends MPOAuthRepository {
       }
 
       var responseData = jsonDecode(response.body);
-      return MPOAuthInitiateResponse.fromJson(responseData);
+      var data = responseData['data'] ?? responseData;
+      return MPOAuthInitiateResponse.fromJson(data);
     } catch (e) {
       rethrow;
     }
@@ -63,7 +64,8 @@ class MPOAuthProvider extends MPOAuthRepository {
       }
 
       var responseData = jsonDecode(response.body);
-      return MPOAuthBaseResponse.fromJson(responseData);
+      var data = responseData['data'] ?? responseData;
+      return MPOAuthBaseResponse.fromJson(data);
     } catch (e) {
       rethrow;
     }
@@ -90,7 +92,8 @@ class MPOAuthProvider extends MPOAuthRepository {
       }
 
       var responseData = jsonDecode(response.body);
-      return MPOAuthStatusResponse.fromJson(responseData);
+      var data = responseData['data'] ?? responseData;
+      return MPOAuthStatusResponse.fromJson(data);
     } catch (e) {
       rethrow;
     }
@@ -117,7 +120,8 @@ class MPOAuthProvider extends MPOAuthRepository {
       }
 
       var responseData = jsonDecode(response.body);
-      return MPOAuthBaseResponse.fromJson(responseData);
+      var data = responseData['data'] ?? responseData;
+      return MPOAuthBaseResponse.fromJson(data);
     } catch (e) {
       rethrow;
     }
@@ -144,7 +148,8 @@ class MPOAuthProvider extends MPOAuthRepository {
       }
 
       var responseData = jsonDecode(response.body);
-      return MPOAuthBaseResponse.fromJson(responseData);
+      var data = responseData['data'] ?? responseData;
+      return MPOAuthBaseResponse.fromJson(data);
     } catch (e) {
       rethrow;
     }
