@@ -24,7 +24,7 @@ class OrderProvider extends OrderRepository {
         body: jsonEncode(order.toJson()),
       );
       return response.statusCode == 201 || response.statusCode == 200
-          ? Future.value(Order.fromJson(jsonDecode(response.body)))
+          ? Future.value(Order.fromJson((jsonDecode(response.body) as Map<String, dynamic>)['data'] as Map<String, dynamic>))
           : Future.error('Failed to create order');
     } catch (e) {
       rethrow;
