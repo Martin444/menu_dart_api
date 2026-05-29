@@ -86,7 +86,11 @@ class CatalogItemProvider extends CatalogItemRepository {
         );
       }
 
-      final responseData = response.data is String ? jsonDecode(response.data) : response.data;
+      var responseData = response.data is String ? jsonDecode(response.data) : response.data;
+
+      if (responseData is Map && responseData.containsKey('data')) {
+        responseData = responseData['data'];
+      }
 
       return CatalogItemModel.fromJson(responseData as Map<String, dynamic>);
     } catch (e) {
@@ -127,7 +131,11 @@ class CatalogItemProvider extends CatalogItemRepository {
         );
       }
 
-      final responseData = response.data is String ? jsonDecode(response.data) : response.data;
+      var responseData = response.data is String ? jsonDecode(response.data) : response.data;
+
+      if (responseData is Map && responseData.containsKey('data')) {
+        responseData = responseData['data'];
+      }
 
       return CatalogItemModel.fromJson(responseData as Map<String, dynamic>);
     } catch (e) {
@@ -219,7 +227,11 @@ class CatalogItemProvider extends CatalogItemRepository {
         );
       }
 
-      final responseData = response.data is String ? jsonDecode(response.data) : response.data;
+      var responseData = response.data is String ? jsonDecode(response.data) : response.data;
+
+      if (responseData is Map && responseData.containsKey('data')) {
+        responseData = responseData['data'];
+      }
 
       return CatalogItemModel.fromJson(responseData as Map<String, dynamic>);
     } catch (e) {
@@ -260,7 +272,11 @@ class CatalogItemProvider extends CatalogItemRepository {
         );
       }
 
-      final responseData = response.data is String ? jsonDecode(response.data) : response.data;
+      var responseData = response.data is String ? jsonDecode(response.data) : response.data;
+
+      if (responseData is Map && responseData.containsKey('data')) {
+        responseData = responseData['data'];
+      }
 
       return responseData as Map<String, dynamic>;
     } catch (e) {
