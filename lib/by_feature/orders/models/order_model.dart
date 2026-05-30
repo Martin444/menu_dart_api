@@ -1,4 +1,5 @@
 import 'package:menu_dart_api/by_feature/orders/models/new_order_param.dart';
+import 'package:menu_dart_api/by_feature/orders/models/store_info.dart';
 
 class Order {
   final String? id;
@@ -21,6 +22,7 @@ class Order {
   final String? paymentStatus;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final StoreInfo? store;
 
   Order({
     this.id,
@@ -43,6 +45,7 @@ class Order {
     this.paymentStatus,
     this.createdAt,
     this.updatedAt,
+    this.store,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
@@ -78,6 +81,9 @@ class Order {
       updatedAt: json['updatedAt'] != null
           ? DateTime.tryParse(json['updatedAt'].toString())
           : null,
+      store: json['store'] != null
+          ? StoreInfo.fromJson(json['store'] as Map<String, dynamic>)
+          : null,
     );
   }
 
@@ -103,6 +109,7 @@ class Order {
       'paymentStatus': paymentStatus,
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
+      'store': store?.toJson(),
     };
     data.removeWhere((key, value) => value == null);
     return data;
@@ -131,6 +138,7 @@ extension OrderCopyWith on Order {
     String? paymentStatus,
     DateTime? createdAt,
     DateTime? updatedAt,
+    StoreInfo? store,
   }) {
     return Order(
       id: id ?? this.id,
@@ -153,6 +161,7 @@ extension OrderCopyWith on Order {
       paymentStatus: paymentStatus ?? this.paymentStatus,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      store: store ?? this.store,
     );
   }
 }
