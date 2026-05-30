@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:menu_dart_api/by_feature/auth/register/data/repository/register_commerce_respository.dart';
 import 'package:menu_dart_api/by_feature/auth/login/model/user_succes_model.dart';
@@ -11,7 +12,7 @@ import 'package:menu_dart_api/core/exeptions/api_exception.dart';
 class RegisterCommerceProvider extends RegisterCommerceRespository {
   @override
   Future<UserSuccess> registerCommerce({
-    required String photo,
+    Uint8List? fileBytes,
     required String email,
     required String name,
     required String phone,
@@ -20,21 +21,28 @@ class RegisterCommerceProvider extends RegisterCommerceRespository {
   }) async {
     try {
       Uri loginURl = Uri.parse('${API.defaulBaseUrl}/auth/register');
-      var login = await http.post(
-        loginURl,
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({
-          "photoURL": photo,
-          "email": email,
-          "name": name,
-          "phone": phone,
-          "password": password,
-          "role": role,
-          "needToChangepassword": false,
-        }),
-      );
+      var request = http.MultipartRequest('POST', loginURl);
+
+      if (fileBytes != null) {
+        request.files.add(
+          http.MultipartFile.fromBytes(
+            'file',
+            fileBytes,
+            filename: 'photo_${DateTime.now().millisecondsSinceEpoch}.jpg',
+          ),
+        );
+      }
+
+      request.fields['email'] = email;
+      request.fields['name'] = name;
+      request.fields['phone'] = phone;
+      request.fields['password'] = password;
+      request.fields['role'] = role;
+      request.fields['needToChangepassword'] = 'false';
+
+      var streamedResponse = await request.send();
+      var login = await http.Response.fromStream(streamedResponse);
+
       var respJson = jsonDecode(login.body);
       final token = respJson['access_token'] ?? respJson['accessToken'];
       if (token == null) {

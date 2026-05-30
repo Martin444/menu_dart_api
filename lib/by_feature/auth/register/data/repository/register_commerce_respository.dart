@@ -1,8 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:menu_dart_api/by_feature/auth/login/model/user_succes_model.dart';
 
 abstract class RegisterCommerceRespository {
   Future<UserSuccess> registerCommerce({
-    required String photo,
+    Uint8List? fileBytes,
     required String email,
     required String name,
     required String phone,
