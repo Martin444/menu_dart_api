@@ -18,6 +18,7 @@ class CatalogModel {
   final DateTime createdAt;
   final DateTime updatedAt;
   final DateTime? archivedAt;
+  final Map<String, dynamic>? owner;
 
   const CatalogModel({
     required this.id,
@@ -38,6 +39,7 @@ class CatalogModel {
     required this.createdAt,
     required this.updatedAt,
     this.archivedAt,
+    this.owner,
   });
 
   factory CatalogModel.fromJson(Map<String, dynamic> json) {
@@ -77,6 +79,7 @@ class CatalogModel {
       createdAt: _parseDate(json['createdAt']),
       updatedAt: _parseDate(json['updatedAt']),
       archivedAt: json['archivedAt'] != null ? _parseDate(json['archivedAt']) : null,
+      owner: json['owner'] is Map<String, dynamic> ? json['owner'] as Map<String, dynamic> : null,
     );
   }
 
@@ -124,6 +127,7 @@ class CatalogModel {
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
       'archivedAt': archivedAt?.toIso8601String(),
+      'owner': owner,
     };
   }
 }
@@ -189,7 +193,7 @@ class CatalogItemModel {
       isAvailable: CatalogModel._parseBool(json['isAvailable']) ?? true,
       isFeatured: CatalogModel._parseBool(json['isFeatured']) ?? false,
       attributes: json['attributes'] is Map<String, dynamic> ? json['attributes'] as Map<String, dynamic> : null,
-      additionalImages: json['additionalImages'] is List 
+      additionalImages: json['additionalImages'] is List
           ? (json['additionalImages'] as List).map((e) => e.toString()).toList()
           : null,
       category: json['category']?.toString(),
