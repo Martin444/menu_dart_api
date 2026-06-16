@@ -21,11 +21,11 @@ class LoginProvider extends LoginRepository {
           "password": password,
         },
       );
-      if (login.statusCode != 201) {
+      if (login.statusCode >= 300) {
         var respJson = jsonDecode(login.body);
         throw ApiException(
           login.statusCode,
-          respJson['message'],
+          respJson['message']?.toString() ?? 'Error desconocido',
         );
       }
       var respJson = jsonDecode(login.body);
@@ -34,6 +34,7 @@ class LoginProvider extends LoginRepository {
       return UserSuccess(
         accessToken: token,
         needToChangePassword: respJson['needToChangePassword'] ?? false,
+        commerceId: respJson['commerceId'] as String?,
       );
     } catch (e) {
       rethrow;

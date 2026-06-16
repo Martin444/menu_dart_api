@@ -4,8 +4,10 @@ import 'package:dio/dio.dart' as dio;
 import 'package:menu_dart_api/by_feature/upload_images/data/repository/upload_file_repository.dart';
 import 'package:menu_dart_api/core/api.dart';
 
+@Deprecated('Use Supabase Storage instead. Cloudinary upload endpoint is deprecated.')
 class UploadFileProvider extends UploadFileRepository {
   @override
+  @Deprecated('Use Supabase Storage instead.')
   Future<String> uploadFile(image) async {
     try {
       Uri uploadURl = Uri.parse('${API.defaulBaseUrl}/cloudinary/upload');

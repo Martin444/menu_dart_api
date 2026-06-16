@@ -37,13 +37,38 @@ export 'package:menu_dart_api/by_feature/orders/models/paginated_orders_response
 export 'package:menu_dart_api/by_feature/orders/usescase/order_usescase.dart';
 export 'package:menu_dart_api/by_feature/orders/usescase/count_orders_admin_usecase.dart';
 export 'package:menu_dart_api/by_feature/orders/usescase/get_total_revenue_usecase.dart';
+export 'package:menu_dart_api/by_feature/orders/usescase/orders_extra_usecases.dart';
 export 'package:menu_dart_api/by_feature/user/update_user/update_fcm_token_usecase.dart';
 
 
 // OAuth de Mercado Pago - Funcionalidad completa
 export 'package:menu_dart_api/by_feature/payments/oauth/mp_oauth.dart';
 
+// Auth - Modelos base
+export 'package:menu_dart_api/by_feature/auth/models/role_type.dart';
+export 'package:menu_dart_api/by_feature/auth/models/business_context.dart';
+export 'package:menu_dart_api/by_feature/auth/models/permission.dart';
+export 'package:menu_dart_api/by_feature/auth/models/user_role.dart';
+export 'package:menu_dart_api/by_feature/auth/models/commerce_context.dart';
+
+// Auth - Social Login
 export 'package:menu_dart_api/by_feature/auth/social_login/social_login.dart';
+
+// Auth - Refresh
+export 'package:menu_dart_api/by_feature/auth/refresh/data/usecase/refresh_token_usecase.dart';
+
+// Auth - Switch Context
+export 'package:menu_dart_api/by_feature/auth/switch_context/data/usecase/switch_context_usecase.dart';
+export 'package:menu_dart_api/by_feature/auth/switch_context/model/switch_context.dart';
+
+// Auth - My Contexts
+export 'package:menu_dart_api/by_feature/auth/my_contexts/data/usecase/get_my_contexts_usecase.dart';
+
+// User Roles Management
+export 'package:menu_dart_api/by_feature/user_roles/user_roles.dart';
+
+// Health Check
+export 'package:menu_dart_api/by_feature/auth/health/data/usecase/firebase_health_usecase.dart';
 
 // Catalog APIs
 export 'package:menu_dart_api/by_feature/catalog/models/catalog_model.dart';
@@ -85,3 +110,9 @@ export 'package:menu_dart_api/by_feature/membership/data/usecase/assign_plan_to_
 
 // Events & Tickets APIs
 export 'package:menu_dart_api/by_feature/events/events.dart';
+
+// Commerce APIs
+export 'package:menu_dart_api/by_feature/commerce/commerce.dart';
+
+// Payments APIs (status & checkin)
+export 'package:menu_dart_api/by_feature/payments/data/usecase/payments_usecases.dart';

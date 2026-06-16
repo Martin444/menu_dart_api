@@ -62,6 +62,7 @@ class MembershipPlanModel {
 }
 
 class MembershipPlanLimits {
+  final int maxCommerces;
   final int maxCatalogs;
   final int maxCatalogItems;
   final int maxLocations;
@@ -71,6 +72,7 @@ class MembershipPlanLimits {
   final int storageLimit;
 
   MembershipPlanLimits({
+    this.maxCommerces = 1,
     this.maxCatalogs = 1,
     this.maxCatalogItems = 10,
     this.maxLocations = 1,
@@ -82,6 +84,7 @@ class MembershipPlanLimits {
 
   factory MembershipPlanLimits.fromJson(Map<String, dynamic> json) {
     return MembershipPlanLimits(
+      maxCommerces: json['maxCommerces'] as int? ?? 1,
       maxCatalogs: json['maxCatalogs'] as int? ?? 1,
       maxCatalogItems: json['maxCatalogItems'] as int? ?? 10,
       maxLocations: json['maxLocations'] as int? ?? 1,
@@ -94,6 +97,7 @@ class MembershipPlanLimits {
 
   Map<String, dynamic> toJson() {
     return {
+      'maxCommerces': maxCommerces,
       'maxCatalogs': maxCatalogs,
       'maxCatalogItems': maxCatalogItems,
       'maxLocations': maxLocations,

@@ -18,12 +18,16 @@ class SocialLoginResponse {
   /// Timestamp de expiración del token
   final DateTime? expiresAt;
 
+  /// ID del comercio activo (contexto de negocio)
+  final String? commerceId;
+
   const SocialLoginResponse({
     required this.accessToken,
     this.refreshToken,
     this.user,
     this.needToChangePassword = false,
     this.expiresAt,
+    this.commerceId,
   });
 
   /// Crea una instancia desde JSON
@@ -34,6 +38,7 @@ class SocialLoginResponse {
       user: json['user'] != null ? SocialLoginUser.fromJson(json['user'] as Map<String, dynamic>) : null,
       needToChangePassword: json['needToChangePassword'] as bool? ?? false,
       expiresAt: json['expires_at'] != null ? DateTime.parse(json['expires_at'] as String) : null,
+      commerceId: json['commerceId'] as String?,
     );
   }
 
@@ -45,6 +50,7 @@ class SocialLoginResponse {
       if (user != null) 'user': user!.toJson(),
       'needToChangePassword': needToChangePassword,
       if (expiresAt != null) 'expires_at': expiresAt!.toIso8601String(),
+      if (commerceId != null) 'commerceId': commerceId,
     };
   }
 

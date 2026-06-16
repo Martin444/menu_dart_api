@@ -3,8 +3,8 @@ import 'dart:typed_data';
 import 'package:menu_dart_api/by_feature/auth/login/model/user_succes_model.dart';
 import 'package:menu_dart_api/by_feature/auth/register/data/provider/register_commerce_provider.dart';
 
-class RegisterCommerceUsescase {
-  RegisterCommerceUsescase();
+class RegisterCommerceUseCase {
+  RegisterCommerceUseCase();
 
   Future<UserSuccess> execute({
     Uint8List? fileBytes,

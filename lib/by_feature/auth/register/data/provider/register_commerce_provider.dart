@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:menu_dart_api/by_feature/auth/register/data/repository/register_commerce_respository.dart';
+import 'package:menu_dart_api/by_feature/auth/register/data/repository/register_commerce_repository.dart';
 import 'package:menu_dart_api/by_feature/auth/login/model/user_succes_model.dart';
 
 // ignore: depend_on_referenced_packages
@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:menu_dart_api/core/api.dart';
 import 'package:menu_dart_api/core/exeptions/api_exception.dart';
 
-class RegisterCommerceProvider extends RegisterCommerceRespository {
+class RegisterCommerceProvider extends RegisterCommerceRepository {
   @override
   Future<UserSuccess> registerCommerce({
     Uint8List? fileBytes,
@@ -48,12 +48,13 @@ class RegisterCommerceProvider extends RegisterCommerceRespository {
       if (token == null) {
         throw ApiException(
           respJson['statusCode'] ?? 32,
-          respJson['message'],
+          respJson['message']?.toString() ?? 'Error desconocido',
         );
       }
       return UserSuccess(
         accessToken: token,
         needToChangePassword: respJson['needToChangePassword'] ?? false,
+        commerceId: respJson['commerceId'] as String?,
       );
     } catch (e) {
       rethrow;

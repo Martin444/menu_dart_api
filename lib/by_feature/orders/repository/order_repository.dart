@@ -10,11 +10,15 @@ abstract class OrderRepository {
 
   Future<PaginatedOrdersResponse> getOrdersAdmin({int? page, int? limit});
 
+  Future<List<Order>> getOrdersByAnonymous(String anonymousId);
+
   Future<Order> getOrderById(String orderId);
 
-  Future<void> createOrder(Order order);
+  Future<Order> createOrder(Order order);
 
-  Future<void> updateOrder(Order order);
+  Future<Order> updateOrder(String orderId, Map<String, dynamic> data);
+
+  Future<Order> updateOrderStatus(String orderId, String status);
 
   Future<void> deleteOrder(String orderId);
 
