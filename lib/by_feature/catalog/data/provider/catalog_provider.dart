@@ -97,7 +97,7 @@ class CatalogProvider extends CatalogRepository {
   }
 
   @override
-  Future<List<CatalogModel>> getMyCatalogs({String? type}) async {
+  Future<Map<String, dynamic>> getMyCatalogs({String? type}) async {
     try {
       final Uri url = type != null
           ? Uri.parse('${API.defaulBaseUrl}/catalogs/my-catalogs?type=$type')
@@ -127,13 +127,22 @@ class CatalogProvider extends CatalogRepository {
         responseData = responseData['data'];
       }
 
-      if (responseData is! List) {
+      if (responseData is! Map<String, dynamic>) {
         throw ApiException(500, 'Respuesta inválida del servidor');
       }
 
-      return responseData
-          .map((item) => CatalogModel.fromJson(item as Map<String, dynamic>))
-          .toList();
+      final linked = (responseData['linked'] as List<dynamic>?)
+              ?.map(
+                  (item) => CatalogModel.fromJson(item as Map<String, dynamic>))
+              .toList() ??
+          [];
+      final unlinked = (responseData['unlinked'] as List<dynamic>?)
+              ?.map(
+                  (item) => CatalogModel.fromJson(item as Map<String, dynamic>))
+              .toList() ??
+          [];
+
+      return {'linked': linked, 'unlinked': unlinked};
     } catch (e) {
       if (e is dio.DioException) {
         throw ApiException(
@@ -356,6 +365,51 @@ class CatalogProvider extends CatalogRepository {
           e.response?.data?.toString() ??
               e.message ??
               'Error al archivar catálogo',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<CatalogModel> assignCatalogToCommerce(String catalogId) async {
+    try {
+      final Uri url = Uri.parse(
+        '${API.defaulBaseUrl}/catalogs/$catalogId/assign-to-commerce',
+      );
+
+      final response = await _dio.post(
+        url.toString(),
+        options: dio.Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${API.loginAccessToken}',
+          },
+        ),
+      );
+
+      if (response.statusCode != 200) {
+        throw ApiException(
+          response.statusCode ?? 500,
+          response.data.toString(),
+        );
+      }
+
+      var responseData =
+          response.data is String ? jsonDecode(response.data) : response.data;
+
+      if (responseData is Map && responseData.containsKey('data')) {
+        responseData = responseData['data'];
+      }
+
+      return CatalogModel.fromJson(responseData as Map<String, dynamic>);
+    } catch (e) {
+      if (e is dio.DioException) {
+        throw ApiException(
+          e.response?.statusCode ?? 500,
+          e.response?.data?.toString() ??
+              e.message ??
+              'Error al vincular catálogo al comercio',
         );
       }
       rethrow;

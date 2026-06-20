@@ -5,6 +5,7 @@ class CatalogModel {
   final String? name;
   final String? description;
   final String ownerId;
+  final String? commerceId;
   final String status;
   final String slug;
   final bool isPublic;
@@ -26,6 +27,7 @@ class CatalogModel {
     this.name,
     this.description,
     required this.ownerId,
+    this.commerceId,
     required this.status,
     required this.slug,
     required this.isPublic,
@@ -62,6 +64,7 @@ class CatalogModel {
       name: json['name']?.toString(),
       description: json['description']?.toString(),
       ownerId: extractedOwnerId,
+      commerceId: json['commerceId']?.toString(),
       status: json['status']?.toString() ?? 'active',
       slug: json['slug']?.toString() ?? '',
       isPublic: _parseBool(json['isPublic']) ?? true,
@@ -114,6 +117,7 @@ class CatalogModel {
       'name': name,
       'description': description,
       'ownerId': ownerId,
+      'commerceId': commerceId,
       'status': status,
       'slug': slug,
       'isPublic': isPublic,

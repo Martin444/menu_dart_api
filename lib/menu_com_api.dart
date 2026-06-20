@@ -84,6 +84,7 @@ export 'package:menu_dart_api/by_feature/catalog/data/usecase/get_catalog_by_id_
 export 'package:menu_dart_api/by_feature/catalog/data/usecase/create_catalog_item_usecase.dart';
 export 'package:menu_dart_api/by_feature/catalog/data/usecase/update_catalog_item_usecase.dart';
 export 'package:menu_dart_api/by_feature/catalog/data/usecase/delete_catalog_item_usecase.dart';
+export 'package:menu_dart_api/by_feature/catalog/data/usecase/assign_catalog_to_commerce_usecase.dart';
 
 // Membership APIs
 export 'package:menu_dart_api/by_feature/membership/data/repository/membership_repository.dart';

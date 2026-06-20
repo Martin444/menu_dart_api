@@ -29,7 +29,8 @@ class UpdateRoleProvider extends UpdateRoleRepository {
       }
 
       final responseData = jsonDecode(response.body);
-      final data = responseData['data'] as Map<String, dynamic>? ?? responseData;
+      final outer = responseData['data'] as Map<String, dynamic>? ?? responseData;
+      final data = outer['data'] as Map<String, dynamic>? ?? outer;
       return UserRole.fromJson(data);
     } catch (e) {
       rethrow;

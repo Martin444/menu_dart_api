@@ -9,10 +9,10 @@ class GetMyCatalogsUseCase {
   ///
   /// [type] Tipo de catálogo opcional para filtrar (menu, wardrobe, product_list, etc.)
   ///
-  /// Retorna una lista de [CatalogModel]
+  /// Retorna un mapa con listas 'linked' y 'unlinked' de [CatalogModel]
   ///
   /// Lanza [ApiException] si hay error en la petición
-  Future<List<CatalogModel>> execute({String? type}) async {
+  Future<Map<String, dynamic>> execute({String? type}) async {
     try {
       return await _provider.getMyCatalogs(type: type);
     } catch (e) {

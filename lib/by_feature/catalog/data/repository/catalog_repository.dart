@@ -8,7 +8,11 @@ abstract class CatalogRepository {
   Future<CatalogModel> createCatalog(CreateCatalogParams params);
 
   /// Obtiene los catálogos del usuario autenticado
-  Future<List<CatalogModel>> getMyCatalogs({String? type});
+  /// Retorna un mapa con listas 'linked' y 'unlinked'
+  Future<Map<String, dynamic>> getMyCatalogs({String? type});
+
+  /// Vincula un catálogo sin comercio al comercio actual del usuario
+  Future<CatalogModel> assignCatalogToCommerce(String catalogId);
 
   /// Obtiene un catálogo específico por ID
   Future<CatalogModel> getCatalogById(String catalogId);
