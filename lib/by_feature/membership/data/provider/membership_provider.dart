@@ -26,6 +26,39 @@ class MembershipProvider extends MembershipRepository {
         : response.data;
   }
 
+  /// Extrae el contenido del campo 'data' del envelope estándar de la API:
+  /// {statusCode, message, data: <inner>}
+  /// Si no hay envelope, retorna el mapa original.
+  Map<String, dynamic> _unwrapEnvelope(Map<String, dynamic> response) {
+    if (response.containsKey('data') && response['data'] is Map) {
+      return response['data'] as Map<String, dynamic>;
+    }
+    return response;
+  }
+
+  /// Extrae una lista de planes del envelope estándar de la API.
+  /// Soporta: data.plans, data (si es List), plans directo.
+  List<dynamic> _unwrapPlanList(dynamic response) {
+    if (response is List) return response;
+    if (response is! Map) return [];
+
+    // {statusCode, message, data: {plans: [...]}}
+    if (response.containsKey('data')) {
+      final data = response['data'];
+      if (data is List) return data;
+      if (data is Map && data['plans'] is List) {
+        return data['plans'] as List;
+      }
+    }
+
+    // {plans: [...]}
+    if (response.containsKey('plans') && response['plans'] is List) {
+      return response['plans'] as List;
+    }
+
+    return [];
+  }
+
   @override
   Future<MembershipStatusModel> getMembershipStatus() async {
     try {
@@ -41,7 +74,8 @@ class MembershipProvider extends MembershipRepository {
         );
       }
 
-      final data = _parseResponse(response) as Map<String, dynamic>;
+      final parsed = _parseResponse(response) as Map<String, dynamic>;
+      final data = _unwrapEnvelope(parsed);
       return MembershipStatusModel.fromJson(data);
     } catch (e) {
       if (e is dio.DioException) {
@@ -73,16 +107,8 @@ class MembershipProvider extends MembershipRepository {
         );
       }
 
-      final data = _parseResponse(response);
-      
-      List<dynamic> plansList = [];
-      if (data is List) {
-        plansList = data;
-      } else if (data is Map && data['plans'] != null) {
-        plansList = data['plans'] as List;
-      } else if (data is Map && data['data'] != null && data['data'] is List) {
-        plansList = data['data'] as List;
-      }
+      final parsed = _parseResponse(response);
+      final plansList = _unwrapPlanList(parsed);
 
       return plansList
           .map((item) => MembershipPlanModel.fromJson(item as Map<String, dynamic>))
@@ -113,9 +139,10 @@ class MembershipProvider extends MembershipRepository {
         );
       }
 
-      final data = _parseResponse(response) as Map<String, dynamic>;
-      if (data['plans'] != null) {
-        return (data['plans'] as List)
+      final parsed = _parseResponse(response) as Map<String, dynamic>;
+      final plansList = _unwrapPlanList(parsed);
+      if (plansList.isNotEmpty) {
+        return plansList
             .map((item) => MembershipPlanModel.fromJson(item as Map<String, dynamic>))
             .toList();
       }
@@ -147,7 +174,8 @@ class MembershipProvider extends MembershipRepository {
         );
       }
 
-      final data = _parseResponse(response) as Map<String, dynamic>;
+      final parsed = _parseResponse(response) as Map<String, dynamic>;
+      final data = _unwrapEnvelope(parsed);
       return MembershipStatusModel.fromJson(data);
     } catch (e) {
       if (e is dio.DioException) {
@@ -176,7 +204,8 @@ class MembershipProvider extends MembershipRepository {
         );
       }
 
-      final data = _parseResponse(response) as Map<String, dynamic>;
+      final parsed = _parseResponse(response) as Map<String, dynamic>;
+      final data = _unwrapEnvelope(parsed);
       return PaymentResultModel.fromJson(data);
     } catch (e) {
       if (e is dio.DioException) {
@@ -215,7 +244,8 @@ class MembershipProvider extends MembershipRepository {
         );
       }
 
-      final data = _parseResponse(response) as Map<String, dynamic>;
+      final parsed = _parseResponse(response) as Map<String, dynamic>;
+      final data = _unwrapEnvelope(parsed);
       return PaymentResultModel.fromJson(data);
     } catch (e) {
       if (e is dio.DioException) {
@@ -244,7 +274,8 @@ class MembershipProvider extends MembershipRepository {
         );
       }
 
-      final data = _parseResponse(response) as Map<String, dynamic>;
+      final parsed = _parseResponse(response) as Map<String, dynamic>;
+      final data = _unwrapEnvelope(parsed);
       return MembershipStatusModel.fromJson(data);
     } catch (e) {
       if (e is dio.DioException) {
@@ -273,7 +304,8 @@ class MembershipProvider extends MembershipRepository {
         );
       }
 
-      final data = _parseResponse(response) as Map<String, dynamic>;
+      final parsed = _parseResponse(response) as Map<String, dynamic>;
+      final data = _unwrapEnvelope(parsed);
       return DiscountResultModel.fromJson(data);
     } catch (e) {
       if (e is dio.DioException) {
@@ -412,17 +444,8 @@ class MembershipProvider extends MembershipRepository {
         );
       }
 
-      final data = _parseResponse(response);
-      
-      List<dynamic> plansList = [];
-      if (data is List) {
-        plansList = data;
-      } else if (data is Map && data['plans'] != null) {
-        plansList = data['plans'] as List;
-      } else if (data is Map && data['data'] != null && data['data'] is List) {
-        // Soporte adicional por si viene envuelto en 'data'
-        plansList = data['data'] as List;
-      }
+      final parsed = _parseResponse(response);
+      final plansList = _unwrapPlanList(parsed);
 
       return plansList
           .map((item) => MembershipPlanModel.fromJson(item as Map<String, dynamic>))
@@ -453,7 +476,8 @@ class MembershipProvider extends MembershipRepository {
         );
       }
 
-      final data = _parseResponse(response) as Map<String, dynamic>;
+      final parsed = _parseResponse(response) as Map<String, dynamic>;
+      final data = _unwrapEnvelope(parsed);
       return MembershipPlanModel.fromJson(data);
     } catch (e) {
       if (e is dio.DioException) {
@@ -482,7 +506,8 @@ class MembershipProvider extends MembershipRepository {
         );
       }
 
-      final data = _parseResponse(response) as Map<String, dynamic>;
+      final parsed = _parseResponse(response) as Map<String, dynamic>;
+      final data = _unwrapEnvelope(parsed);
       return MembershipPlanModel.fromJson(data);
     } catch (e) {
       if (e is dio.DioException) {
@@ -511,7 +536,8 @@ class MembershipProvider extends MembershipRepository {
         );
       }
 
-      final data = _parseResponse(response) as Map<String, dynamic>;
+      final parsed = _parseResponse(response) as Map<String, dynamic>;
+      final data = _unwrapEnvelope(parsed);
       return MembershipPlanModel.fromJson(data);
     } catch (e) {
       if (e is dio.DioException) {
@@ -566,7 +592,8 @@ class MembershipProvider extends MembershipRepository {
         );
       }
 
-      final data = _parseResponse(response) as Map<String, dynamic>;
+      final parsed = _parseResponse(response) as Map<String, dynamic>;
+      final data = _unwrapEnvelope(parsed);
       return MembershipPlanModel.fromJson(data);
     } catch (e) {
       if (e is dio.DioException) {
@@ -651,7 +678,8 @@ class MembershipProvider extends MembershipRepository {
         );
       }
 
-      final data = _parseResponse(response) as Map<String, dynamic>;
+      final parsed = _parseResponse(response) as Map<String, dynamic>;
+      final data = _unwrapEnvelope(parsed);
       return MembershipStatusModel.fromJson(data);
     } catch (e) {
       if (e is dio.DioException) {
@@ -696,7 +724,8 @@ class MembershipProvider extends MembershipRepository {
         );
       }
 
-      final data = _parseResponse(response) as Map<String, dynamic>;
+      final parsed = _parseResponse(response) as Map<String, dynamic>;
+      final data = _unwrapEnvelope(parsed);
       return PaymentLinkModel.fromJson(data);
     } catch (e) {
       if (e is dio.DioException) {
@@ -739,7 +768,8 @@ class MembershipProvider extends MembershipRepository {
         );
       }
 
-      final data = _parseResponse(response) as Map<String, dynamic>;
+      final parsed = _parseResponse(response) as Map<String, dynamic>;
+      final data = _unwrapEnvelope(parsed);
       return AutoBillingResponseModel.fromJson(data);
     } catch (e) {
       if (e is dio.DioException) {
@@ -767,7 +797,8 @@ class MembershipProvider extends MembershipRepository {
         );
       }
 
-      final data = _parseResponse(response) as Map<String, dynamic>;
+      final parsed = _parseResponse(response) as Map<String, dynamic>;
+      final data = _unwrapEnvelope(parsed);
       return BillingDetailsModel.fromJson(data);
     } catch (e) {
       if (e is dio.DioException) {
@@ -805,7 +836,8 @@ class MembershipProvider extends MembershipRepository {
         );
       }
 
-      final data = _parseResponse(response) as Map<String, dynamic>;
+      final parsed = _parseResponse(response) as Map<String, dynamic>;
+      final data = _unwrapEnvelope(parsed);
       return ChangeAmountResponseModel.fromJson(data);
     } catch (e) {
       if (e is dio.DioException) {
@@ -843,7 +875,8 @@ class MembershipProvider extends MembershipRepository {
         );
       }
 
-      final data = _parseResponse(response) as Map<String, dynamic>;
+      final parsed = _parseResponse(response) as Map<String, dynamic>;
+      final data = _unwrapEnvelope(parsed);
       return AutoBillingResponseModel.fromJson(data);
     } catch (e) {
       if (e is dio.DioException) {
@@ -960,7 +993,8 @@ class MembershipProvider extends MembershipRepository {
         );
       }
 
-      final data = _parseResponse(response) as Map<String, dynamic>;
+      final parsed = _parseResponse(response) as Map<String, dynamic>;
+      final data = _unwrapEnvelope(parsed);
       return MembershipStatusModel.fromJson(data);
     } catch (e) {
       if (e is dio.DioException) {
