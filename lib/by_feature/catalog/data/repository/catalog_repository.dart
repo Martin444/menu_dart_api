@@ -41,4 +41,7 @@ abstract class CatalogRepository {
 
   /// Obtiene catálogos públicos por ownerId (sin autenticación)
   Future<List<CatalogModel>> getPublicCatalogsByOwnerId(String ownerId);
+
+  /// Obtiene catálogos públicos de un comercio por slug o UUID
+  Future<List<CatalogModel>> getPublicCatalogsByCommerce(String identifier);
 }

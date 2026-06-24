@@ -9,6 +9,7 @@ class Order {
   final String? customerLastName;
   final String? createdBy;
   final String? ownerId;
+  final String? commerceId;
   final String? operationID;
   final String? paymentUrl;
   final List<OrderItem>? items;
@@ -32,6 +33,7 @@ class Order {
     this.customerLastName,
     this.createdBy,
     this.ownerId,
+    this.commerceId,
     this.operationID,
     this.paymentUrl,
     this.items,
@@ -64,6 +66,7 @@ class Order {
       customerLastName: json['customerLastName']?.toString(),
       createdBy: json['createdBy']?.toString(),
       ownerId: json['ownerId']?.toString(),
+      commerceId: json['commerceId']?.toString(),
       operationID: json['operationID']?.toString(),
       paymentUrl: json['paymentUrl']?.toString(),
       items: itemsList,
@@ -96,6 +99,7 @@ class Order {
       'customerLastName': customerLastName,
       'createdBy': createdBy,
       'ownerId': ownerId,
+      'commerceId': commerceId,
       'operationID': operationID,
       'paymentUrl': paymentUrl,
       'items': items?.map((item) => item.toJson()).toList(),
@@ -125,6 +129,7 @@ extension OrderCopyWith on Order {
     String? customerLastName,
     String? createdBy,
     String? ownerId,
+    String? commerceId,
     String? operationID,
     String? paymentUrl,
     List<OrderItem>? items,
@@ -148,6 +153,7 @@ extension OrderCopyWith on Order {
       customerLastName: customerLastName ?? this.customerLastName,
       createdBy: createdBy ?? this.createdBy,
       ownerId: ownerId ?? this.ownerId,
+      commerceId: commerceId ?? this.commerceId,
       operationID: operationID ?? this.operationID,
       paymentUrl: paymentUrl ?? this.paymentUrl,
       items: items ?? this.items,

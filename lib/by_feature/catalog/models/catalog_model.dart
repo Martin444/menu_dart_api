@@ -20,6 +20,7 @@ class CatalogModel {
   final DateTime updatedAt;
   final DateTime? archivedAt;
   final Map<String, dynamic>? owner;
+  final Map<String, dynamic>? commerce;
 
   const CatalogModel({
     required this.id,
@@ -42,6 +43,7 @@ class CatalogModel {
     required this.updatedAt,
     this.archivedAt,
     this.owner,
+    this.commerce,
   });
 
   factory CatalogModel.fromJson(Map<String, dynamic> json) {
@@ -83,6 +85,7 @@ class CatalogModel {
       updatedAt: _parseDate(json['updatedAt']),
       archivedAt: json['archivedAt'] != null ? _parseDate(json['archivedAt']) : null,
       owner: json['owner'] is Map<String, dynamic> ? json['owner'] as Map<String, dynamic> : null,
+      commerce: json['commerce'] is Map<String, dynamic> ? json['commerce'] as Map<String, dynamic> : null,
     );
   }
 
@@ -132,6 +135,7 @@ class CatalogModel {
       'updatedAt': updatedAt.toIso8601String(),
       'archivedAt': archivedAt?.toIso8601String(),
       'owner': owner,
+      'commerce': commerce,
     };
   }
 }
