@@ -22,9 +22,7 @@ class NotificationProvider extends NotificationRepository {
       };
 
   dynamic _parseResponse(dio.Response response) {
-    return response.data is String
-        ? jsonDecode(response.data)
-        : response.data;
+    return response.data is String ? jsonDecode(response.data) : response.data;
   }
 
   /// Extrae el contenido del campo 'data' del envelope estándar de la API:
@@ -44,8 +42,7 @@ class NotificationProvider extends NotificationRepository {
   }
 
   @override
-  Future<NotificationTemplateModel> createTemplate(
-      CreateNotificationTemplateParams params) async {
+  Future<NotificationTemplateModel> createTemplate(CreateNotificationTemplateParams params) async {
     try {
       final response = await _dio.post(
         '${API.defaulBaseUrl}/notifications/admin/templates',
@@ -71,8 +68,7 @@ class NotificationProvider extends NotificationRepository {
   }
 
   @override
-  Future<PaginatedTemplatesResponse> listTemplates(
-      ListTemplatesParams params) async {
+  Future<PaginatedTemplatesResponse> listTemplates(ListTemplatesParams params) async {
     try {
       final response = await _dio.get(
         '${API.defaulBaseUrl}/notifications/admin/templates',
@@ -123,8 +119,7 @@ class NotificationProvider extends NotificationRepository {
   }
 
   @override
-  Future<NotificationTemplateModel> updateTemplate(
-      String id, UpdateNotificationTemplateParams params) async {
+  Future<NotificationTemplateModel> updateTemplate(String id, UpdateNotificationTemplateParams params) async {
     try {
       final response = await _dio.patch(
         '${API.defaulBaseUrl}/notifications/admin/templates/$id',
@@ -177,8 +172,7 @@ class NotificationProvider extends NotificationRepository {
   }
 
   @override
-  Future<SendNotificationResult> sendDirectNotification(
-      SendAdminNotificationParams params) async {
+  Future<SendNotificationResult> sendDirectNotification(SendAdminNotificationParams params) async {
     try {
       final response = await _dio.post(
         '${API.defaulBaseUrl}/notifications/admin/send',
@@ -186,7 +180,7 @@ class NotificationProvider extends NotificationRepository {
         options: dio.Options(headers: _headers),
       );
 
-      if (response.statusCode != 200) {
+      if (response.statusCode != 201) {
         throw ApiException(
           response.statusCode ?? 500,
           response.data.toString(),
@@ -194,7 +188,8 @@ class NotificationProvider extends NotificationRepository {
       }
 
       final parsed = _parseResponse(response) as Map<String, dynamic>;
-      return SendNotificationResult.fromJson(parsed);
+      final data = _unwrapEnvelope(parsed);
+      return SendNotificationResult.fromJson(data);
     } on dio.DioException catch (e) {
       throw _toApiException(e, 'Error al enviar notificación directa');
     } catch (e) {
@@ -203,8 +198,7 @@ class NotificationProvider extends NotificationRepository {
   }
 
   @override
-  Future<SendFromTemplateResult> sendFromTemplate(
-      String templateId, SendFromTemplateParams params) async {
+  Future<SendFromTemplateResult> sendFromTemplate(String templateId, SendFromTemplateParams params) async {
     try {
       final response = await _dio.post(
         '${API.defaulBaseUrl}/notifications/admin/send-from-template/$templateId',
@@ -220,7 +214,8 @@ class NotificationProvider extends NotificationRepository {
       }
 
       final parsed = _parseResponse(response) as Map<String, dynamic>;
-      return SendFromTemplateResult.fromJson(parsed);
+      final data = _unwrapEnvelope(parsed);
+      return SendFromTemplateResult.fromJson(data);
     } on dio.DioException catch (e) {
       throw _toApiException(e, 'Error al enviar notificación desde template');
     } catch (e) {
@@ -229,8 +224,7 @@ class NotificationProvider extends NotificationRepository {
   }
 
   @override
-  Future<PaginatedUsersWithTokensResponse> getUsersWithTokens(
-      ListUsersWithTokensParams params) async {
+  Future<PaginatedUsersWithTokensResponse> getUsersWithTokens(ListUsersWithTokensParams params) async {
     try {
       final response = await _dio.get(
         '${API.defaulBaseUrl}/notifications/admin/users-with-tokens',
@@ -246,7 +240,8 @@ class NotificationProvider extends NotificationRepository {
       }
 
       final parsed = _parseResponse(response) as Map<String, dynamic>;
-      return PaginatedUsersWithTokensResponse.fromJson(parsed);
+      final data = _unwrapEnvelope(parsed);
+      return PaginatedUsersWithTokensResponse.fromJson(data);
     } on dio.DioException catch (e) {
       throw _toApiException(e, 'Error al listar usuarios con FCM token');
     } catch (e) {
