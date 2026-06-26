@@ -88,7 +88,13 @@ class EventProvider extends EventRepository {
       if (response.statusCode != 200) {
         throw ApiException(response.statusCode, response.body);
       }
-      final List<dynamic> data = jsonDecode(response.body);
+      final decoded = jsonDecode(response.body);
+      final data = decoded is List
+          ? decoded
+          : (decoded is Map<String, dynamic> ? (decoded['data'] ?? decoded) : decoded);
+      if (data is! List) {
+        throw ApiException(500, 'Respuesta inesperada del servidor');
+      }
       return data
           .map((e) => EventModel.fromJson(e as Map<String, dynamic>))
           .toList();
@@ -111,8 +117,11 @@ class EventProvider extends EventRepository {
       if (response.statusCode != 200) {
         throw ApiException(response.statusCode, response.body);
       }
-      return EventModel.fromJson(
-          jsonDecode(response.body) as Map<String, dynamic>);
+      final decoded = jsonDecode(response.body);
+      final data = decoded is Map<String, dynamic>
+          ? (decoded['data'] ?? decoded)
+          : decoded;
+      return EventModel.fromJson(data as Map<String, dynamic>);
     } catch (e) {
       if (e is ApiException) rethrow;
       throw ApiException(500, e.toString());
@@ -134,8 +143,11 @@ class EventProvider extends EventRepository {
       if (response.statusCode != 200) {
         throw ApiException(response.statusCode, response.body);
       }
-      return EventModel.fromJson(
-          jsonDecode(response.body) as Map<String, dynamic>);
+      final decoded = jsonDecode(response.body);
+      final data = decoded is Map<String, dynamic>
+          ? (decoded['data'] ?? decoded)
+          : decoded;
+      return EventModel.fromJson(data as Map<String, dynamic>);
     } catch (e) {
       if (e is ApiException) rethrow;
       throw ApiException(500, e.toString());

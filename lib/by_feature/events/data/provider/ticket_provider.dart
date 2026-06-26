@@ -19,6 +19,12 @@ import 'package:menu_dart_api/core/exeptions/api_exception.dart';
 /// This provider handles all HTTP communication for ticket operations,
 /// including purchases, validations, and management.
 class TicketProvider extends TicketRepository {
+  Map<String, dynamic> _unwrap(dynamic decoded) {
+    if (decoded is Map<String, dynamic>) {
+      return (decoded['data'] ?? decoded) as Map<String, dynamic>;
+    }
+    return decoded as Map<String, dynamic>;
+  }
   /// Purchases a ticket after successful payment.
   @override
   Future<TicketModel> purchase(PurchaseTicketParams params) async {
@@ -35,7 +41,7 @@ class TicketProvider extends TicketRepository {
         throw ApiException(response.statusCode, response.body);
       }
       return TicketModel.fromJson(
-          jsonDecode(response.body) as Map<String, dynamic>);
+          _unwrap(jsonDecode(response.body)));
     } catch (e) {
       if (e is ApiException) rethrow;
       throw ApiException(500, e.toString());
@@ -58,7 +64,7 @@ class TicketProvider extends TicketRepository {
         throw ApiException(response.statusCode, response.body);
       }
       return CheckoutResponse.fromJson(
-          jsonDecode(response.body) as Map<String, dynamic>);
+          _unwrap(jsonDecode(response.body)));
     } catch (e) {
       if (e is ApiException) rethrow;
       throw ApiException(500, e.toString());
@@ -98,7 +104,7 @@ class TicketProvider extends TicketRepository {
         throw ApiException(response.statusCode, response.body);
       }
       return TicketModel.fromJson(
-          jsonDecode(response.body) as Map<String, dynamic>);
+          _unwrap(jsonDecode(response.body)));
     } catch (e) {
       if (e is ApiException) rethrow;
       throw ApiException(500, e.toString());
@@ -122,7 +128,7 @@ class TicketProvider extends TicketRepository {
         throw ApiException(response.statusCode, response.body);
       }
       return TicketModel.fromJson(
-          jsonDecode(response.body) as Map<String, dynamic>);
+          _unwrap(jsonDecode(response.body)));
     } catch (e) {
       if (e is ApiException) rethrow;
       throw ApiException(500, e.toString());
@@ -146,7 +152,7 @@ class TicketProvider extends TicketRepository {
         throw ApiException(response.statusCode, response.body);
       }
       return OfflineValidationResult.fromJson(
-          jsonDecode(response.body) as Map<String, dynamic>);
+          _unwrap(jsonDecode(response.body)));
     } catch (e) {
       if (e is ApiException) rethrow;
       throw ApiException(500, e.toString());
@@ -168,7 +174,7 @@ class TicketProvider extends TicketRepository {
         throw ApiException(response.statusCode, response.body);
       }
       return TicketQrData.fromJson(
-          jsonDecode(response.body) as Map<String, dynamic>);
+          _unwrap(jsonDecode(response.body)));
     } catch (e) {
       if (e is ApiException) rethrow;
       throw ApiException(500, e.toString());
@@ -193,7 +199,7 @@ class TicketProvider extends TicketRepository {
         throw ApiException(response.statusCode, response.body);
       }
       return TicketModel.fromJson(
-          jsonDecode(response.body) as Map<String, dynamic>);
+          _unwrap(jsonDecode(response.body)));
     } catch (e) {
       if (e is ApiException) rethrow;
       throw ApiException(500, e.toString());
@@ -217,7 +223,7 @@ class TicketProvider extends TicketRepository {
         throw ApiException(response.statusCode, response.body);
       }
       return TicketStatus.fromJson(
-          jsonDecode(response.body) as Map<String, dynamic>);
+          _unwrap(jsonDecode(response.body)));
     } catch (e) {
       if (e is ApiException) rethrow;
       throw ApiException(500, e.toString());

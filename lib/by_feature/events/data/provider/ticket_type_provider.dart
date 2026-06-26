@@ -23,7 +23,10 @@ class TicketTypeProvider extends TicketTypeRepository {
       if (response.statusCode != 201 && response.statusCode != 200) {
         throw ApiException(response.statusCode, response.body);
       }
-      final json = jsonDecode(response.body) as Map<String, dynamic>;
+      final decoded = jsonDecode(response.body);
+      final json = decoded is Map<String, dynamic>
+          ? (decoded['data'] ?? decoded) as Map<String, dynamic>
+          : decoded as Map<String, dynamic>;
       if (!json.containsKey('eventId') && !json.containsKey('event')) {
         json['eventId'] = params.eventId;
       }
@@ -48,7 +51,13 @@ class TicketTypeProvider extends TicketTypeRepository {
       if (response.statusCode != 200) {
         throw ApiException(response.statusCode, response.body);
       }
-      final List<dynamic> data = jsonDecode(response.body);
+      final decoded = jsonDecode(response.body);
+      final data = decoded is List
+          ? decoded
+          : (decoded is Map<String, dynamic> ? (decoded['data'] ?? decoded) : decoded);
+      if (data is! List) {
+        throw ApiException(500, 'Respuesta inesperada del servidor');
+      }
       return data.map((e) {
         final json = e as Map<String, dynamic>;
         if (!json.containsKey('eventId') && !json.containsKey('event')) {
@@ -78,8 +87,11 @@ class TicketTypeProvider extends TicketTypeRepository {
       if (response.statusCode != 200) {
         throw ApiException(response.statusCode, response.body);
       }
-      return TicketTypeModel.fromJson(
-          jsonDecode(response.body) as Map<String, dynamic>);
+      final decoded = jsonDecode(response.body);
+      final data = decoded is Map<String, dynamic>
+          ? (decoded['data'] ?? decoded)
+          : decoded;
+      return TicketTypeModel.fromJson(data as Map<String, dynamic>);
     } catch (e) {
       if (e is ApiException) rethrow;
       throw ApiException(500, e.toString());
