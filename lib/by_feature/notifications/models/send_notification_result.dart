@@ -26,6 +26,7 @@ class SendAdminNotificationParams {
   final String body;
   final Map<String, dynamic>? data;
   final String? imageUrl;
+  final String? deepLink;
 
   SendAdminNotificationParams({
     required this.userIds,
@@ -33,15 +34,22 @@ class SendAdminNotificationParams {
     required this.body,
     this.data,
     this.imageUrl,
+    this.deepLink,
   });
 
   Map<String, dynamic> toJson() {
+    final resolvedData = <String, dynamic>{};
+    if (data != null) resolvedData.addAll(data!);
+    if (deepLink != null && deepLink!.trim().isNotEmpty) {
+      resolvedData['url'] = deepLink!.trim();
+    }
+
     final map = <String, dynamic>{
       'userIds': userIds,
       'title': title,
       'body': body,
     };
-    if (data != null) map['data'] = data;
+    if (resolvedData.isNotEmpty) map['data'] = resolvedData;
     if (imageUrl != null) map['imageUrl'] = imageUrl;
     return map;
   }
