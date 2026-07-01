@@ -8,6 +8,7 @@ Implementación completa de los endpoints de catálogos siguiendo la arquitectur
 lib/by_feature/catalog/
 ├── models/
 │   ├── catalog_model.dart                # Modelo principal de catálogo e items
+│   ├── pagination_model.dart             # Modelo de paginación offset-based
 │   ├── create_catalog_params.dart        # Parámetros para crear catálogo
 │   ├── update_catalog_params.dart        # Parámetros para actualizar catálogo
 │   ├── create_catalog_item_params.dart   # Parámetros para crear items
@@ -105,17 +106,22 @@ for (var catalog in allCatalogs) {
 }
 ```
 
-### 3. Obtener Catálogo por ID
+### 3. Obtener Catálogo por ID (con paginación de items)
 
 ```dart
 import 'package:menu_dart_api/by_feature/catalog/data/usecase/get_catalog_by_id_usecase.dart';
 
-final catalog = await GetCatalogByIdUseCase().execute('550e8400-e29b-41d4-a716-446655440000');
+final catalog = await GetCatalogByIdUseCase().execute(
+  '550e8400-e29b-41d4-a716-446655440000',
+  offset: 0,
+  limit: 20,
+  inStock: true, // Filtra solo items disponibles
+);
 
 print('Nombre: ${catalog.name}');
 print('Slug: ${catalog.slug}');
 print('Público: ${catalog.isPublic}');
-print('Items:');
+print('Items (página 1, hasta 20):');
 catalog.items?.forEach((item) {
   print('  - ${item.name}: \$${item.price}');
 });
@@ -425,6 +431,60 @@ Valores válidos para `status`:
 - `out_of_stock` - Agotado
 - `discontinued` - Descontinuado
 - `coming_soon` - Próximamente
+
+### Búsqueda y Listados Paginados
+
+```dart
+import 'package:menu_dart_api/by_feature/catalog/data/usecase/search_public_catalogs_usecase.dart';
+import 'package:menu_dart_api/by_feature/catalog/data/usecase/get_public_catalogs_by_commerce_usecase.dart';
+
+// Buscar catálogos públicos con paginación
+final searchResult = await SearchPublicCatalogsUseCase().execute(
+  query: 'pizza',
+  type: 'menu',
+  tags: ['italiano'],
+  offset: 0,
+  limit: 20,
+);
+print('Resultados: ${searchResult.items.length} / ${searchResult.pagination.total}');
+
+// Obtener catálogos de un comercio con paginación e inStock
+final commerceCatalogs = await GetPublicCatalogsByCommerceUseCase().execute(
+  'mi-comercio-slug',
+  offset: 0,
+  limit: 50,
+  inStock: true,
+);
+print('Catálogos: ${commerceCatalogs.items.length} de ${commerceCatalogs.pagination.total}');
+
+// Paginación (load more)
+if (commerceCatalogs.pagination.hasMore) {
+  final nextPage = await GetPublicCatalogsByCommerceUseCase().execute(
+    'mi-comercio-slug',
+    offset: 50, // offset = previous offset + limit
+    limit: 50,
+  );
+}
+```
+
+### Catálogo Público por Slug o ID (con inStock)
+
+```dart
+import 'package:menu_dart_api/by_feature/catalog/data/usecase/get_public_catalog_by_slug_usecase.dart';
+import 'package:menu_dart_api/by_feature/catalog/data/usecase/get_public_catalog_by_id_usecase.dart';
+
+// Por slug
+final catalog = await GetPublicCatalogBySlugUseCase().execute(
+  'mi-catalogo-slug',
+  inStock: true,
+);
+
+// Por ID
+final catalogById = await GetPublicCatalogByIdUseCase().execute(
+  '550e8400-e29b-41d4-a716-446655440000',
+  inStock: true,
+);
+```
 
 ## 🎯 Ejemplo Completo: Gestión de Menú
 

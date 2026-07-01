@@ -8,13 +8,14 @@ class GetPublicCatalogBySlugUseCase {
   /// Ejecuta la obtención de un catálogo público por su slug
   ///
   /// [slug] Slug único del catálogo público
+  /// [inStock] Filtra solo items disponibles
   ///
   /// Retorna el [CatalogModel] público con todos sus detalles
   ///
   /// Lanza [ApiException] si hay error en la petición
-  Future<CatalogModel> execute(String slug) async {
+  Future<CatalogModel> execute(String slug, {bool inStock = true}) async {
     try {
-      return await _provider.getPublicCatalogBySlug(slug);
+      return await _provider.getPublicCatalogBySlug(slug, inStock: inStock);
     } catch (e) {
       rethrow;
     }

@@ -4,6 +4,7 @@ import 'package:dio/dio.dart' as dio;
 import 'package:menu_dart_api/by_feature/catalog/data/repository/catalog_repository.dart';
 import 'package:menu_dart_api/by_feature/catalog/models/catalog_model.dart';
 import 'package:menu_dart_api/by_feature/catalog/models/create_catalog_params.dart';
+import 'package:menu_dart_api/by_feature/catalog/models/pagination_model.dart';
 import 'package:menu_dart_api/by_feature/catalog/models/update_catalog_params.dart';
 import 'package:menu_dart_api/core/api.dart';
 import 'package:menu_dart_api/core/exeptions/api_exception.dart';
@@ -13,15 +14,34 @@ import 'package:menu_dart_api/core/helpers/multipart_helper.dart';
 class CatalogProvider extends CatalogRepository {
   final dio.Dio _dio = dio.Dio();
 
+  /// Extrae el body del response (unwrap `data` key si existe) y también
+  /// devuelve el map completo para leer `pagination` del顶层.
+  Map<String, dynamic> _unwrapResponse(dynamic rawData) {
+    if (rawData is String) {
+      rawData = jsonDecode(rawData);
+    }
+    if (rawData is Map<String, dynamic>) {
+      return rawData;
+    }
+    throw ApiException(500, 'Respuesta inválida del servidor');
+  }
+
+  /// Extrae solo el contenido de `data` del response envuelto.
+  dynamic _extractData(dynamic rawData) {
+    final map = _unwrapResponse(rawData);
+    if (map.containsKey('data')) {
+      return map['data'];
+    }
+    return map;
+  }
+
   @override
   Future<CatalogModel> createCatalog(CreateCatalogParams params) async {
     try {
       final Uri url = Uri.parse('${API.defaulBaseUrl}/catalogs');
 
-      // Construir FormData
       final formDataMap = <String, dynamic>{};
 
-      // Agregar campos de texto
       formDataMap['catalogType'] = params.catalogType;
       if (params.name != null) formDataMap['name'] = params.name;
       if (params.description != null) {
@@ -31,7 +51,6 @@ class CatalogProvider extends CatalogRepository {
         formDataMap['isPublic'] = MultipartHelper.encodeBool(params.isPublic!);
       }
 
-      // Agregar JSON fields
       if (params.metadata != null) {
         formDataMap['metadata'] = MultipartHelper.encodeJson(params.metadata);
       }
@@ -39,12 +58,10 @@ class CatalogProvider extends CatalogRepository {
         formDataMap['settings'] = MultipartHelper.encodeJson(params.settings);
       }
 
-      // Agregar tags
       if (params.tags != null && params.tags!.isNotEmpty) {
         formDataMap['tags'] = MultipartHelper.encodeTags(params.tags);
       }
 
-      // Agregar imagen si existe
       if (params.coverImage != null) {
         formDataMap['coverImage'] = dio.MultipartFile.fromBytes(
           params.coverImage!,
@@ -75,14 +92,8 @@ class CatalogProvider extends CatalogRepository {
         );
       }
 
-      var responseData =
-          response.data is String ? jsonDecode(response.data) : response.data;
-
-      if (responseData is Map && responseData.containsKey('data')) {
-        responseData = responseData['data'];
-      }
-
-      return CatalogModel.fromJson(responseData as Map<String, dynamic>);
+      return CatalogModel.fromJson(
+          _extractData(response.data) as Map<String, dynamic>);
     } catch (e) {
       if (e is dio.DioException) {
         throw ApiException(
@@ -120,25 +131,17 @@ class CatalogProvider extends CatalogRepository {
         );
       }
 
-      var responseData =
-          response.data is String ? jsonDecode(response.data) : response.data;
-
-      if (responseData is Map && responseData.containsKey('data')) {
-        responseData = responseData['data'];
-      }
-
-      if (responseData is! Map<String, dynamic>) {
-        throw ApiException(500, 'Respuesta inválida del servidor');
-      }
+      final responseData =
+          _extractData(response.data) as Map<String, dynamic>;
 
       final linked = (responseData['linked'] as List<dynamic>?)
-              ?.map(
-                  (item) => CatalogModel.fromJson(item as Map<String, dynamic>))
+              ?.map((item) =>
+                  CatalogModel.fromJson(item as Map<String, dynamic>))
               .toList() ??
           [];
       final unlinked = (responseData['unlinked'] as List<dynamic>?)
-              ?.map(
-                  (item) => CatalogModel.fromJson(item as Map<String, dynamic>))
+              ?.map((item) =>
+                  CatalogModel.fromJson(item as Map<String, dynamic>))
               .toList() ??
           [];
 
@@ -157,12 +160,23 @@ class CatalogProvider extends CatalogRepository {
   }
 
   @override
-  Future<CatalogModel> getCatalogById(String catalogId) async {
+  Future<CatalogModel> getCatalogById(
+    String catalogId, {
+    int? offset,
+    int? limit,
+    bool inStock = true,
+  }) async {
     try {
-      final Uri url = Uri.parse('${API.defaulBaseUrl}/catalogs/$catalogId');
+      final queryParams = <String, String>{};
+      if (offset != null) queryParams['offset'] = offset.toString();
+      if (limit != null) queryParams['limit'] = limit.toString();
+      queryParams['inStock'] = inStock.toString();
+
+      final uri = Uri.parse('${API.defaulBaseUrl}/catalogs/$catalogId')
+          .replace(queryParameters: queryParams.isNotEmpty ? queryParams : null);
 
       final response = await _dio.get(
-        url.toString(),
+        uri.toString(),
         options: dio.Options(
           headers: {
             'Content-Type': 'application/json',
@@ -178,14 +192,8 @@ class CatalogProvider extends CatalogRepository {
         );
       }
 
-      var responseData =
-          response.data is String ? jsonDecode(response.data) : response.data;
-
-      if (responseData is Map && responseData.containsKey('data')) {
-        responseData = responseData['data'];
-      }
-
-      return CatalogModel.fromJson(responseData as Map<String, dynamic>);
+      return CatalogModel.fromJson(
+          _extractData(response.data) as Map<String, dynamic>);
     } catch (e) {
       if (e is dio.DioException) {
         throw ApiException(
@@ -205,10 +213,8 @@ class CatalogProvider extends CatalogRepository {
       final Uri url =
           Uri.parse('${API.defaulBaseUrl}/catalogs/${params.catalogId}');
 
-      // Construir FormData
       final formDataMap = <String, dynamic>{};
 
-      // Agregar solo los campos que no son null
       if (params.name != null) formDataMap['name'] = params.name;
       if (params.description != null) {
         formDataMap['description'] = params.description;
@@ -219,7 +225,6 @@ class CatalogProvider extends CatalogRepository {
         formDataMap['isPublic'] = MultipartHelper.encodeBool(params.isPublic!);
       }
 
-      // Agregar JSON fields
       if (params.metadata != null) {
         formDataMap['metadata'] = MultipartHelper.encodeJson(params.metadata);
       }
@@ -227,12 +232,10 @@ class CatalogProvider extends CatalogRepository {
         formDataMap['settings'] = MultipartHelper.encodeJson(params.settings);
       }
 
-      // Agregar tags
       if (params.tags != null && params.tags!.isNotEmpty) {
         formDataMap['tags'] = MultipartHelper.encodeTags(params.tags);
       }
 
-      // Agregar nueva imagen si existe
       if (params.coverImage != null) {
         formDataMap['coverImage'] = dio.MultipartFile.fromBytes(
           params.coverImage!,
@@ -263,14 +266,8 @@ class CatalogProvider extends CatalogRepository {
         );
       }
 
-      var responseData =
-          response.data is String ? jsonDecode(response.data) : response.data;
-
-      if (responseData is Map && responseData.containsKey('data')) {
-        responseData = responseData['data'];
-      }
-
-      return CatalogModel.fromJson(responseData as Map<String, dynamic>);
+      return CatalogModel.fromJson(
+          _extractData(response.data) as Map<String, dynamic>);
     } catch (e) {
       if (e is dio.DioException) {
         throw ApiException(
@@ -306,14 +303,7 @@ class CatalogProvider extends CatalogRepository {
         );
       }
 
-      var responseData =
-          response.data is String ? jsonDecode(response.data) : response.data;
-
-      if (responseData is Map && responseData.containsKey('data')) {
-        responseData = responseData['data'];
-      }
-
-      return responseData as Map<String, dynamic>;
+      return _extractData(response.data) as Map<String, dynamic>;
     } catch (e) {
       if (e is dio.DioException) {
         throw ApiException(
@@ -350,14 +340,8 @@ class CatalogProvider extends CatalogRepository {
         );
       }
 
-      var responseData =
-          response.data is String ? jsonDecode(response.data) : response.data;
-
-      if (responseData is Map && responseData.containsKey('data')) {
-        responseData = responseData['data'];
-      }
-
-      return CatalogModel.fromJson(responseData as Map<String, dynamic>);
+      return CatalogModel.fromJson(
+          _extractData(response.data) as Map<String, dynamic>);
     } catch (e) {
       if (e is dio.DioException) {
         throw ApiException(
@@ -395,14 +379,8 @@ class CatalogProvider extends CatalogRepository {
         );
       }
 
-      var responseData =
-          response.data is String ? jsonDecode(response.data) : response.data;
-
-      if (responseData is Map && responseData.containsKey('data')) {
-        responseData = responseData['data'];
-      }
-
-      return CatalogModel.fromJson(responseData as Map<String, dynamic>);
+      return CatalogModel.fromJson(
+          _extractData(response.data) as Map<String, dynamic>);
     } catch (e) {
       if (e is dio.DioException) {
         throw ApiException(
@@ -417,62 +395,17 @@ class CatalogProvider extends CatalogRepository {
   }
 
   @override
-  Future<CatalogModel> getPublicCatalogBySlug(String slug) async {
-    try {
-      final Uri url = Uri.parse('${API.defaulBaseUrl}/catalogs/public/$slug');
-
-      final response = await _dio.get(
-        url.toString(),
-        options: dio.Options(
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        ),
-      );
-
-      if (response.statusCode != 200) {
-        throw ApiException(
-          response.statusCode ?? 500,
-          response.data.toString(),
-        );
-      }
-
-      var responseData =
-          response.data is String ? jsonDecode(response.data) : response.data;
-
-      if (responseData is Map && responseData.containsKey('data')) {
-        responseData = responseData['data'];
-      }
-
-      return CatalogModel.fromJson(responseData as Map<String, dynamic>);
-    } catch (e) {
-      if (e is dio.DioException) {
-        throw ApiException(
-          e.response?.statusCode ?? 500,
-          e.response?.data?.toString() ??
-              e.message ??
-              'Error al obtener catálogo público',
-        );
-      }
-      rethrow;
-    }
-  }
-
-  @override
-  Future<List<CatalogModel>> searchPublicCatalogs({
-    String? query,
-    String? type,
-    List<String>? tags,
+  Future<CatalogModel> getPublicCatalogBySlug(
+    String slug, {
+    bool inStock = true,
   }) async {
     try {
-      final queryParams = <String, dynamic>{};
-      if (query != null) queryParams['query'] = query;
-      if (type != null) queryParams['type'] = type;
-      if (tags != null && tags.isNotEmpty) queryParams['tags'] = tags.join(',');
+      final queryParams = <String, String>{
+        'inStock': inStock.toString(),
+      };
 
-      final uri = Uri.parse('${API.defaulBaseUrl}/catalogs/public/search')
-          .replace(
-              queryParameters: queryParams.isNotEmpty ? queryParams : null);
+      final uri = Uri.parse('${API.defaulBaseUrl}/catalogs/public/$slug')
+          .replace(queryParameters: queryParams);
 
       final response = await _dio.get(
         uri.toString(),
@@ -490,27 +423,15 @@ class CatalogProvider extends CatalogRepository {
         );
       }
 
-      var responseData =
-          response.data is String ? jsonDecode(response.data) : response.data;
-
-      if (responseData is Map && responseData.containsKey('data')) {
-        responseData = responseData['data'];
-      }
-
-      if (responseData is! List) {
-        throw ApiException(500, 'Respuesta inválida del servidor');
-      }
-
-      return responseData
-          .map((item) => CatalogModel.fromJson(item as Map<String, dynamic>))
-          .toList();
+      return CatalogModel.fromJson(
+          _extractData(response.data) as Map<String, dynamic>);
     } catch (e) {
       if (e is dio.DioException) {
         throw ApiException(
           e.response?.statusCode ?? 500,
           e.response?.data?.toString() ??
               e.message ??
-              'Error al buscar catálogos públicos',
+              'Error al obtener catálogo público',
         );
       }
       rethrow;
@@ -518,13 +439,27 @@ class CatalogProvider extends CatalogRepository {
   }
 
   @override
-  Future<CatalogModel> getPublicCatalogById(String catalogId) async {
+  Future<PaginatedCatalogsResult> searchPublicCatalogs({
+    String? query,
+    String? type,
+    List<String>? tags,
+    int offset = 0,
+    int limit = 20,
+  }) async {
     try {
-      final Uri url =
-          Uri.parse('${API.defaulBaseUrl}/catalogs/public/id/$catalogId');
+      final queryParams = <String, dynamic>{
+        'offset': offset.toString(),
+        'limit': limit.toString(),
+      };
+      if (query != null) queryParams['query'] = query;
+      if (type != null) queryParams['type'] = type;
+      if (tags != null && tags.isNotEmpty) queryParams['tags'] = tags.join(',');
+
+      final uri = Uri.parse('${API.defaulBaseUrl}/catalogs/public/search')
+          .replace(queryParameters: queryParams);
 
       final response = await _dio.get(
-        url.toString(),
+        uri.toString(),
         options: dio.Options(
           headers: {
             'Content-Type': 'application/json',
@@ -539,14 +474,62 @@ class CatalogProvider extends CatalogRepository {
         );
       }
 
-      var responseData =
-          response.data is String ? jsonDecode(response.data) : response.data;
+      final rawMap = _unwrapResponse(response.data);
+      final pagination = rawMap.containsKey('pagination')
+          ? PaginationModel.fromJson(
+              rawMap['pagination'] as Map<String, dynamic>)
+          : PaginationModel(total: 0, offset: offset, limit: limit, hasMore: false);
 
-      if (responseData is Map && responseData.containsKey('data')) {
-        responseData = responseData['data'];
+      final data = rawMap['data'] as List<dynamic>? ?? [];
+      final items = data
+          .map((item) => CatalogModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+
+      return PaginatedCatalogsResult(items: items, pagination: pagination);
+    } catch (e) {
+      if (e is dio.DioException) {
+        throw ApiException(
+          e.response?.statusCode ?? 500,
+          e.response?.data?.toString() ??
+              e.message ??
+              'Error al buscar catálogos públicos',
+        );
+      }
+      rethrow;
+    }
+  }
+
+  @override
+  Future<CatalogModel> getPublicCatalogById(
+    String catalogId, {
+    bool inStock = true,
+  }) async {
+    try {
+      final queryParams = <String, String>{
+        'inStock': inStock.toString(),
+      };
+
+      final uri = Uri.parse('${API.defaulBaseUrl}/catalogs/public/id/$catalogId')
+          .replace(queryParameters: queryParams);
+
+      final response = await _dio.get(
+        uri.toString(),
+        options: dio.Options(
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      if (response.statusCode != 200) {
+        throw ApiException(
+          response.statusCode ?? 500,
+          response.data.toString(),
+        );
       }
 
-      return CatalogModel.fromJson(responseData as Map<String, dynamic>);
+      return CatalogModel.fromJson(
+          _extractData(response.data) as Map<String, dynamic>);
     } catch (e) {
       if (e is dio.DioException) {
         throw ApiException(
@@ -582,18 +565,12 @@ class CatalogProvider extends CatalogRepository {
         );
       }
 
-      var responseData =
-          response.data is String ? jsonDecode(response.data) : response.data;
-
-      if (responseData is Map && responseData.containsKey('data')) {
-        responseData = responseData['data'];
-      }
-
-      if (responseData is! List) {
+      final data = _extractData(response.data);
+      if (data is! List) {
         throw ApiException(500, 'Respuesta inválida del servidor');
       }
 
-      return responseData
+      return data
           .map((item) => CatalogModel.fromJson(item as Map<String, dynamic>))
           .toList();
     } catch (e) {
@@ -610,14 +587,25 @@ class CatalogProvider extends CatalogRepository {
   }
 
   @override
-  Future<List<CatalogModel>> getPublicCatalogsByCommerce(
-      String identifier) async {
+  Future<PaginatedCatalogsResult> getPublicCatalogsByCommerce(
+    String identifier, {
+    int offset = 0,
+    int limit = 50,
+    bool inStock = true,
+  }) async {
     try {
-      final Uri url = Uri.parse(
-          '${API.defaulBaseUrl}/catalogs/public/commerce/$identifier');
+      final queryParams = <String, String>{
+        'offset': offset.toString(),
+        'limit': limit.toString(),
+        'inStock': inStock.toString(),
+      };
+
+      final uri = Uri.parse(
+              '${API.defaulBaseUrl}/catalogs/public/commerce/$identifier')
+          .replace(queryParameters: queryParams);
 
       final response = await _dio.get(
-        url.toString(),
+        uri.toString(),
         options: dio.Options(
           headers: {
             'Content-Type': 'application/json',
@@ -632,20 +620,18 @@ class CatalogProvider extends CatalogRepository {
         );
       }
 
-      var responseData =
-          response.data is String ? jsonDecode(response.data) : response.data;
+      final rawMap = _unwrapResponse(response.data);
+      final pagination = rawMap.containsKey('pagination')
+          ? PaginationModel.fromJson(
+              rawMap['pagination'] as Map<String, dynamic>)
+          : PaginationModel(total: 0, offset: offset, limit: limit, hasMore: false);
 
-      if (responseData is Map && responseData.containsKey('data')) {
-        responseData = responseData['data'];
-      }
-
-      if (responseData is! List) {
-        throw ApiException(500, 'Respuesta inválida del servidor');
-      }
-
-      return responseData
+      final data = rawMap['data'] as List<dynamic>? ?? [];
+      final items = data
           .map((item) => CatalogModel.fromJson(item as Map<String, dynamic>))
           .toList();
+
+      return PaginatedCatalogsResult(items: items, pagination: pagination);
     } catch (e) {
       if (e is dio.DioException) {
         throw ApiException(

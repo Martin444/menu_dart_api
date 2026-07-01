@@ -4,9 +4,11 @@ import 'package:menu_dart_api/by_feature/catalog/models/catalog_model.dart';
 class GetPublicCatalogByIdUseCase {
   final CatalogProvider _provider = CatalogProvider();
 
-  Future<CatalogModel> execute(String catalogId) async {
+  /// [catalogId] ID del catálogo
+  /// [inStock] Filtra solo items disponibles
+  Future<CatalogModel> execute(String catalogId, {bool inStock = true}) async {
     try {
-      return await _provider.getPublicCatalogById(catalogId);
+      return await _provider.getPublicCatalogById(catalogId, inStock: inStock);
     } catch (e) {
       rethrow;
     }

@@ -1,6 +1,17 @@
 import 'package:menu_dart_api/by_feature/catalog/models/catalog_model.dart';
 import 'package:menu_dart_api/by_feature/catalog/models/create_catalog_params.dart';
+import 'package:menu_dart_api/by_feature/catalog/models/pagination_model.dart';
 import 'package:menu_dart_api/by_feature/catalog/models/update_catalog_params.dart';
+
+class PaginatedCatalogsResult {
+  final List<CatalogModel> items;
+  final PaginationModel pagination;
+
+  const PaginatedCatalogsResult({
+    required this.items,
+    required this.pagination,
+  });
+}
 
 /// Repositorio abstracto para operaciones de catálogos
 abstract class CatalogRepository {
@@ -15,7 +26,13 @@ abstract class CatalogRepository {
   Future<CatalogModel> assignCatalogToCommerce(String catalogId);
 
   /// Obtiene un catálogo específico por ID
-  Future<CatalogModel> getCatalogById(String catalogId);
+  /// [offset] y [limit] para paginar items internos, [inStock] filtra solo disponibles
+  Future<CatalogModel> getCatalogById(
+    String catalogId, {
+    int? offset,
+    int? limit,
+    bool inStock = true,
+  });
 
   /// Actualiza un catálogo existente
   Future<CatalogModel> updateCatalog(UpdateCatalogParams params);
@@ -27,21 +44,31 @@ abstract class CatalogRepository {
   Future<CatalogModel> archiveCatalog(String catalogId);
 
   /// Obtiene un catálogo público por su slug
-  Future<CatalogModel> getPublicCatalogBySlug(String slug);
+  /// [inStock] filtra solo items disponibles
+  Future<CatalogModel> getPublicCatalogBySlug(String slug, {bool inStock = true});
 
-  /// Busca catálogos públicos con filtros
-  Future<List<CatalogModel>> searchPublicCatalogs({
+  /// Busca catálogos públicos con filtros y paginación
+  Future<PaginatedCatalogsResult> searchPublicCatalogs({
     String? query,
     String? type,
     List<String>? tags,
+    int offset = 0,
+    int limit = 20,
   });
 
   /// Obtiene un catálogo público por su ID (sin autenticación)
-  Future<CatalogModel> getPublicCatalogById(String catalogId);
+  /// [inStock] filtra solo items disponibles
+  Future<CatalogModel> getPublicCatalogById(String catalogId, {bool inStock = true});
 
   /// Obtiene catálogos públicos por ownerId (sin autenticación)
   Future<List<CatalogModel>> getPublicCatalogsByOwnerId(String ownerId);
 
   /// Obtiene catálogos públicos de un comercio por slug o UUID
-  Future<List<CatalogModel>> getPublicCatalogsByCommerce(String identifier);
+  /// [offset] y [limit] para paginación, [inStock] filtra solo disponibles
+  Future<PaginatedCatalogsResult> getPublicCatalogsByCommerce(
+    String identifier, {
+    int offset = 0,
+    int limit = 50,
+    bool inStock = true,
+  });
 }

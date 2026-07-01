@@ -1,7 +1,7 @@
 import 'package:menu_dart_api/by_feature/catalog/data/provider/catalog_provider.dart';
-import 'package:menu_dart_api/by_feature/catalog/models/catalog_model.dart';
+import 'package:menu_dart_api/by_feature/catalog/data/repository/catalog_repository.dart';
 
-/// Use case para buscar catálogos públicos con filtros
+/// Use case para buscar catálogos públicos con filtros y paginación
 class SearchPublicCatalogsUseCase {
   final CatalogProvider _provider = CatalogProvider();
 
@@ -10,20 +10,26 @@ class SearchPublicCatalogsUseCase {
   /// [query] Término de búsqueda opcional
   /// [type] Tipo de catálogo opcional (MENU, WARDROBE, etc.)
   /// [tags] Lista de tags para filtrar opcional
+  /// [offset] Desplazamiento para paginación
+  /// [limit] Límite de resultados por página
   ///
-  /// Retorna una lista de [CatalogModel] públicos que coinciden con los filtros
+  /// Retorna un [PaginatedCatalogsResult] con items y paginación
   ///
   /// Lanza [ApiException] si hay error en la petición
-  Future<List<CatalogModel>> execute({
+  Future<PaginatedCatalogsResult> execute({
     String? query,
     String? type,
     List<String>? tags,
+    int offset = 0,
+    int limit = 20,
   }) async {
     try {
       return await _provider.searchPublicCatalogs(
         query: query,
         type: type,
         tags: tags,
+        offset: offset,
+        limit: limit,
       );
     } catch (e) {
       rethrow;
