@@ -611,7 +611,7 @@ class CatalogProvider extends CatalogRepository {
             'Content-Type': 'application/json',
           },
         ),
-      );
+      ).timeout(const Duration(seconds: 10));
 
       if (response.statusCode != 200) {
         throw ApiException(
