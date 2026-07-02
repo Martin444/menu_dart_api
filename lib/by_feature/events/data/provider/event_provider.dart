@@ -10,7 +10,7 @@ import 'package:menu_dart_api/core/exeptions/api_exception.dart';
 import 'package:menu_dart_api/core/helpers/multipart_helper.dart';
 
 class EventProvider extends EventRepository {
-  final dio.Dio _dio = dio.Dio();
+  dio.Dio get _dio => API.dioClient.dio;
 
   @override
   Future<EventModel> create(CreateEventParams params) async {

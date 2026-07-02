@@ -3,7 +3,6 @@ import 'package:menu_dart_api/by_feature/user/update_user_role/data/repository/u
 import 'package:menu_dart_api/by_feature/user/update_user_role/model/update_user_role_request.dart';
 import 'package:menu_dart_api/by_feature/user/update_user_role/model/update_user_role_response.dart';
 import 'package:menu_dart_api/core/api.dart';
-import 'package:menu_dart_api/core/exeptions/api_exception.dart';
 
 class UpdateUserRoleProvider extends UpdateUserRoleRepository {
   @override
@@ -11,7 +10,7 @@ class UpdateUserRoleProvider extends UpdateUserRoleRepository {
     try {
       final String url = '${API.defaulBaseUrl}/user/my-role';
 
-      final response = await dio.Dio().patch(
+      final response = await API.dioClient.dio.patch(
         url,
         data: request.toJson(),
         options: dio.Options(

@@ -11,7 +11,7 @@ import 'package:menu_dart_api/core/helpers/multipart_helper.dart';
 
 /// Provider que implementa las operaciones de items de catálogos
 class CatalogItemProvider extends CatalogItemRepository {
-  final dio.Dio _dio = dio.Dio();
+  dio.Dio get _dio => API.dioClient.dio;
 
   @override
   Future<CatalogItemModel> createItem(CreateCatalogItemParams params) async {

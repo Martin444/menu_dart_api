@@ -7,7 +7,7 @@ import 'package:menu_dart_api/core/api.dart';
 import 'package:menu_dart_api/core/exeptions/api_exception.dart';
 
 class BusinessProfileProvider extends BusinessProfileRepository {
-  final dio.Dio _dio = dio.Dio();
+  dio.Dio get _dio => API.dioClient.dio;
 
   Map<String, dynamic> _unwrapData(dynamic rawData) {
     if (rawData is String) {

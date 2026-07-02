@@ -11,7 +11,7 @@ class UploadFileProvider extends UploadFileRepository {
   Future<String> uploadFile(image) async {
     try {
       Uri uploadURl = Uri.parse('${API.defaulBaseUrl}/cloudinary/upload');
-      var responseUp = await dio.Dio().post(
+      var responseUp = await API.dioClient.dio.post(
         uploadURl.toString(),
         data: dio.FormData.fromMap(
           {

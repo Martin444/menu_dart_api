@@ -14,7 +14,7 @@ import 'package:menu_dart_api/core/exeptions/api_exception.dart';
 /// Usa Dio (siguiendo el patrón de MembershipProvider) con el token JWT
 /// inyectado automáticamente en cada request.
 class NotificationProvider extends NotificationRepository {
-  final dio.Dio _dio = dio.Dio();
+  dio.Dio get _dio => API.dioClient.dio;
 
   Map<String, String> get _headers => {
         'Content-Type': 'application/json',

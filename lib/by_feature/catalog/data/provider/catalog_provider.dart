@@ -12,7 +12,7 @@ import 'package:menu_dart_api/core/helpers/multipart_helper.dart';
 
 /// Provider que implementa las operaciones de catálogos
 class CatalogProvider extends CatalogRepository {
-  final dio.Dio _dio = dio.Dio();
+  dio.Dio get _dio => API.dioClient.dio;
 
   /// Extrae el body del response (unwrap `data` key si existe) y también
   /// devuelve el map completo para leer `pagination` del顶层.

@@ -1,6 +1,7 @@
 import 'dart:developer' as developer;
 
 import 'package:dio/dio.dart';
+import 'package:menu_dart_api/core/services/auth_interceptor.dart';
 import 'package:menu_dart_api/core/services/universal_anonymous_id_service.dart';
 
 /// Interceptor de Dio que automáticamente agrega el header X-Anonymous-Id
@@ -39,6 +40,7 @@ class AnonymousDioClient {
   AnonymousDioClient._() {
     _dio = Dio();
     _dio.interceptors.add(AnonymousIdInterceptor());
+    _dio.interceptors.add(AuthInterceptor());
   }
 
   /// Singleton para obtener la instancia del cliente

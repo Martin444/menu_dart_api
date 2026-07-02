@@ -30,7 +30,7 @@ class UpdateUserAdminProvider extends UpdateUserAdminRepository {
       final dioFormData = dio.FormData.fromMap(formData);
 
       // Realizar la llamada PATCH con multipart/form-data
-      final response = await dio.Dio().patch(
+      final response = await API.dioClient.dio.patch(
         url,
         data: dioFormData,
         options: dio.Options(

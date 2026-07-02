@@ -13,7 +13,7 @@ import 'package:menu_dart_api/core/exeptions/api_exception.dart';
 
 /// Provider que implementa las operaciones de membresía contra la API
 class MembershipProvider extends MembershipRepository {
-  final dio.Dio _dio = dio.Dio();
+  dio.Dio get _dio => API.dioClient.dio;
 
   Map<String, String> get _headers => {
         'Content-Type': 'application/json',
